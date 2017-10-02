@@ -1,0 +1,566 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Linear Algebra Review Assignment 1
+\end_layout
+
+\begin_layout Author
+Simon Kafader, 15-114-945
+\end_layout
+
+\begin_layout Standard
+1.)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\begin{pmatrix}a_{11} & \dots & a_{1n}\\
+\vdots & \ddots & \vdots\\
+a_{m1} & \dots & a_{mn}
+\end{pmatrix},B=\begin{pmatrix}b_{11} & \dots & b_{1m}\\
+\vdots & \ddots & \vdots\\
+b_{n1} & \dots & b_{nm}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr(AB)=(a_{11}b_{11}+...+a_{1n}b_{n1})+(a_{21}b_{12}+...+a_{2n}b_{n2})+...+(a_{m1}b_{1m}+...+a_{mn}b_{nm})
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=(b_{11}a_{11}+b_{12}a_{21}+...+b_{1m}a_{m1})+...+(b_{n1}a_{1n}+...+b_{nm}a_{mn})
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=tr(BA)$
+\end_inset
+
+This is valid because of the associativity and commutativity in 
+\begin_inset Formula $\mathbb{R}$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+2.) 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+G=A^{T}A
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+We know from linear algebra: 
+\begin_inset Formula 
+\[
+(Ax)^{T}=x^{T}A^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x^{T}A^{T}Ax=(Ax)^{T}(Ax)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $Ax$
+\end_inset
+
+ be 
+\begin_inset Formula $y$
+\end_inset
+
+.
+\begin_inset Formula 
+\[
+y^{T}y={\displaystyle {\textstyle \sum_{i=0}^{n}}}y_{i}y_{i}={\displaystyle {\textstyle \sum_{i=0}^{n}}}y_{i}^{2}\succeq0
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+3.) 
+\end_layout
+
+\begin_layout Standard
+Let's assume singularity : 
+\begin_inset Formula 
+\[
+\exists x\in Ker(A)\neq0:Ax=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=>x^{T}Ax=x^{T}0=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+what is a contradiction to the definition of positive definite:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x^{T}Ax>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=>\nexists x\in Ker(A)\neq0:Ax=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=>Ker(A)=\{0\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A is nonsingular.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+4.) 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+A\in\mathbb{R}^{nxn}\:Ax_{i}=\lambda_{i}x_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For the following we use the knowledge that A is regular and symmetrical,
+ in other words eigendecomposable where no eigenvalue is zero.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=QDQ^{-1}\:A^{-1}=QD^{-1}Q^{-1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where D is diagonal.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D_{ii}^{-1}=\lambda_{i}^{-1}=\frac{1}{\lambda_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A^{-1}x_{i}=\frac{1}{\lambda_{i}}x_{i}\Square
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+5.) 
+\begin_inset Formula 
+\[
+A=x_{i}y_{i}^{T}\in\mathbb{R}^{nxm}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A_{ij}=x_{i}x_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+col_{i}=\left\{ \begin{pmatrix}x_{1}y_{i}\\
+\vdots\\
+x_{n}y_{i}
+\end{pmatrix}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+All columns are linearly dependent from one column since column i can be
+ retrieved by col_j / y_j * y_i 
+\begin_inset Formula 
+\[
+\begin{pmatrix}x_{1}y_{i}\\
+\vdots\\
+x_{n}y_{i}
+\end{pmatrix}\Longrightarrow\begin{pmatrix}x_{1}\\
+\vdots\\
+x_{n}
+\end{pmatrix}\Longrightarrow\begin{pmatrix}x_{1}y_{j}\\
+\vdots\\
+x_{n}y_{j}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Longrightarrow A=\sum_{i=0}^{m}x_{i}y_{i}^{T}\Longrightarrow col_{i}=\begin{pmatrix}x_{11}y_{1i}\\
+\vdots\\
+x_{1n}y_{1i}
+\end{pmatrix}+...+\begin{pmatrix}x_{m1}y_{mi}\\
+\vdots\\
+x_{mn}y_{mi}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\sum_{i=0}^{m}G_{i}:\,G_{i}=x_{i}y_{i}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This means that A is a linar combination of m matrices each of rank 1.
+ Therefore the rank cannot exceed m: rank(A) <= m
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+6.) 
+\end_layout
+
+\begin_layout Standard
+We know from linear algebra that the column rank is the same as the row
+ rank.
+ If proof for this well known lemma is needed, then you can find it in the
+ jpeg picture.
+ Following from this the rank cannot exceed the amount of BOTH rows AND
+ columns and must therefore be the minimum of these.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+7.)
+\end_layout
+
+\begin_layout Standard
+a) We know that the rank even though it's full cannot exceed the minimum
+ of n and m.
+ So we're gonna have either linear dependent rows or columns.
+ So there exists a vector v and coefficients c (not all zero) with
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+c_{1}v_{1}+...+c_{r}v_{r}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Longrightarrow Mc=c_{1}v_{1}+...+c_{r}v_{r}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We also know that 
+\begin_inset Formula $M0=0$
+\end_inset
+
+.
+ So if 
+\begin_inset Formula $M^{-1}$
+\end_inset
+
+existed the following two things would be given:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+0=M^{-1}0\:,\:c=M^{-1}0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But it is given that c cannot be zero and therefore 
+\begin_inset Formula $M^{-1}$
+\end_inset
+
+cannot exist.
+\begin_inset Newline newline
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+b) Singular, since there are rows in this matrix that are linearly dependent
+ and we know that a matrix is regular if all rows are linarly independent.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+c) orhtogonal matrices have the property that all rows and columns are linarly
+ independent.
+ Therefore it is clear that this matrix must also be regular.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+d) Suppose A is square matrix and has an eigenvalue of 0.
+ For the sake of contradiction, lets assume A is invertible.
+\end_layout
+
+\begin_layout Standard
+Consider, Av=λv, with λ=0 means there exists a non-zero vv such that Av=0.
+ This implies Av=0v⇒Av=0 For an invertible matrix A, Av=0 implies v=0.
+ So, Av=0=A⋅0.
+ Since v cannot be 0,this means A must not have been one-to-one.
+ Hence, our contradiction, A must not be invertible.
+ So we know that a matrix is invertible if and only if it has no eigenvalue
+ equal to zero.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+e) As we stated before, as long as the matrix has no eigenvalue equal to
+ zero it is regular.
+ In all other cases it is singular.
+ 
+\end_layout
+
+\end_body
+\end_document
