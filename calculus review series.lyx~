@@ -1,0 +1,247 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Linear Algebra Review Assignment 1
+\end_layout
+
+\begin_layout Author
+Simon Kafader, 15-114-945
+\end_layout
+
+\begin_layout Standard
+1.a) 
+\begin_inset Formula $f:\:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m},\:f(x)=Ax$
+\end_inset
+
+.
+ Show that 
+\begin_inset Formula $Df(x)=A$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+f(x)=Ax=\begin{pmatrix}a_{11}x_{1}+a_{12}x_{2}+\dots+a_{1n}x_{n}\\
+\vdots\\
+a_{m1}x_{1}+a_{m2}x_{2}+\dots+a_{mn}x_{n}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Rightarrow\frac{\partial f_{i}(x)}{\partial x_{j}}=a_{ij}
+\]
+
+\end_inset
+
+since when you derivate with respect to 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+only the terms containing 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+will not fall off as constants what will result in the vector 
+\begin_inset Formula $\begin{pmatrix}a_{1j} & \dots & a_{mj}\end{pmatrix}^{T}$
+\end_inset
+
+.
+ Now the i-th component of this vector is obviously 
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Rightarrow Df(x)=\begin{pmatrix}a_{11} & \dots & a_{1n}\\
+\vdots & \ddots & \vdots\\
+a_{m1} & \dots & a_{mn}
+\end{pmatrix}=A
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+b.) 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+g(x)=x^{T}x=x_{1}^{2}+\dots+x_{n}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+c.) 
+\end_layout
+
+\begin_layout Standard
+Define 
+\begin_inset Formula $h(x)=f(g(x))$
+\end_inset
+
+ where 
+\begin_inset Formula $f(y)=x^{T}y$
+\end_inset
+
+ and 
+\begin_inset Formula $g(x)=Qx$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We know that 
+\begin_inset Formula $Dg(x)=Q$
+\end_inset
+
+.
+ We know further that 
+\begin_inset Newline newline
+\end_inset
+
+2.)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr(A^{2})=(a_{11}^{2}+\dots+a_{1m}a_{m1})+(a_{21}a_{12}+a_{22}^{2}+\dots+a_{2m}a_{m2})+\dots+(a_{m1}a_{1m}+\dots+a_{mm}^{2})=\sum_{i=0}^{m}a_{i1}a_{1i}+\dots+a_{im}a_{mi}=\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}a_{ji}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr(A^{T}A)=(a_{11}^{2}+\dots+a_{1m}^{2})+\dots+(a_{m1}^{2}+...+a_{mm}^{2})=\sum_{i=0}^{m}a_{i1}^{2}+\dots+a_{im}^{2}=\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}a_{ji}\leq\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}^{2}\Rightarrow tr(A^{2})\leq tr(A^{T}A)
+\]
+
+\end_inset
+
+
+\backslash
+
+\end_layout
+
+\end_body
+\end_document

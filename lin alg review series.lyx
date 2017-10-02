@@ -543,7 +543,7 @@ d) Suppose A is square matrix and has an eigenvalue of 0.
 \begin_layout Standard
 Consider, Av=λv, with λ=0 means there exists a non-zero vv such that Av=0.
  This implies Av=0v⇒Av=0 For an invertible matrix A, Av=0 implies v=0.
- So, Av=0=A⋅0.
+ So, Av=0=A*0.
  Since v cannot be 0,this means A must not have been one-to-one.
  Hence, our contradiction, A must not be invertible.
  So we know that a matrix is invertible if and only if it has no eigenvalue
