@@ -262,5 +262,23 @@ x_{1n} & \dots & a_{mn}
 
 \end_layout
 
+\begin_layout Standard
+Now obvoiusly every 
+\begin_inset Formula $x_{ij}$
+\end_inset
+
+shows up exactly one time in this sum.
+ So if we deriviate with respect to 
+\begin_inset Formula $x_{ji}$
+\end_inset
+
+the only term left is 
+\begin_inset Formula $a_{ji}$
+\end_inset
+
+.
+  
+\end_layout
+
 \end_body
 \end_document

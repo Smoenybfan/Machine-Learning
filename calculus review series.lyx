@@ -241,5 +241,48 @@ tr(A^{T}A)=(a_{11}^{2}+\dots+a_{1m}^{2})+\dots+(a_{m1}^{2}+...+a_{mm}^{2})=\sum_
 
 \end_layout
 
+\begin_layout Standard
+3.a) 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr\left(\begin{pmatrix}a_{11} & \dots & a_{1n}\\
+\vdots & \ddots & \vdots\\
+a_{m1} & \dots & a_{mn}
+\end{pmatrix}\begin{pmatrix}x_{11} & \dots & a_{m1}\\
+\vdots & \ddots & \vdots\\
+x_{1n} & \dots & a_{mn}
+\end{pmatrix}\right)=(a_{11}x_{11}+\dots+a_{1n}x_{1n})+\dots+(a_{m1}x_{m1}+\dots+a_{mn}x_{mn})=\sum_{i=0}^{m}\sum_{j=0}^{n}a_{ij}x_{ij}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now obvoiusly every 
+\begin_inset Formula $x_{ij}$
+\end_inset
+
+shows up exactly one time in this sum.
+ So if we deriviate with respect to 
+\begin_inset Formula $x_{ji}$
+\end_inset
+
+the only term left is 
+\begin_inset Formula $a_{ji}$
+\end_inset
+
+.
+ So obvoiusly 
+\begin_inset Formula $\nabla_{X}tr(AX^{T})=A$
+\end_inset
+
+ 
+\end_layout
+
 \end_body
 \end_document
