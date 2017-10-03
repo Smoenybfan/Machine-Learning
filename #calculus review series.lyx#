@@ -277,7 +277,26 @@ the only term left is
 \end_inset
 
 .
-  
+ So obvoiusly 
+\begin_inset Formula $\nabla_{X}tr(AX^{T})=A$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+b) 
+\end_layout
+
+\begin_layout Standard
+As we've shown in the last review series
+\begin_inset Formula 
+\[
+\]
+
+\end_inset
+
+
 \end_layout
 
 \end_body

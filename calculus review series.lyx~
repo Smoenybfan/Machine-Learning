@@ -262,5 +262,48 @@ x_{1n} & \dots & a_{mn}
 
 \end_layout
 
+\begin_layout Standard
+Now obvoiusly every 
+\begin_inset Formula $x_{ij}$
+\end_inset
+
+shows up exactly one time in this sum.
+ So if we deriviate with respect to 
+\begin_inset Formula $x_{ji}$
+\end_inset
+
+the only term left is 
+\begin_inset Formula $a_{ji}$
+\end_inset
+
+.
+ So obvoiusly 
+\begin_inset Formula $\nabla_{X}tr(AX^{T})=A$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+b) 
+\end_layout
+
+\begin_layout Standard
+As we've shown in the last review series it is known that 
+\begin_inset Formula $tr(AB)=tr(BA)$
+\end_inset
+
+.
+ So
+\begin_inset Formula 
+\[
+\nabla_{X}tr(AX^{T})=\nabla_{X}tr(X^{T}A)=A
+\]
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document
