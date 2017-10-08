@@ -202,9 +202,35 @@ We know that
 
 .
  We know further that 
-\begin_inset Newline newline
+\begin_inset Formula $\,Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}$
 \end_inset
 
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla h(x)=Dh(x)^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Dh(x)=Df(y)|_{y=f(x)}Dg(x)=Df(Qx)Q
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 2.)
 \end_layout
 

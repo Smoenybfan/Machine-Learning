@@ -552,10 +552,6 @@ cannot exist.
 \begin_layout Standard
 b) Singular, since there are rows in this matrix that are linearly dependent
  and we know that a matrix is regular if all rows are linarly independent.
- Furthermore a lemma states that a matrix is singular iff 
-\begin_inset Formula $|A|\neq0$
-\end_inset
-
  
 \begin_inset Newline newline
 \end_inset

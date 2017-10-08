@@ -202,9 +202,35 @@ We know that
 
 .
  We know further that 
-\begin_inset Newline newline
+\begin_inset Formula $\,Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}$
 \end_inset
 
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla h(x)=Dh(x)^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Dh(x)=Df(g(x))Dg(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 2.)
 \end_layout
 
@@ -298,6 +324,29 @@ As we've shown in the last review series it is known that
 \begin_inset Formula 
 \[
 \nabla_{X}tr(AX^{T})=\nabla_{X}tr(X^{T}A)=A
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+c) 
+\end_layout
+
+\begin_layout Standard
+We define 
+\begin_inset Formula $C=BA$
+\end_inset
+
+ and use knowledge from the script section 2.1 and a)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{X}tr(AX^{T}B)=\nabla_{X}tr(BAX^{T})=\nabla_{X}tr(CX^{T})=C=BA
 \]
 
 \end_inset

@@ -1,0 +1,172 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Machine Learning Assignment #3 
+\end_layout
+
+\begin_layout Title
+Probability theory review
+\end_layout
+
+\begin_layout Author
+Simon Kafader, 15-114-945
+\end_layout
+
+\begin_layout Standard
+2.)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E(Z)=E(AX+Y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We know that the expectation is a linear function.
+ This means we can take the matrix out and split it
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E(AX+Y)=AE(X)+E(Y)=A\cdot0+\mu=\mu
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Cov[Z]=Cov(Z,Z)=Cov(AX+Y,AX+Y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now since we know that the covariance is bilinear and symmetric we can split
+ it up as follows
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Cov(AX+Y,AX+Y)=Cov(AX,AX)+2\cdot Cov(AX,Y)+Cov(Y,Y)=A^{2}Cov(X,X)+2ACov(X,Y)+Cov(Y,Y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ are independent random variables, we know that 
+\begin_inset Formula $Cov(X,Y)=0$
+\end_inset
+
+.
+ Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
