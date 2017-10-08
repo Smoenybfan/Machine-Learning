@@ -205,13 +205,15 @@ We know that
 \begin_inset Formula $\,Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}$
 \end_inset
 
-
+.
+ So by knowing that these two fucntions are derivatable, the chained function
+ is derivatable as well.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\nabla h(x)=Dh(x)^{T}
+Dh(x)=D(x^{\top})\cdot Qx+D(Qx)\cdot x^{\top}=Qx+x^{\top}Q
 \]
 
 \end_inset
@@ -220,11 +222,8 @@ We know that
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\[
-Dh(x)=Df(y)|_{y=f(x)}Dg(x)=Df(Qx)Q
-\]
-
+Now since Q is orthogonal we know that 
+\begin_inset Formula $Qx=x^{\top}Q\Rightarrow Dh(x)=2Qx$
 \end_inset
 
 
