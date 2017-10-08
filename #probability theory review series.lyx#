@@ -142,6 +142,49 @@ Cov(AX+Y,AX+Y)=Cov(AX,AX)+2\cdot Cov(AX,Y)+Cov(Y,Y)=A^{2}Cov(X,X)+2ACov(X,Y)+Cov
 
 \begin_layout Standard
 Since 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ are independent random variables, we know that 
+\begin_inset Formula $Cov(X,Y)=0$
+\end_inset
+
+.
+ Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+6.)
+\end_layout
+
+\begin_layout Standard
+Let's start at the right side:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(x_{1)}\cdot f(x_{2}|\,x_{1})\cdot\dots\cdot f(x_{n}|\,x_{1},\dots x_{n-1})=f(x_{1})\cdot\frac{f(x_{1},x_{2})}{f(x_{1})}\cdot\frac{f(x_{1},x_{2},x_{3})}{f(x_{1},x_{2})}\cdot\dots\cdot\frac{f(x_{1},\dots,\,x_{n})}{f(x_{1},\dots,x_{n-1})}=f(x_{1})
+\]
+
+\end_inset
+
+
 \end_layout
 
 \end_body
