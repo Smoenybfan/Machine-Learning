@@ -205,15 +205,13 @@ We know that
 \begin_inset Formula $\,Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}$
 \end_inset
 
-.
- So by knowing that these two fucntions are derivatable, the chained function
- is derivatable as well.
+
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-Dh(x)=D(x^{\top})\cdot Qx+D(Qx)\cdot x^{\top}=Qx+x^{\top}Q
+\nabla h(x)=Dh(x)^{T}
 \]
 
 \end_inset
@@ -222,8 +220,11 @@ Dh(x)=D(x^{\top})\cdot Qx+D(Qx)\cdot x^{\top}=Qx+x^{\top}Q
 \end_layout
 
 \begin_layout Standard
-Now since Q is orthogonal we know that 
-\begin_inset Formula $Qx=x^{\top}Q\Rightarrow Dh(x)=2Qx$
+\begin_inset Formula 
+\[
+Dh(x)=Df(y)|_{y=f(x)}Dg(x)=Df(Qx)Q
+\]
+
 \end_inset
 
 
@@ -360,7 +361,7 @@ We define
 \begin_layout Standard
 \begin_inset Formula 
 \[
-D\left(\frac{x^{\top}Ax}{x^{\top}x}\right)=\frac{2Ax}{x^{\top}x}-\frac{-2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=\frac{(2Ax)(x^{\top}x)}{(x^{\top}x)^{2}}-\frac{-2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=\frac{(2Ax)(x^{\top}x)+2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=0
+D\left(\frac{x^{\top}Ax}{x^{\top}x}\right)=\frac{2Ax}{x^{\top}x}-\frac{2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=\frac{(2Ax)(x^{\top}x)}{(x^{\top}x)^{2}}-\frac{2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=\frac{(2Ax)(x^{\top}x)-2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=0
 \]
 
 \end_inset
@@ -371,7 +372,7 @@ D\left(\frac{x^{\top}Ax}{x^{\top}x}\right)=\frac{2Ax}{x^{\top}x}-\frac{-2x\cdot 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-(Ax)(x^{\top}x)+x\cdot(x^{\top}Ax)=0
+(Ax)(x^{\top}x)-x\cdot(x^{\top}Ax)=0
 \]
 
 \end_inset
@@ -382,18 +383,7 @@ D\left(\frac{x^{\top}Ax}{x^{\top}x}\right)=\frac{2Ax}{x^{\top}x}-\frac{-2x\cdot 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-(Ax)(x^{\top}x)=-x\cdot(x^{\top}Ax)
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-(x^{\top}x)Ax=x(x^{\top}Ax)
+(Ax)(x^{\top}x)=x\cdot(x^{\top}Ax)
 \]
 
 \end_inset

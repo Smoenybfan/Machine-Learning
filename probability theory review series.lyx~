@@ -168,5 +168,40 @@ Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
 
 \end_layout
 
+\begin_layout Standard
+6.)
+\end_layout
+
+\begin_layout Standard
+Let's start at the right side:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(x_{1)}\cdot f(x_{2}|\,x_{1})\cdot\dots\cdot f(x_{n}|\,x_{1},\dots x_{n-1})=f(x_{1})\cdot\frac{f(x_{1},x_{2})}{f(x_{1})}\cdot\frac{f(x_{1},x_{2},x_{3})}{f(x_{1},x_{2})}\cdot\dots\cdot\frac{f(x_{1},\dots,\,x_{n})}{f(x_{1},\dots,x_{n-1})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can strike away the numerator i with the denominator i+1 what only
+ leaves one term:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(x_{1})\cdot\frac{f(x_{1},x_{2})}{f(x_{1})}\cdot\frac{f(x_{1},x_{2},x_{3})}{f(x_{1},x_{2})}\cdot\dots\cdot\frac{f(x_{1},\dots,\,x_{n})}{f(x_{1},\dots,x_{n-1})}=f(x_{1},\dots,x_{n})
+\]
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document

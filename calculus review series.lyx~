@@ -222,7 +222,7 @@ We know that
 \begin_layout Standard
 \begin_inset Formula 
 \[
-Dh(x)=Df(g(x))Dg(x)
+Dh(x)=Df(y)|_{y=f(x)}Dg(x)=Df(Qx)Q
 \]
 
 \end_inset
@@ -347,6 +347,54 @@ We define
 \begin_inset Formula 
 \[
 \nabla_{X}tr(AX^{T}B)=\nabla_{X}tr(BAX^{T})=\nabla_{X}tr(CX^{T})=C=BA
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+4)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D\left(\frac{x^{\top}Ax}{x^{\top}x}\right)=\frac{2Ax}{x^{\top}x}-\frac{-2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=\frac{(2Ax)(x^{\top}x)}{(x^{\top}x)^{2}}-\frac{-2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=\frac{(2Ax)(x^{\top}x)+2x\cdot x^{\top}Ax}{\left(x^{\top}x\right)^{2}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+(Ax)(x^{\top}x)+x\cdot(x^{\top}Ax)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+(Ax)(x^{\top}x)=-x\cdot(x^{\top}Ax)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+(x^{\top}x)Ax=x(x^{\top}Ax)
 \]
 
 \end_inset
