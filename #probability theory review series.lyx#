@@ -419,7 +419,7 @@ We start with taking a constant out of the integral:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\begin{align}f_{\mathbf{X}}(x_{1},\ldots,x_{n}) & =\frac{\exp\left(-\frac{1}{2}({\mathbf{x}}-{\boldsymbol{\mu}})^{\mathrm{\top}}{\boldsymbol{\Sigma}}^{-1}({\mathbf{x}}-{\boldsymbol{\mu}})\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}\\[5pt]
+\begin{align}f_{\mathbf{X}}(x_{1},\ldots,x_{n}) & =\frac{\exp\left(-\frac{1}{2}({\mathbf{x}}-{\boldsymbol{\mu}})^{\mathrm{T}}{\boldsymbol{\Sigma}}^{-1}({\mathbf{x}}-{\boldsymbol{\mu}})\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}\\[5pt]
 \\
 \end{align}
 \]
@@ -440,7 +440,7 @@ When we use it for our remaining integral with
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b-c}=e^{-c}\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b}=\frac{\exp\left(-c-\frac{1}{2}b{}^{\top}A^{-1}b\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{A}|}}=\frac{(2\pi)^{\frac{n}{2}}|A|^{-\frac{1}{2}}}{e^{c-\frac{1}{2}b^{\top}A^{-1}b}|}
+\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b-c}=e^{-c}\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b}=\frac{\exp\left(-c-\frac{1}{2}b{}^{\top}A^{-1}b\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}
 \]
 
 \end_inset

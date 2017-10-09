@@ -83,6 +83,197 @@ Simon Kafader, 15-114-945
 \end_layout
 
 \begin_layout Standard
+1.a) 
+\end_layout
+
+\begin_layout Standard
+If X and Y are independent, then we know that 
+\begin_inset Formula $E(XY)=E(X)E(Y)$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $Cov(X,Y)=E(XY)−E(X)E(Y)=E(X)E(Y)−E(X)E(Y)=0$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let X be uniformly distributed in [−1, 1] and let 
+\begin_inset Formula $Y=X^{2}$
+\end_inset
+
+.
+ Clearly, X and Y are dependent, but
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+COV[X,Y]=COV[X,X^{2}]=E[X\cdot X^{2}]-E[X]E[X^{2}]=E[X^{3}]-E[X]E[X^{2}]=0-0\cdot E[X^{2}]=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So even though the covariance here is zero, the variables are not independent.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+b) 
+\end_layout
+
+\begin_layout Standard
+From the definition of the covariance matrix we can easily see that it must
+ be a square matrix: 
+\begin_inset Formula $V(X)=(Cov(X_{i},X_{j}))_{i,j=1,...,n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Proof that it is symmetric:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Var[X]^{\top}=E[(X-E[X])(X-E[X])^{\top}]^{\top}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=E[((X-E[X])(X-E[X])^{\top})^{\top}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=E[(X-E[X])(X-E[X])^{\top}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=Var[X]
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Proof of semi-definite:
+\end_layout
+
+\begin_layout Standard
+For vectors 
+\begin_inset Formula $x_{i}=(x_{i1},...,x_{ik})^{\top},i=1,...,n$
+\end_inset
+
+, the covariance matrix is 
+\begin_inset Formula $Q=\frac{1}{n}\sum_{i=1}^{n}(x_{i}-\bar{x})(x_{i}-\bar{x})^{\top}\,.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $y\in\mathbb{R}^{k}$
+\end_inset
+
+be a nonzero vector:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y^{\top}Qy=y^{\top}\left(\frac{1}{n}\sum_{i=1}^{n}(x_{i}-\bar{x})(x_{i}-\bar{x})^{\top}\right)y
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{n}\sum_{i=1}^{n}y^{\top}(x_{i}-\bar{x})(x_{i}-\bar{x})^{\top}y
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{n}\sum_{i=1}^{n}((x_{i}-\bar{x})^{\top}y)^{\top}((x_{i}-\bar{x})^{\top}y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{n}\sum_{i=1}^{n}\left((x_{i}-\bar{x})^{\top}y\right)^{2}\geq0\,.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore Q is always positive semi-definite.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
 2.)
 \end_layout
 
@@ -169,7 +360,136 @@ Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
 \end_layout
 
 \begin_layout Standard
+3.) The probability of Thomas finding Viktor in this last bar is exactly
+ 
+\begin_inset Formula $(2/3)*(1/5)=2/15$
+\end_inset
+
+.
+ This is because informally Viktor decides beforehand if and if so to which
+ party he goes.
+ This makes the stated probability.
+ Now because this is decided beforehand, getting new information does not
+ change
+\end_layout
+
+\begin_layout Standard
+anything about the probability since it is already fixed.
+ Therefore it is 
+\begin_inset Formula $2/15$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+4.)
+\end_layout
+
+\begin_layout Standard
+We start with taking a constant out of the integral:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b-c}=e^{-c}\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b}=
+\]
+
+\end_inset
+
+ Now let 
+\begin_inset Formula $X$
+\end_inset
+
+ be an n-dimensional random variable and A its covariance matrix.
+ Now from the hint in the excercise we know that it is normally (gaussian)
+ distributed.
+ Since 
+\begin_inset Formula $A$
+\end_inset
+
+ is positive definite the multivariate normal distribution is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{align}f_{\mathbf{X}}(x_{1},\ldots,x_{n}) & =\frac{\exp\left(-\frac{1}{2}({\mathbf{x}}-{\boldsymbol{\mu}})^{\mathrm{\top}}{\boldsymbol{\Sigma}}^{-1}({\mathbf{x}}-{\boldsymbol{\mu}})\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}\\[5pt]
+\\
+\end{align}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When we use it for our remaining integral with 
+\begin_inset Formula $\mu=x-b$
+\end_inset
+
+ we get the following equatation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b-c}=e^{-c}\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b}=\frac{\exp\left(-c-\frac{1}{2}b{}^{\top}A^{-1}b\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{A}|}}=\frac{(2\pi)^{\frac{n}{2}}|A|^{-\frac{1}{2}}}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+5.) As we've seen in the lecture we prefer to use the log likelihood for
+ maximising such functions.
+ Therefore this log likelihood here will be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\lambda)=\sum_{i=1}^{n}(X_{i}log\lambda-\lambda-log(X_{i}!))=log(\lambda)\sum_{i=1}^{n}(X_{i}-n\lambda)-\sum_{i=1}^{n}log(X_{i}!)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l'(\lambda)=\frac{1}{\lambda}\sum_{i=1}^{n}x_{i}-n=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This implies that the estimate should be 
+\begin_inset Formula $\lambda=\overline{X}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 6.)
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Standard
