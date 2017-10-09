@@ -175,7 +175,7 @@ We know from linear algebra:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-x^{T}A^{T}Ax=(Ax)^{T}(Ax)
+x^{T}Gx=x^{T}A^{T}Ax=(Ax)^{T}(Ax)
 \]
 
 \end_inset
@@ -403,7 +403,11 @@ x_{n}y_{i}
 
 \begin_layout Standard
 All columns are linearly dependent from one column since column i can be
- retrieved by col_j / y_j * y_i .
+ retrieved by 
+\begin_inset Formula $col_{j}/y_{j}\cdot y_{i}$
+\end_inset
+
+ .
  Therefore the rank of this matrix is 1.
  
 \begin_inset Formula 
@@ -455,7 +459,11 @@ A=\sum_{i=0}^{m}G_{i}:\,G_{i}=x_{i}y_{i}^{T}
 
 \begin_layout Standard
 This means that A is a linar combination of m matrices each of rank 1.
- Therefore the rank cannot exceed m: rank(A) <= m
+ Therefore the rank cannot exceed m: 
+\begin_inset Formula $rank(A)\leq m$
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -552,6 +560,10 @@ cannot exist.
 \begin_layout Standard
 b) Singular, since there are rows in this matrix that are linearly dependent
  and we know that a matrix is regular if all rows are linarly independent.
+ Furthermore a lemma states that a matrix is singular iff 
+\begin_inset Formula $|A|\neq0$
+\end_inset
+
  
 \begin_inset Newline newline
 \end_inset

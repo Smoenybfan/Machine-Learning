@@ -227,6 +227,70 @@ Now since Q is orthogonal we know that
 \end_inset
 
 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+d)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(x)=||Ax-b||^{2}=g(h(x))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $h(x)=Ax-b$
+\end_inset
+
+ and 
+\begin_inset Formula $g(x)=||x||^{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Dg(x)=D<x,x>=D(x_{1}^{2}+\dots+x_{m}^{2})=(2x_{1}\dots\ 2x_{m})^{\top}=2x
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Dh(x)=D(Ax-b)=A
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Df(x)=Dg(z)|_{z=h(x)}Dh(x)=2(Ax-b)\cdot A
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -250,6 +314,14 @@ tr(A^{2})=(a_{11}^{2}+\dots+a_{1m}a_{m1})+(a_{21}a_{12}+a_{22}^{2}+\dots+a_{2m}a
 tr(A^{T}A)=(a_{11}^{2}+\dots+a_{1m}^{2})+\dots+(a_{m1}^{2}+...+a_{mm}^{2})=\sum_{i=0}^{m}a_{i1}^{2}+\dots+a_{im}^{2}=\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}^{2}
 \]
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Remind, that 
+\begin_inset Formula $\forall a,b\in\mathbb{R}:\ 2ab\leq a^{2}+b^{2}$
 \end_inset
 
 
@@ -393,7 +465,7 @@ D\left(\frac{x^{\top}Ax}{x^{\top}x}\right)=\frac{2Ax}{x^{\top}x}-\frac{-2x\cdot 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-(x^{\top}x)Ax=x(x^{\top}Ax)
+(x^{\top}x)Ax=-x(x^{\top}Ax)
 \]
 
 \end_inset

@@ -320,14 +320,6 @@ tr(A^{T}A)=(a_{11}^{2}+\dots+a_{1m}^{2})+\dots+(a_{m1}^{2}+...+a_{mm}^{2})=\sum_
 \end_layout
 
 \begin_layout Standard
-Remind, that 
-\begin_inset Formula $\forall a,b\in\mathbb{R}:\ 2ab\leq a^{2}+b^{2}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset Formula 
 \[
 \sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}a_{ji}\leq\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}^{2}\Rightarrow tr(A^{2})\leq tr(A^{T}A)

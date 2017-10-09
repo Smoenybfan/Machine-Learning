@@ -175,7 +175,7 @@ We know from linear algebra:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-x^{T}A^{T}Ax=(Ax)^{T}(Ax)
+x^{T}Gx=x^{T}A^{T}Ax=(Ax)^{T}(Ax)
 \]
 
 \end_inset
@@ -403,7 +403,11 @@ x_{n}y_{i}
 
 \begin_layout Standard
 All columns are linearly dependent from one column since column i can be
- retrieved by col_j / y_j * y_i .
+ retrieved by 
+\begin_inset Formula $col_{j}/y_{j}\cdot y_{i}$
+\end_inset
+
+ .
  Therefore the rank of this matrix is 1.
  
 \begin_inset Formula 
@@ -455,7 +459,11 @@ A=\sum_{i=0}^{m}G_{i}:\,G_{i}=x_{i}y_{i}^{T}
 
 \begin_layout Standard
 This means that A is a linar combination of m matrices each of rank 1.
- Therefore the rank cannot exceed m: rank(A) <= m
+ Therefore the rank cannot exceed m: 
+\begin_inset Formula $rank(A)\leq m$
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -580,7 +588,8 @@ d) Suppose A is square matrix and has an eigenvalue of 0.
 \end_layout
 
 \begin_layout Standard
-Consider, Av=λv, with λ=0 means there exists a non-zero vv such that Av=0.
+Consider, Av=λv, with λ=0 means there exists a non-zero vector v such that
+ Av=0.
  This implies Av=0v⇒Av=0 For an invertible matrix A, Av=0 implies v=0.
  So, Av=0=A*0.
  Since v cannot be 0,this means A must not have been one-to-one.
