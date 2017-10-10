@@ -477,12 +477,106 @@ This means that A is a linar combination of m matrices each of rank 1.
 \begin_layout Standard
 We know from linear algebra that the column rank is the same as the row
  rank.
- If proof for this well known lemma is needed, then you can find it in the
- jpeg picture.
  Following from this the rank cannot exceed the amount of BOTH rows AND
  columns and must therefore be the minimum of these.
  
 \begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Proof Lemma: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A\in R^{mxn}$
+\end_inset
+
+.
+ Let the row rank be r.
+ Therefore the dimension of the row space is alos r.
+ Now let 
+\begin_inset Formula $x_{1},\dots,x_{r}$
+\end_inset
+
+be a basis of this row space.
+ Now consider a linear homogeneous relation with these vectors and scalar
+ coefficents 
+\begin_inset Formula $c_{1},\dots,c_{r}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+0=c_{1}Ax_{1}+\dots+c_{r}Ax_{r}=A(c_{1}x_{1}+\dots c_{r}x_{r})=Av
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $v=c_{1}x_{1}+\dots+c_{r}x_{r}$
+\end_inset
+
+.Now v is obviously a linear combination of vectors of the row space in A,
+ which implies that v belongs to this row space.
+ Furthermore since 
+\begin_inset Formula $Av=0$
+\end_inset
+
+, v is orthogonal to every row vector of A.
+ These facts together imply that v is orthogonal to itself, which means
+ that 
+\begin_inset Formula $c_{1}x_{1}+\dots c_{r}x_{r}=0$
+\end_inset
+
+.
+ Recall now that the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+are a basis and therefore linearly independent.
+ Therefore it must be true that 
+\begin_inset Formula $c_{1}=\dots=c_{r}=0$
+\end_inset
+
+.
+ Therefore 
+\begin_inset Formula $Ax_{1},\dots,Ax_{r}$
+\end_inset
+
+are also linearly independent.
+ Now each 
+\begin_inset Formula $Ax_{i}$
+\end_inset
+
+is a vector in the column space of A, so the 
+\begin_inset Formula $Ax_{i}$
+\end_inset
+
+are linearly independent vectors in the column space and therefore the column
+ rank must at least be as big as r.
+ Now you can do this exact same proces with 
+\begin_inset Formula $A^{\top}$
+\end_inset
+
+what leads to reverse equality and concludes this proof.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\]
+
 \end_inset
 
 
@@ -551,10 +645,20 @@ But it is given that c cannot be zero and therefore
 \end_inset
 
 cannot exist.
+\end_layout
+
+\begin_layout Standard
+In the case 
+\begin_inset Formula $m=n$
+\end_inset
+
+, the matrix is regular.
+ Therefore singularity is not guaranteed.
+ 
 \begin_inset Newline newline
 \end_inset
 
- 
+
 \end_layout
 
 \begin_layout Standard

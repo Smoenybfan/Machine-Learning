@@ -408,7 +408,7 @@ We start with taking a constant out of the integral:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b-c}=e^{-c}\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b}=
+\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b-c}=e^{-c}\int_{x\in\mathbb{R^{n}}}e^{-\frac{1}{2}x^{\top}Ax-x^{\top}b}
 \]
 
 \end_inset
