@@ -82,11 +82,7 @@ Probability theory review
 Simon Kafader, 15-114-945
 \end_layout
 
-\begin_layout Standard
-1.a) 
-\end_layout
-
-\begin_layout Standard
+\begin_layout Enumerate
 If X and Y are independent, then we know that 
 \begin_inset Formula $E(XY)=E(X)E(Y)$
 \end_inset
@@ -125,11 +121,6 @@ COV[X,Y]=COV[X,X^{2}]=E[X\cdot X^{2}]-E[X]E[X^{2}]=E[X^{3}]-E[X]E[X^{2}]=0-0\cdo
 
 \begin_layout Standard
 So even though the covariance here is zero, the variables are not independent.
- 
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -334,7 +325,7 @@ Cov(AX+Y,AX+Y)=Cov(AX,AX)+2\cdot Cov(AX,Y)+Cov(Y,Y)
 \begin_layout Standard
 \begin_inset Formula 
 \[
-=A^{2}Cov(X,X)+2ACov(X,Y)+Cov(Y,Y)
+=ACov(X,X)A^{\top}+2ACov(X,Y)+Cov(Y,Y)
 \]
 
 \end_inset
@@ -362,7 +353,7 @@ Since
 \begin_layout Standard
 \begin_inset Formula 
 \[
-Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
+Cov[Z]=AIA^{\top}+2A0+\sigma I=AA^{\top}+\sigma I
 \]
 
 \end_inset
@@ -431,6 +422,8 @@ We start with taking a constant out of the integral:
 \begin_inset Formula 
 \[
 \begin{align}f_{\mathbf{X}}(x_{1},\ldots,x_{n}) & =\frac{\exp\left(-\frac{1}{2}({\mathbf{x}}-{\boldsymbol{\mu}})^{\mathrm{\top}}{\boldsymbol{\Sigma}}^{-1}({\mathbf{x}}-{\boldsymbol{\mu}})\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}\\[5pt]
+\\
+\\
 \\
 \end{align}
 \]

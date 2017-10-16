@@ -83,10 +83,6 @@ Simon Kafader, 15-114-945
 \end_layout
 
 \begin_layout Enumerate
-
-\end_layout
-
-\begin_layout Enumerate
 If X and Y are independent, then we know that 
 \begin_inset Formula $E(XY)=E(X)E(Y)$
 \end_inset
@@ -329,7 +325,7 @@ Cov(AX+Y,AX+Y)=Cov(AX,AX)+2\cdot Cov(AX,Y)+Cov(Y,Y)
 \begin_layout Standard
 \begin_inset Formula 
 \[
-=A^{2}Cov(X,X)+2ACov(X,Y)+Cov(Y,Y)
+=ACov(X,X)A^{\top}+2ACov(X,Y)+Cov(Y,Y)
 \]
 
 \end_inset
@@ -357,7 +353,7 @@ Since
 \begin_layout Standard
 \begin_inset Formula 
 \[
-Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
+Cov[Z]=AIA^{\top}+2A0+\sigma I=AA^{\top}+\sigma I
 \]
 
 \end_inset
@@ -366,27 +362,57 @@ Cov[Z]=A^{2}I+2A0+\sigma I=A^{2}+\sigma I
 \end_layout
 
 \begin_layout Standard
-3.) The probability of Thomas finding Viktor in this last bar is exactly
- 
-\begin_inset Formula $(2/3)*(1/5)=2/15$
-\end_inset
-
-.
- This is because informally Viktor decides beforehand if and if so to which
- party he goes.
- This makes the stated probability.
- Now because this is decided beforehand, getting new information does not
- change
+3.) We have the following events: 
 \end_layout
 
 \begin_layout Standard
-anything about the probability since it is already fixed.
- Therefore it is 
-\begin_inset Formula $2/15$
+A: 
+\begin_inset Quotes eld
+\end_inset
+
+Thomas is at a party
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+B: 
+\begin_inset Quotes eld
+\end_inset
+
+Thomas is not in bars 1-4
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+C: 
+\begin_inset Quotes eld
+\end_inset
+
+Thomas is in the last bar
+\begin_inset Quotes erd
 \end_inset
 
 .
+ This is the probability we want to calculate.
+ 
 \begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(C)=P(A|B)=\frac{P(A\cap B)}{P(B)}=\frac{\frac{2}{3}\cdot\frac{1}{5}}{\frac{1}{3}+\frac{2}{3}\cdot\frac{1}{5}}=\frac{\frac{2}{15}}{\frac{7}{15}}=\frac{2}{7}
+\]
+
 \end_inset
 
 
@@ -426,6 +452,7 @@ We start with taking a constant out of the integral:
 \begin_inset Formula 
 \[
 \begin{align}f_{\mathbf{X}}(x_{1},\ldots,x_{n}) & =\frac{\exp\left(-\frac{1}{2}({\mathbf{x}}-{\boldsymbol{\mu}})^{\mathrm{\top}}{\boldsymbol{\Sigma}}^{-1}({\mathbf{x}}-{\boldsymbol{\mu}})\right)}{\sqrt{(2\pi)^{n}|\boldsymbol{\Sigma}|}}\\[5pt]
+\\
 \\
 \\
 \end{align}

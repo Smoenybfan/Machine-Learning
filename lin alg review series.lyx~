@@ -113,7 +113,7 @@ tr(AB)=(a_{11}b_{11}+...+a_{1n}b_{n1})+(a_{21}b_{12}+...+a_{2n}b_{n2})+...+(a_{m
 \begin_layout Standard
 \begin_inset Formula 
 \[
-=\sum_{i=0}^{m}\sum_{j=0}^{n}a_{ij}b_{ji}=\sum_{i=0}^{m}\sum_{j=0}^{n}b_{ji}a_{ij}
+=\sum_{i=1}^{m}\sum_{j=1}^{n}a_{ij}b_{ji}=\sum_{i=1}^{m}\sum_{j=1}^{n}b_{ji}a_{ij}=\sum_{j=1}^{n}\sum_{i=1}^{m}b_{ji}a_{ij}
 \]
 
 \end_inset
@@ -655,6 +655,10 @@ In the case
 , the matrix is regular.
  Therefore singularity is not guaranteed.
  
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

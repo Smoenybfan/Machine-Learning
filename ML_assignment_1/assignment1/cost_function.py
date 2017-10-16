@@ -1,0 +1,46 @@
+from sigmoid import sigmoid
+import numpy as np
+
+
+def cost_function(theta, X, y):
+    """
+    Computes the cost of using theta as the parameter for logistic regression
+
+    Args:
+        theta: Parameters of shape [num_features]
+        X: Data matrix of shape [num_data, num_features]
+        y: Labels corresponding to X of size [num_data, 1]
+
+    Returns:
+        l: The cost for logistic regression
+
+    """
+
+    l = None
+    #######################################################################
+    # TODO:                                                               #
+    # Compute and return the log-likelihood l of a particular choice of   #
+    # theta.                                                              #
+    #                                                                     #
+    #######################################################################
+
+
+
+    pass
+
+    #######################################################################
+    #                         END OF YOUR CODE                            #
+    #######################################################################
+    return l
+
+def h_theta_of_X(theta, X):
+
+
+
+    return 1
+
+def g_of_Z(Z):
+
+
+
+    return numerator / denumerator;

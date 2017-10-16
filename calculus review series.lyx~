@@ -166,7 +166,7 @@ g(x)=x^{T}x=x_{1}^{2}+\dots+x_{n}^{2}
 \begin_layout Standard
 \begin_inset Formula 
 \[
-Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}
+Df(x)=\left[\frac{\partial x^{\top}x}{\partial x_{1}},\dots,\frac{\partial x^{\top}x}{\partial x_{n}}\right]^{\top}=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}
 \]
 
 \end_inset
@@ -176,38 +176,6 @@ Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}
 \end_inset
 
 c.) 
-\end_layout
-
-\begin_layout Standard
-Define 
-\begin_inset Formula $h(x)=f(g(x))$
-\end_inset
-
- where 
-\begin_inset Formula $f(y)=x^{T}y$
-\end_inset
-
- and 
-\begin_inset Formula $g(x)=Qx$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Standard
-We know that 
-\begin_inset Formula $Dg(x)=Q$
-\end_inset
-
-.
- We know further that 
-\begin_inset Formula $\,Df(x)=\begin{bmatrix}2x_{1} & \dots & 2x_{n}\end{bmatrix}^{T}$
-\end_inset
-
-.
- So by knowing that these two fucntions are derivatable, the chained function
- is derivatable as well.
 \end_layout
 
 \begin_layout Standard
@@ -300,7 +268,18 @@ Df(x)=Dg(z)|_{z=h(x)}Dh(x)=2(Ax-b)\cdot A
 \begin_layout Standard
 \begin_inset Formula 
 \[
-tr(A^{2})=(a_{11}^{2}+\dots+a_{1m}a_{m1})+(a_{21}a_{12}+a_{22}^{2}+\dots+a_{2m}a_{m2})+\dots+(a_{m1}a_{1m}+\dots+a_{mm}^{2})=\sum_{i=0}^{m}a_{i1}a_{1i}+\dots+a_{im}a_{mi}=\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}a_{ji}
+tr(A^{2})=(a_{11}^{2}+\dots+a_{1m}a_{m1})+(a_{21}a_{12}+a_{22}^{2}+\dots+a_{2m}a_{m2})+\dots+(a_{m1}a_{1m}+\dots+a_{mm}^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i=0}^{m}a_{i1}a_{1i}+\dots+a_{im}a_{mi}=\sum_{i=0}^{m}\sum_{j=0}^{m}a_{ij}a_{ji}
 \]
 
 \end_inset
@@ -348,9 +327,9 @@ Remind, that
 tr\left(\begin{pmatrix}a_{11} & \dots & a_{1n}\\
 \vdots & \ddots & \vdots\\
 a_{m1} & \dots & a_{mn}
-\end{pmatrix}\begin{pmatrix}x_{11} & \dots & a_{m1}\\
+\end{pmatrix}\begin{pmatrix}x_{11} & \dots & x_{m1}\\
 \vdots & \ddots & \vdots\\
-x_{1n} & \dots & a_{mn}
+x_{1n} & \dots & x_{mn}
 \end{pmatrix}\right)=(a_{11}x_{11}+\dots+a_{1n}x_{1n})+\dots+(a_{m1}x_{m1}+\dots+a_{mn}x_{mn})=\sum_{i=0}^{m}\sum_{j=0}^{n}a_{ij}x_{ij}
 \]
 
