@@ -1,4 +1,4 @@
-from numpy import exp, negative, array, nditer
+from numpy import exp, array, nditer
 
 
 def sigmoid(z):

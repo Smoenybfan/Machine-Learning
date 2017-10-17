@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
 from sklearn.model_selection import train_test_split
-from assignment1 import sigmoid
+from assignment1 import sigmoid, cost_function
 
 # Set default parameters for plots
 plt.rcParams['figure.figsize'] = (12.0, 6.0)
@@ -55,5 +55,9 @@ g_test = sigmoid(z_test)
 plt.plot(z_test, g_test)
 plt.title('Sigmoid')
 plt.show()
+
+theta_0 = np.zeros(X_train.shape[1])
+l_0 = cost_function(theta_0, X_train, y_train)
+print('Log-likelihood with initial theta: ', l_0)
 
 

@@ -25,6 +25,8 @@ def cost_function(theta, X, y):
     #######################################################################
 
 
+    l = np.sum(np.dot(y, np.log(h_of_X_with_respect_to_theta(X,theta))) + np.dot(1-y, np.log(1- h_of_X_with_respect_to_theta(X, theta))))
+
 
     pass
 
@@ -33,14 +35,9 @@ def cost_function(theta, X, y):
     #######################################################################
     return l
 
-def h_theta_of_X(theta, X):
+def h_of_X_with_respect_to_theta(X, theta): #works with arbitrary input as long as the dimensions are correct
+    theta_dot_X = np.dot(X, theta)
+
+    return sigmoid(theta_dot_X)
 
 
-
-    return 1
-
-def g_of_Z(Z):
-
-
-
-    return numerator / denumerator;
