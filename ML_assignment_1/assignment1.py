@@ -56,9 +56,9 @@ X_test = np.concatenate((np.ones((num_test, 1)), X_test/255.), axis=1)
 # plt.title('Sigmoid')
 # plt.show()
 
-# theta_0 = np.zeros(X_train.shape[1])
-# l_0 = cost_function(theta_0, X_train, y_train)
-# print('Log-likelihood with initial theta: ', l_0)
+theta_0 = np.zeros(X_train.shape[1])
+l_0 = cost_function(theta_0, X_train, y_train)
+print('Log-likelihood with initial theta: ', l_0)
 
 x_test = np.ones([2, 10])
 theta_0 = np.zeros(10)
