@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
 from sklearn.model_selection import train_test_split
-from assignment1 import sigmoid, cost_function
+from assignment1 import sigmoid, cost_function, gradient_function, logistic_Newton, logistic_SGD, gda
 
 # Set default parameters for plots
 plt.rcParams['figure.figsize'] = (12.0, 6.0)
@@ -50,14 +50,46 @@ X_train = np.concatenate((np.ones((num_train, 1)), X_train/255.), axis=1)
 X_test = np.concatenate((np.ones((num_test, 1)), X_test/255.), axis=1)
 
 # Test your sigmoid
-z_test = np.arange(-5, 5, 0.01)
-g_test = sigmoid(z_test)
-plt.plot(z_test, g_test)
-plt.title('Sigmoid')
+# z_test = np.arange(-5, 5, 0.01)
+# g_test = sigmoid(z_test)
+# plt.plot(z_test, g_test)
+# plt.title('Sigmoid')
+# plt.show()
+
+# theta_0 = np.zeros(X_train.shape[1])
+# l_0 = cost_function(theta_0, X_train, y_train)
+# print('Log-likelihood with initial theta: ', l_0)
+
+x_test = np.ones([2, 10])
+theta_0 = np.zeros(10)
+grad_0 = gradient_function(theta_0, x_test, 1.0)
+print(grad_0)
+
+
+method = 'sgd'
+
+# We'll meausure the execution time
+start = time.time()
+
+if method is 'sgd':
+    theta, losses = logistic_SGD(X_train, y_train)
+elif method is 'newton':
+    theta, losses = logistic_Newton(X_train, y_train)
+elif method is 'gda':
+    theta, losses = gda(X_train, y_train)
+else:
+    raise ValueError('Method not recognised!')
+
+exec_time = time.time()-start
+print('Total exection time: {}s'.format(exec_time))
+
+if losses:
+    plt.plot(losses)
+    plt.title('Training Log-Likelihood')
+    plt.show()
+
+# We can have a look at what theta has learned to recognise as "face"
+plt.imshow(np.reshape(theta[1:], [24, 24], order='F'))
+plt.title('Learned theta')
 plt.show()
-
-theta_0 = np.zeros(X_train.shape[1])
-l_0 = cost_function(theta_0, X_train, y_train)
-print('Log-likelihood with initial theta: ', l_0)
-
 

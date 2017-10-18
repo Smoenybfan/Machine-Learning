@@ -31,8 +31,10 @@ def logistic_SGD(X, y, num_iter=100000, alpha=0.01):
         #   - Update theta based on alpha and using gradient_function         #
         #                                                                     #
         #######################################################################
+        randomNumber = np.random.randint(0, X.shape[1]-1)
 
-        pass
+        theta = theta + gradient_function(theta, X[randomNumber,:], y[randomNumber])*alpha
+
 
         #######################################################################
         #                         END OF YOUR CODE                            #
