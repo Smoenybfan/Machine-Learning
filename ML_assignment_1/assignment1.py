@@ -66,7 +66,7 @@ grad_0 = gradient_function(theta_0, x_test, 1.0)
 print(grad_0)
 
 
-method = 'newton'
+method = 'sgd'
 
 # We'll meausure the execution time
 start = time.time()

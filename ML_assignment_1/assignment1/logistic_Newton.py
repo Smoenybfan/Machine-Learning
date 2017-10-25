@@ -59,15 +59,17 @@ def h_of_X_with_respect_to_theta(X, theta): #works with arbitrary input as long 
 def hessian(theta, X, y):
     h = np.zeros((X.shape[1], X.shape[1]))
 
+
+
     for i in range(0, X.shape[0]-1):
 
-        h_of_X = h_of_X_with_respect_to_theta(X, theta)
+        h_of_X = h_of_X_with_respect_to_theta(X[i], theta)
 
         vec_transposed = np.array([X[i]]).T
 
         mat_i = np.multiply(np.matmul(vec_transposed, np.array([X[i]])), np.dot(h_of_X, 1 - h_of_X))
         h += mat_i
 
-    h = np.divide(h, X.shape[0])
+    h = np.divide(h, X.shape[1])
 
     return h
