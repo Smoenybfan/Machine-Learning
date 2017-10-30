@@ -37,9 +37,7 @@ def logistic_Newton(X, y, num_iter=10):
 
         hess = hessian(theta, X, y)
 
-        hessian_inv = np.linalg.inv(hess)
-
-        theta = theta - np.dot(hessian_inv, gradient_function(theta, X, y))
+        theta = theta - np.linalg.solve(hess, gradient_function(theta, X, y))
 
         #######################################################################
         #                         END OF YOUR CODE                            #
