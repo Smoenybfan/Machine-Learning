@@ -28,7 +28,7 @@ def gradient_function(theta, X, y):
     h_X_theta = h_of_X_with_respect_to_theta(X, theta)
     grad = np.dot((y - h_X_theta), X)
 
-    grad = np.divide(grad, X.shape[0])
+
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################

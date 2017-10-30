@@ -32,7 +32,17 @@ def gda(X, y):
     #                                                                     #
     #######################################################################
 
-    pass
+    phi = np.sum(y) / float(X.shape[0])
+
+    mu_0 = np.dot(1 - y, X) / np.sum(1 - y)
+
+    mu_1 = np.dot(y, X) / np.sum(y)
+
+    x_minus_y = X - (np.dot(np.array([y]).T, np.array([mu_0])) + np.dot(np.array([1-y]).T, np.array([mu_1])))
+
+
+
+    sigma = np.matmul(x_minus_y.T, x_minus_y) / X.shape[0]
 
     #######################################################################
     #                         END OF YOUR CODE                            #

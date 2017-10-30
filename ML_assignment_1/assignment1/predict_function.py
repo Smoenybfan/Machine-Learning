@@ -18,7 +18,16 @@ def predict_function(theta, X, y=None):
     #                                                                     #
     #######################################################################
     
-    pass
+    preds = sigmoid(np.dot(X, theta))
+
+    rounded_preds =np.round(preds)
+
+    accuracy = 0.0
+
+    for i in range(0, preds.shape[0]):
+        if rounded_preds[i] == y[i]:
+            accuracy += 1.0 / preds.shape[0]
+
 
     #######################################################################
     #                         END OF YOUR CODE                            #

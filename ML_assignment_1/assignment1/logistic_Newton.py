@@ -62,4 +62,4 @@ def hessian(theta, X, y):
     theta_diag = np.diag(np.multiply(h_of_X, 1 - h_of_X))
 
 
-    return np.matmul(np.matmul(X.T, theta_diag), X)
+    return np.matmul(np.matmul(-X.T, theta_diag), X)

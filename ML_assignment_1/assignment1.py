@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
 from sklearn.model_selection import train_test_split
-from assignment1 import sigmoid, cost_function, gradient_function, logistic_Newton, logistic_SGD, gda
+from assignment1 import sigmoid, cost_function, gradient_function, logistic_Newton, logistic_SGD, gda, predict_function
 
 # Set default parameters for plots
 plt.rcParams['figure.figsize'] = (12.0, 6.0)
@@ -66,7 +66,7 @@ grad_0 = gradient_function(theta_0, x_test, 1.0)
 print(grad_0)
 
 
-method = 'newton'
+method = 'sgd'
 
 # We'll meausure the execution time
 start = time.time()
@@ -92,4 +92,10 @@ if losses:
 plt.imshow(np.reshape(theta[1:], [24, 24], order='F'))
 plt.title('Learned theta')
 plt.show()
+
+# Test the final classifier
+pred_test, accuracy_test = predict_function(theta, X_test, y_test)
+pred_train, accuracy_train = predict_function(theta, X_train, y_train)
+print('Test accuracy: {}'.format(accuracy_test))
+print('Training accuracy: {}'.format(accuracy_train))
 
