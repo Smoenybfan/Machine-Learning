@@ -33,24 +33,33 @@ def kmeans(X, k, max_iter=100):
     centers = X[np.random.randint(0, X.shape[0], k)]
     assign = np.zeros(X.shape[0])
 
-    for i in range(max_iter):
-        prev_assign = assign
-
+    for l in range(max_iter):
+        prev_assign = np.array(assign)
 
         # 2nd step: Update the cluster assignment
-        for l in range(X.shape[0]):
-            x = X[l]
+        for i in range(X.shape[0]):
+            x = X[i]
             diff =  np.tile(x, (k, 1)) - centers
-            assign[l] = np.argmin(np.linalg.norm(diff, None, axis=1))
+            assign[i] = np.argmin(np.linalg.norm(diff, None, axis=1))
 
         # 3rd step: Check for convergence
 
-        if(np.array_equal(prev_assign, assign)):
+        if np.array_equal(prev_assign, assign):
             break
 
         # 4th step: Update the cluster centers based on the new assignment
 
-        denomiator = np.where(assign=l)
+        for j in range(centers.shape[0]):
+
+            numinator = np.where(assign == j, np.ones(assign.shape[0]), np.zeros(assign.shape[0]))
+
+            denumiator = np.sum(numinator)
+
+            numinator = np.dot(numinator,X)
+
+            centers[j] = numinator / denumiator
+
+
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
