@@ -43,20 +43,15 @@ def logistic_Newton(X, y, num_iter=10):
         #                         END OF YOUR CODE                            #
         #######################################################################
         exec_time = time.time()-start
-        loss = cost_function(theta, X, y)
+        loss = cost_function(theta, X, y) / X.shape[0]
         losses.append(loss)
         print('Iter {}/{}: cost = {}  ({}s)'.format(i+1, num_iter, loss, exec_time))
 
     return theta, losses
 
-def h_of_X_with_respect_to_theta(X, theta): #works with arbitrary input as long as the dimensions are correct
-    theta_dot_X = np.dot(X, theta)
-
-    return sigmoid(theta_dot_X)
-
 def hessian(theta, X):
 
-    h_of_X = h_of_X_with_respect_to_theta(X, theta)
+    h_of_X = sigmoid(np.dot(X, theta))
 
     theta_diag = (np.multiply(h_of_X, 1 - h_of_X))
 
