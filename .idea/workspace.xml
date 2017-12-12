@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51280efa-3d8d-44ae-b289-447287827bf7" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/emslol" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/emslol2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/.ipynb_checkpoints/Assignment3-checkpoint.ipynb" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/.ipynb_checkpoints/Assignment3-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/Assignment3.ipynb" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/Assignment3.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans_colors.py" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans_colors.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_segmentation.py" afterPath="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_segmentation.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/Assignment3.ipynb">
           <provider selected="true" editor-type-id="ipnb-editor">
             <state>
-              <selected id="9" />
+              <selected id="13" />
             </state>
           </provider>
         </entry>
@@ -33,8 +36,8 @@
       <file leaf-file-name="ass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+            <state relative-caret-position="816">
+              <caret line="60" column="33" lean-forward="false" selection-start-line="60" selection-start-column="33" selection-end-line="60" selection-end-column="33" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -57,8 +60,20 @@
       <file leaf-file-name="em_segmentation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_segmentation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="-272">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="em_mog.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-272">
+              <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -69,8 +84,8 @@
       <file leaf-file-name="kmeans.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="59" column="12" lean-forward="false" selection-start-line="53" selection-start-column="10" selection-end-line="59" selection-end-column="12" />
+            <state relative-caret-position="544">
+              <caret line="53" column="20" lean-forward="false" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -94,10 +109,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans.py" />
-        <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py" />
         <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans_colors.py" />
-        <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py" />
         <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/Assignment3.ipynb" />
+        <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py" />
+        <option value="$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py" />
       </list>
     </option>
   </component>
@@ -129,7 +144,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -159,6 +173,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -239,6 +254,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18541667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -286,6 +302,53 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/Assignment3.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans_colors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="37" column="27" lean-forward="false" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_segmentation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1003">
+          <caret line="59" column="12" lean-forward="false" selection-start-line="53" selection-start-column="10" selection-end-line="59" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/Assignment3.ipynb">
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
@@ -404,40 +467,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/kmeans.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="59" column="12" lean-forward="false" selection-start-line="53" selection-start-column="10" selection-end-line="59" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_segmentation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="109" column="19" lean-forward="false" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
+        <state relative-caret-position="544">
+          <caret line="53" column="20" lean-forward="false" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -450,6 +483,36 @@
           <caret line="37" column="27" lean-forward="false" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="27" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_segmentation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-272">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/assignment3/em_mog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-272">
+          <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ml_assignment3/ml_assignment3/ass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="60" column="33" lean-forward="false" selection-start-line="60" selection-start-column="33" selection-end-line="60" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
