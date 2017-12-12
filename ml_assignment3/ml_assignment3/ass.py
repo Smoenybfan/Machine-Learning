@@ -25,15 +25,32 @@ rv4 = multivariate_normal.rvs([-3., 3.], [[2.5, 0.1], [2.3, 1.5]], size=700)
 X = np.concatenate([rv1, rv2, rv3, rv4], 0)
 y = np.array([0]*400+[1]*500+[2]*600+[3]*700)
 
-# Plot the test data
-plt.scatter(X[:, 0], X[:, 1], c=y)
-plt.title("Test Blobs")
+# # Plot the test data
+# plt.scatter(X[:, 0], X[:, 1], c=y)
+# plt.title("Test Blobs")
+# plt.show()
+#
+# # Test your implementation
+# centers, assign = kmeans(X, 4)
+# plt.clf()
+# plt.scatter(X[:, 0], X[:, 1], c=assign)
+# plt.scatter(centers[:, 0], centers[:, 1], c='r', marker='x')
+# plt.title("Predicted clustering")
+# plt.show()
+
+
+
+# Load and show test image
+img = misc.imread('lena.jpg')
+plt.imshow(img)
+plt.title("Original image")
 plt.show()
 
-# Test your implementation
-centers, assign = kmeans(X, 4)
-plt.clf()
-plt.scatter(X[:, 0], X[:, 1], c=assign)
-plt.scatter(centers[:, 0], centers[:, 1], c='r', marker='x')
-plt.title("Predicted clustering")
+# Compute quantized image
+k = 64
+img_cl = kmeans_colors(img, k)
+
+# Show the quantized image
+plt.imshow(img_cl)
+plt.title("Quantized image")
 plt.show()

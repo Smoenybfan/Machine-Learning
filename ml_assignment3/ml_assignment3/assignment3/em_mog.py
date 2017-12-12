@@ -32,7 +32,11 @@ def em_mog(X, k, max_iter=20):
     # Initialize the means of the gaussians. You can use K-means!         #
     #######################################################################
     
-    
+    kmeans = KMeans(n_clusters=k, max_iter=max_iter)
+
+    kmeans.fit(X)
+
+    mu = kmeans.cluster_centers_
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
@@ -75,6 +79,8 @@ def log_likelihood(X, mu, sigma, phi):
     # Compute the log-likelihood of the data under the current model.     #
     # This is used to check for convergnence of the algorithm.            #
     #######################################################################
+
+    ll = np.log(multivariate_normal.pdf(x=X, mean=mu, cov=sigma)) +np.log(phi) #i checke nit, vilech stimmts ja sogar
     
     
     #######################################################################
@@ -100,6 +106,8 @@ def e_step(X, mu, sigma, phi):
     # Use scipy.stats.multivariate_normal.pdf(...) to compute the pdf of  #
     # of a gaussian with the current parameters.                          # 
     #######################################################################
+
+    for j in range()
     
 
     #######################################################################
