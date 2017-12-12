@@ -17,7 +17,7 @@ def em_segmentation(img, k, max_iter=20):
 
     """
     
-    labels = None
+    label_img = None
     
     #######################################################################
     # TODO:                                                               #
@@ -28,39 +28,42 @@ def em_segmentation(img, k, max_iter=20):
     # 3rd: Predict the assignment of the pixels to the gaussian and       #  
     #      generate the label-image                                       #
     #######################################################################
+    width = img.shape[1]
+    height = img.shape[0]
+    rgb = img.shape[2]
+    spatialDimension = 2
+    label_img = img
 
-    #1 preparations
-    w = img.shape[1]
-    h = img.shape[0]
-    cols = img.shape[2]
-
-    labels = img
-
-    xgrid, ygrid = np.meshgrid(np.arange(0, w, 1), np.arange(0, h, 1))
-
-    coordinates = np.stack((ygrid, xgrid), axis=2)
-    img = np.concatenate((img, coordinates), axis=2)
-
-    img = np.reshape(img, (h * w, cols + 2))
-
-    #2 fit the MoG
-    moG = GaussianMixture(n_components=k)
-    moG.fit(img)
+    
+    xvalues = np.arange(0,width,1);
+    yvalues = np.arange(0,height,1);
+    xx, yy = np.meshgrid(xvalues, yvalues)
+    
+    coor = np.stack((yy,xx),axis=2)
+    img = np.concatenate((img,coor),axis=2)
+    
+    img = np.reshape(img,(height*width,rgb+spatialDimension))
 
 
-    img = moG.predict(img)
+    gaussianMixture = GaussianMixture(n_components=k)
+    gaussianMixture.fit(img)
+    img = gaussianMixture.predict(img)
 
-    labels = np.zeros([w * h, cols])
-    means = np.delete(moG.means_, [3, 4], axis=1)
+    label_img = np.zeros([width*height,rgb])
+    means = np.delete(gaussianMixture.means_,[3,4],axis=1)
 
-    for i in range(img.shape[0]):
-        labels[i] = means[img[i]]
+    for i in range (img.shape[0]):
+        label_img[i] = means[img[i]]
+        
+        
+    
+    label_img = np.reshape(label_img,(height,width,rgb))
 
-    labels = np.reshape(labels, (h, w, cols))
 
+    
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
 
-    return labels
+    return label_img
                     

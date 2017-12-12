@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 import time
 
 
-def em_mog(X, k, max_iter=20):
+def em_mog(X, k, max_iter=100):
     """
     Learn a Mixture of Gaussians model using the EM-algorithm.
 
@@ -31,11 +31,11 @@ def em_mog(X, k, max_iter=20):
     # TODO:                                                               #
     # Initialize the means of the gaussians. You can use K-means!         #
     #######################################################################
-
-    kmeans  = KMeans(n_clusters=k).fit(X)
-
-    mu = kmeans.cluster_centers_
     
+    kmeans = KMeans(n_clusters=k, random_state=0).fit(X)
+    mu = kmeans.cluster_centers_ 
+    
+    #mu = np.array([[0.0,1.0],[1.0,0.0],[1.0,1.0],[0.5,0.5]])
     
     #######################################################################
     #                         END OF YOUR CODE                            #
@@ -79,18 +79,17 @@ def log_likelihood(X, mu, sigma, phi):
     # Compute the log-likelihood of the data under the current model.     #
     # This is used to check for convergnence of the algorithm.            #
     #######################################################################
-
     k = mu.shape[0]
     n = X.shape[0]
-
+    
     ll = 0.0
     for i in range(n):
         likelihood_sum = 0.0
         for j in range(k):
-            likelihood_sum += multivariate_normal.pdf(X[i], mean=mu[j], cov=sigma[j]) * phi[j]
+            likelihood_sum += multivariate_normal.pdf(X[i],mean=mu[j],cov=sigma[j])*phi[j]
         ll += np.log(likelihood_sum)
     
-    
+        
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
@@ -114,63 +113,50 @@ def e_step(X, mu, sigma, phi):
     # Use scipy.stats.multivariate_normal.pdf(...) to compute the pdf of  #
     # of a gaussian with the current parameters.                          # 
     #######################################################################
+    
+    n = X.shape[0]
+    k = mu.shape[0]
 
-    ind = np.arange(phi.shape[0])
-    w = np.zeros((X.shape[0], phi.shape[0]))
-    denumerator  = 0
-  #  for l in range(phi.shape[0]):
-   #     denumerator += multivariate_normal(X[l], mu[l], sigma[l])
-
-    for i in range(X.shape[0]):
-
-        #probs = multivariate_normal.pdf(X[i], mu, sigma)
-        for l in range(phi.shape[0]):
-            denumerator += multivariate_normal.pdf(X[l], mu[l], sigma[l])
-
-        #denumerator = np.sum(np.multiply(probs ,phi))
-
-        for j in range(phi.shape[0]):
-
-            w[i,j] = np.multiply(multivariate_normal.pdf(X[i], mu[j], sigma[j]), phi[j]) / denumerator
-
-
+    w = np.zeros((n, k))
+  
+    for i in range(k):
+            w[:, i] = multivariate_normal.pdf(X,mean=mu[i],cov=sigma[i])*phi[i]
+    w /= np.sum(w,axis=1)[:,None]
+    
+   
+    
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
-
+    
     return w
 
 
 def m_step(w, X, mu, sigma, phi, k):
     """
     Computes the M-step of the EM algorithm.
-
+    
     """
     #######################################################################
     # TODO:                                                               #
     # Update all the model parameters as per the M-step of the EM         #
     # algorithm.
-    #######################################################################
+    #######################################################################    
+    n, num_features = X.shape
+    k = mu.shape[0]
+    
+    
+    phi = np.sum(w,axis=1)/n
 
-    phi = np.sum(w, axis=0) / X.shape[0]
-
-    sig_mat = np.zeros(sigma[0].shape)
-
-    mu = np.dot(w.T, X) / np.sum(w, axis=0)[:, None]
-
+    mu = np.dot(w.T,X)/np.sum(w,axis=0)[:,None]
+   
+    sigma = np.zeros((k, num_features, num_features))
     for j in range(k):
-
-        for i in range(X.shape[0]):
-            y = np.reshape(X[i] - mu[j], (X.shape[1], 1))
-            sig_mat += np.multiply(w[i, j], np.dot(y, y.T))
-
-        sigma[j] = np.divide(sig_mat , np.sum(w[j], axis=0))
-
-    # y no work?mu = np.multiply(np.sum(w), np.sum(w, axis=0)) / np.sum(w, axis=0) #if not possible try np.multiply(np.sum(X), np.sum(w)) or np.sum(np.multiply(X,w))
-
-
-
-
+        for i in range(n):
+            y = np.reshape(X[i]- mu[j], (num_features,1))
+            sigma[j] += w[i, j] * np.dot(y, y.T)
+        sigma[j] /= np.sum(w[:,j])
+        
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
