@@ -13,47 +13,35 @@ def em_segmentation(img, k, max_iter=20):
         k: The number of gaussians to be used
 
     Returns:
-        label_img: A matrix of labels indicating the gaussian of size [h, w]
+        label_img: A matrix of label_img indicating the gaussian of size [h, w, 3]
 
     """
-    
-    labels = None
-    
+
+    label_img = None
+
     #######################################################################
     # TODO:                                                               #
     # 1st: Augment the pixel features with their 2D coordinates to get    #
     #      features of the form RGBXY (see np.meshgrid)                   #
     # 2nd: Fit the MoG to the resulting data using                        #
     #      sklearn.mixture.GaussianMixture                                #
-    # 3rd: Predict the assignment of the pixels to the gaussian and       #  
+    # 3rd: Predict the assignment of the pixels to the gaussian and       #
     #      generate the label-image                                       #
     #######################################################################
 
-    #1 preparations
-    w = img.shape[1]
-    h = img.shape[0]
-    cols = img.shape[2]
+    x, y = np.meshgrid(np.arange(0, img.shape[1], 1), np.arange(0, img.shape[0], 1))
+    image_matrix = np.concatenate((img, np.stack((y, x), axis=2)), axis=2)
+    image_array = np.reshape(image_matrix, (img.shape[0] * img.shape[1], 5))
 
-    xgrid, ygrid = np.meshgrid(np.arange(0, w, 1), np.arange(0, h, 1))
+    MoG = GaussianMixture(k).fit(image_array)
+    labels = MoG.predict(image_array)
+    centers = np.delete(MoG.means_, [3, 4], axis=1)
 
-    coordinates = np.stack((ygrid, xgrid), axis=2)
-    img = np.concatenate((img, coordinates), axis=2)
-
-    img = np.reshape(img, (h * w, cols + 2))
-
-    #2 fit the MoG
-    moG = GaussianMixture(n_components=k).fit(img)
-
-    label_img = moG.predict(img)
-
-    means = np.delete(moG.means_, [3, 4], axis=1).astype('uint8')
-
-    img_temp = np.take(means, label_img, axis=0)
-    labels = np.reshape(img_temp, (h, w, cols))
+    new_image_array = np.take(centers, labels, axis=0)
+    label_img = np.reshape(new_image_array, (img.shape[0], img.shape[1], 3))
 
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
 
-    return labels
-                    
+    return label_img

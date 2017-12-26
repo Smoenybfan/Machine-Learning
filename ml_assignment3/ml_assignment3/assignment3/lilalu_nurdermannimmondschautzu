@@ -14,10 +14,10 @@ def em_mog(X, k, max_iter=20):
 
     Returns:
         phi: A vector of probabilities for the latent vars z of shape [k]
-        mu: A marix of mean vectors of shape [k, num_features]
-        sigma: A list of length k of covariance matrices each of shape [num_features, num_features]
+        mu: A marix of mean vectors of shape [k, num_features] 
+        sigma: A list of length k of covariance matrices each of shape [num_features, num_features] 
         w: A vector of weights for the k gaussians per example of shape [n, k] (result of the E-step)
-
+        
     """
 
     # Initialize variables
@@ -26,28 +26,26 @@ def em_mog(X, k, max_iter=20):
     phi = np.ones([k,])/k
     ll_prev = float('inf')
     start = time.time()
-
+    
     #######################################################################
     # TODO:                                                               #
     # Initialize the means of the gaussians. You can use K-means!         #
     #######################################################################
-
-    kmeans  = KMeans(n_clusters=k).fit(X)
-
+    
+    kmeans = KMeans(n_clusters=k, max_iter = max_iter).fit(X)
     mu = kmeans.cluster_centers_
-
-
+    
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
 
-    for l in range(max_iter):
+    for l in range(max_iter): 
         # E-Step: compute the probabilities p(z==j|x; mu, sigma, phi)
         w = e_step(X, mu, sigma, phi)
-
+        
         # M-step: Update the parameters mu, sigma and phi
-        phi, mu, sigma = m_step(w, X, mu, sigma, phi, k)
-
+        phi, mu, sigma = m_step(w, X, mu, sigma, phi, k)        
+        
         # Check convergence
         ll = log_likelihood(X, mu, sigma, phi)
         print('Iter: {}/{}, LL: {}'.format(l+1, max_iter, ll))
@@ -55,14 +53,14 @@ def em_mog(X, k, max_iter=20):
             print('EM has converged...')
             break
         ll_prev = ll
-
+    
     # Get stats
     exec_time = time.time()-start
     print('Number of iterations: {}, Execution time: {}s'.format(l+1, exec_time))
-
+    
     # Compute final assignment
     w = e_step(X, mu, sigma, phi)
-
+    
     return phi, mu, sigma, w
 
 
@@ -70,104 +68,148 @@ def em_mog(X, k, max_iter=20):
 def log_likelihood(X, mu, sigma, phi):
     """
     Returns the log-likelihood of the data under the current parameters of the MoG model.
-
+    
     """
     ll = None
-
+    
     #######################################################################
     # TODO:                                                               #
     # Compute the log-likelihood of the data under the current model.     #
     # This is used to check for convergnence of the algorithm.            #
     #######################################################################
-
-    k = mu.shape[0]
-    n = X.shape[0]
-
-    ll = 0.0
+    
+    n = X[:, 0].size
+    k = phi.size
+    
+    sums = np.zeros(n)
     for i in range(n):
-        likelihood_sum = 0.0
+        innerSum = 0
+        # something with the multivariate
         for j in range(k):
-            likelihood_sum += multivariate_normal.pdf(X[i], mean=mu[j], cov=sigma[j]) * phi[j]
-        ll += np.log(likelihood_sum)
-
-
+            innerSum = innerSum + multivariate_normal.pdf(X[i], mean = mu[j], cov = sigma[j]) * phi[j]
+            
+        sums[i] = sums[i] + np.log(innerSum)
+        
+    ll = np.sum(sums)
+    print ll
+    
+    
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
-
+    
     return ll
-
-
+                    
+    
 def e_step(X, mu, sigma, phi):
     """
     Computes the E-step of the EM algorithm.
 
     Returns:
-        w:  A vector of probabilities p(z==j|x; mu, sigma, phi) for the k
-            gaussians per example of shape [n, k]
+        w:  A vector of probabilities p(z==j|x; mu, sigma, phi) for the k 
+            gaussians per example of shape [n, k] 
     """
     w = None
-
+    
     #######################################################################
     # TODO:                                                               #
     # Perform the E-step of the EM algorithm.                             #
     # Use scipy.stats.multivariate_normal.pdf(...) to compute the pdf of  #
-    # of a gaussian with the current parameters.                          #
+    # of a gaussian with the current parameters.                          # 
     #######################################################################
-
-    ind = np.arange(phi.shape[0])
-    w = np.zeros((X.shape[0], phi.shape[0]))
-    denumerator  = 0
-   # for l in range(phi.shape[0]):
-  #     denumerator += multivariate_normal(X[l], mu[l], sigma[l])
-
-
-    for i in range(mu.shape[0]):
-            w[:, i] = multivariate_normal.pdf(X,mean=mu[i],cov=sigma[i])*phi[i] #claculate the columns of the matrix
-    w /= np.sum(w,axis=1)[:,None] #division over the precalculated denums, elementwise per row
-
+    
+    k = phi.size
+    n = X[:, 0].size
+    w = np.zeros((n, k))
+    nominator = np.zeros((n, k))
+    sums = np.zeros((n))
+    
+    # for all samples
+    for i in range(n):
+        # for all clusters
+        for j in range(k):
+            # TODO: Evaluate probability here, using multivariate_normal.pdf
+            # p(x) | z(i) = j
+            pOfXGivenJ = multivariate_normal.pdf(X[i], mean = mu[j], cov = sigma[j])
+            nominator[i, j] = pOfXGivenJ * phi[j]
+            # Optimized by calculating multivariate_normal only once
+            sums[i] = sums[i] + pOfXGivenJ * phi[j]
+            
+            
+    # for all samples
+    for i in range(n):
+        # for all clusters
+        for j in range(k):        
+            w[i, j] = nominator[i, j] / sums[i]
+        
 
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
-
+    
     return w
 
 
 def m_step(w, X, mu, sigma, phi, k):
     """
     Computes the M-step of the EM algorithm.
-
+    
     """
     #######################################################################
     # TODO:                                                               #
     # Update all the model parameters as per the M-step of the EM         #
-    # algorithm.
+    # algorithm.                                                          #
     #######################################################################
-
-    phi = np.sum(w, axis=0) / X.shape[0]
-
-    sig_mat = np.zeros(sigma[0].shape)
-
-
-    mu = np.dot(w.T, X) / np.sum(w, axis=0)[:, np.newaxis] #componentwise division
-
-
+    
+    n = X[:, 0].size
+    nOfFeat = X[0, :].size
+    nominator = np.zeros((k, nOfFeat))
+    
     for j in range(k):
-
-        for i in range(X.shape[0]):
-            inner_vec = (X[i] - mu[j]).flatten()
-            sig_mat += np.multiply(w[i, j], np.outer(inner_vec, inner_vec))
-
-        sigma[j] = np.divide(sig_mat , np.sum(w[:,j]))
-
-    # y no work?mu = np.multiply(np.sum(w), np.sum(w, axis=0)) / np.sum(w, axis=0) #if not possible try np.multiply(np.sum(X), np.sum(w)) or np.sum(np.multiply(X,w))
-
-
-
+        sumOfW = np.sum(w[:, j])
+        # phi
+        phi[j] = sumOfW
+        phi[j] = np.divide(phi[j], n)
+        
+        # mu
+        for i in range(n):
+            nominator[j] = nominator[j] + np.inner(w[i, j], X[i, :])
+    
+    mu = np.divide(nominator, sumOfW)
+    
+    sumOfW = np.zeros(k)
+    mu = np.zeros((k, nOfFeat))
+        
+    for j in range (k):
+        for i in range(n):
+            mu[j] = mu[j] + np.inner(w[i, j], X[i, :])
+            sumOfW[j] = sumOfW[j] + w[i, j]
+            
+    for j in range(k):
+        mu[j] = mu[j] / sumOfW[j]
+       
+    
+    sumOfW = np.zeros(k)
+    sigma = []
+    for j in range(k):
+        sumOfW[j] = np.sum(w[:, j])
+        
+        nominatorSigma = np.zeros((nOfFeat, nOfFeat))
+        for i in range(n):
+            # sigma
+            difference = X[i, :] - mu[j]
+            nominatorSigma = nominatorSigma + w[i, j] * np.outer(difference, difference)
+        
+        sigma.append(nominatorSigma / sumOfW[j])
+        
+    # sigma must be a list of matrices [numFeatures, numFeatures]
+        
+        
+    
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
-
+    
     return phi, mu, sigma
-
+        
+        
