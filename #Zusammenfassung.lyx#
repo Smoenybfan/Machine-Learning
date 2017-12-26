@@ -907,9 +907,548 @@ sigmoid function
 \begin_layout Standard
 \begin_inset Formula 
 \[
-g'(z)=
+g'(z)=g(z)(1-g(z)).
 \]
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similar as before we will now make a set of probabilistic assumptions and
+ then fit our parameters via maximum lieklihood.
+ Let us assume that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(y=1|\,x;\Theta)=h_{\Theta}(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(y=0|\,x;\Theta)=1-h_{\Theta}(x)
+\]
+
+\end_inset
+
+ Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y|x;\Theta)=(h_{\Theta}(x))^{y}(1-h_{\Theta}(x))^{1-y}
+\]
+
+\end_inset
+
+Again, assuming that our 
+\begin_inset Formula $m$
+\end_inset
+
+ training examples ar IID, the likelihood of the parameters is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(\Theta)=\prod_{i=1}^{m}(h_{\Theta}(x^{(i)}))^{y^{(i)}}(1-h_{\Theta}(x^{(i)}))^{1-y^{(i)}}
+\]
+
+\end_inset
+
+As before, we will again maximize the log likelihood
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\Theta)=log\,L(\Theta)=\sum_{i=1}^{m}y^{(i)}log\,h(x^{(i)})+(1-y^{(i)})log(1-h(x^{(i)}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+How do we maximize the likelihood? Similar as with linear regression we
+ can use gradient ascent.
+ In vectorial notation, our updates will be given by 
+\begin_inset Formula $\Theta:=\Theta+\alpha\nabla_{\Theta}l(\Theta)$
+\end_inset
+
+ where 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial\Theta_{j}}l(\Theta)=(y-h_{\Theta}(x))x_{j}
+\]
+
+\end_inset
+
+This gives us therefore the stochastic gradient ascent rule
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta_{j}:=\Theta_{j}+\alpha(y^{(i)}-h_{\Theta}(x^{(i)}))x_{j}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The perceptron learning algorithm
+\end_layout
+
+\begin_layout Standard
+We want to be able to 
+\begin_inset Quotes eld
+\end_inset
+
+force
+\begin_inset Quotes erd
+\end_inset
+
+ our algorithm to output values that are either exactly 1 or 0.
+ We can do this by modifying 
+\begin_inset Formula $g(z)$
+\end_inset
+
+so that it's outputing 1 if 
+\begin_inset Formula $z\ge0$
+\end_inset
+
+ and 0 if 
+\begin_inset Formula $z<0$
+\end_inset
+
+.
+ If we then let 
+\begin_inset Formula $h_{\Theta}(x)=g(\Theta^{T}x)$
+\end_inset
+
+ and use the same update rule as above, we have the 
+\series bold
+perceptron learning algorithm
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Another algorithm for maximizing 
+\begin_inset Formula $l(\Theta)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First, consider Newton's method for finding a zero of a function.
+ The update rule here is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta:=\Theta-\frac{f(\Theta)}{f'(\Theta)}
+\]
+
+\end_inset
+
+Here, we're approximating the minimum by taking the tangent of the function,
+ going through the current guess of 
+\begin_inset Formula $\Theta$
+\end_inset
+
+.
+ The point where this tangent is zero becomes our new guess.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename newton_graphs.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This method gives us a way to get to 
+\begin_inset Formula $f(\Theta)=0.$
+\end_inset
+
+ But we want to use it to maximize a function.
+ The maxima of this function 
+\begin_inset Formula $l$
+\end_inset
+
+ correspond to points where the first derivative is zero.
+ Therefore we obtain the update rule
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta:=\Theta-\frac{l'(\Theta)}{l''(\Theta)}
+\]
+
+\end_inset
+
+The generalization if this method to the multidimensional setting is given
+ by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta:=\Theta-H^{-1}\nabla_{\Theta}l(\Theta)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $H$
+\end_inset
+
+ is the Hessian which is given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H_{ij}=\frac{\partial^{2}l(\Theta)}{\partial\Theta_{i}\partial\Theta_{j}}.
+\]
+
+\end_inset
+
+ Usually, Newton's method converges much faster than gradiant descent and
+ needs fewer iterations.
+ But for large numbers of features this method can get very costly because
+ the inverse of a big matrix needs to be calulated.
+ When Newton's method is applied to maximize the logistic regression log
+ likelihood function 
+\begin_inset Formula $l(\Theta)$
+\end_inset
+
+, the resulating method is also called 
+\series bold
+Fisher scoring
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Section
+Generative Learning algorithms
+\end_layout
+
+\begin_layout Standard
+So far we always modelled 
+\begin_inset Formula $p(y|x)$
+\end_inset
+
+.
+ Now we want to learn 
+\begin_inset Formula $p(x|y)$
+\end_inset
+
+.
+ For example, if 
+\begin_inset Formula $y$
+\end_inset
+
+ indicates whetere an example is a dog (0) or an elephant (1), then 
+\begin_inset Formula $p(x|y=0)$
+\end_inset
+
+ models the distribution of the dogs' features.
+ After modeling 
+\begin_inset Formula $p(y)$
+\end_inset
+
+ (called 
+\series bold
+class priors
+\series default
+) and 
+\begin_inset Formula $p(x|y)$
+\end_inset
+
+ our algorithm can then use Bayes rule to derive the posterior distribution
+ on 
+\begin_inset Formula $y$
+\end_inset
+
+ given 
+\begin_inset Formula $x$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y|x)=\frac{p(x|y)p(y)}{p(x)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Gaussian discriminant analysis GDA
+\end_layout
+
+\begin_layout Standard
+This model assumes that 
+\begin_inset Formula $p(x|y)$
+\end_inset
+
+ is distributed according to a multivariate normal distribution.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Multivariate Normal Distribution
+\end_layout
+
+\begin_layout Standard
+The multivariate normal distribution in 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensions is parameterized by a 
+\series bold
+mean vector
+\series default
+ 
+\begin_inset Formula $\mu\in\mathbb{{R}}^{n}$
+\end_inset
+
+and a 
+\series bold
+covariance matrix 
+\series default
+
+\begin_inset Formula $\Sigma\in\mathbb{R}^{n\,x\,n}$
+\end_inset
+
+ where 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+is symmetric and positive definitve.
+ The density (also written as 
+\begin_inset Formula $N(\mu,\Sigma)$
+\end_inset
+
+) is given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(x;\mu,\Sigma)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}exp(-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu))
+\]
+
+\end_inset
+
+The mean of this density is of course 
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ The 
+\series bold
+covariance
+\series default
+ of a vector-valued random variable 
+\begin_inset Formula $Z$
+\end_inset
+
+ is defined as Cov(
+\begin_inset Formula $Z$
+\end_inset
+
+)=E[(Z-E[Z])(Z-E[Z])
+\begin_inset Formula $^{T}$
+\end_inset
+
+] If X is distributed according to a multivariate normal distribution, then
+ 
+\begin_inset Formula $Cov(X)=\Sigma$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Graphically spoken, the covariance matrix changes the shape of the ellipsoid
+ where mean moves the center:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename vary_sigma.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename vary_mu.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The Gaussian Discriminant Analysis model
+\end_layout
+
+\begin_layout Standard
+The model is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y\sim Bernoulli(\phi)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x|y=0\sim N(\mu_{0},\Sigma)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x|y=1\sim N(\mu_{1},\Sigma)
+\]
+
+\end_inset
+
+The parameters of our model here are 
+\begin_inset Formula $\phi,\Sigma,\mu_{0}$
+\end_inset
+
+and 
+\begin_inset Formula $\mu_{1}$
+\end_inset
+
+.The log-likelihood of the data is given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\phi,\mu_{0,}\mu_{1},\Sigma)=log\prod_{i=1}^{m}p(x^{(i)},y^{(i)};\phi,\mu_{0},\mu_{1},\Sigma)
+\]
+
+\end_inset
+
+When we maximize 
+\begin_inset Formula $l$
+\end_inset
+
+ with respect to the parameters we find he maximum likelihood estimates
+ of the parameters to be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi=\frac{1}{m}\sum_{i=1}^{m}1\{y^{(i)}=1\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{0}=\frac{\sum_{i=1}^{m}1\{y^{(i)}=0\}x^{(i)}}{\sum_{i=1}^{m}1\{y^{(i)}=0\}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{1}=\frac{\sum_{i=1}^{m}1\{y^{(i)}=1\}x^{(i)}}{\sum_{i=1}^{m}1\{y^{(i)}=1\}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Sigma=\frac{1}{m}\sum_{i=1}^{m}(x^{(i)}-\mu_{y^{(i)}})(x^{(i)}-u_{y^{(i)}})^{T}
+\]
+
+\end_inset
+
+The following image shows what the algorithm is doing:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename gda.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The data has been fit to the two gaussians we see here.
+ One is for the data that is an x, the other is for the data that is a circle.
+ Also shown is the decision boundardy where 
+\begin_inset Formula $p(y=1|x$
 \end_inset
 
 
