@@ -998,17 +998,6 @@ How do we maximize the likelihood? Similar as with linear regression we
 
 \end_inset
 
-This gives us therefore the stochastic gradient ascent rule
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\Theta_{j}:=\Theta_{j}+\alpha(y^{(i)}-h_{\Theta}(x^{(i)}))x_{j}^{(i)}
-\]
-
-\end_inset
-
 
 \end_layout
 
