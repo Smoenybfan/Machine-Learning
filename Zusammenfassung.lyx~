@@ -1,0 +1,1005 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Zusammenfassung Machine Learning HS 17
+\end_layout
+
+\begin_layout Section
+Supervised Learning
+\end_layout
+
+\begin_layout Standard
+Given some data, we want to be able to predict the outcome.
+ E.g.
+ when we have the Living area, we may want to predict the price of a house
+ as a function of the size of the living area.
+ 
+\end_layout
+
+\begin_layout Standard
+To establish a notation, we'll use 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+ to denote the input variables (the living area in our example).
+ These are also called 
+\series bold
+input features
+\series default
+.
+ We'll use 
+\begin_inset Formula $y^{(i)}$
+\end_inset
+
+ to denote the output, which is also called 
+\series bold
+target variable
+\series default
+.
+ A pair 
+\begin_inset Formula $(x^{(i)},y^{(i)})$
+\end_inset
+
+ is then called a 
+\series bold
+training example 
+\series default
+and the whole list of training examples we're using is called the 
+\series bold
+training set
+\series default
+.
+ The i says that this is the i-th training example.
+ 
+\end_layout
+
+\begin_layout Standard
+Our goal is, given a training set, to find a function 
+\begin_inset Formula $h$
+\end_inset
+
+ so that 
+\begin_inset Formula $h(x)$
+\end_inset
+
+ predicts 
+\begin_inset Formula $y$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+accuratly
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This function 
+\begin_inset Formula $h(x)$
+\end_inset
+
+ is called a 
+\series bold
+hypothesis
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../../Machine Learning/hypothesis.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When the target variable that we're trying to predict is continuous (can
+ take on infinitely many, uncountable values), we call the learning problem
+ a 
+\series bold
+regression problem
+\series default
+.
+ When 
+\begin_inset Formula $y$
+\end_inset
+
+ can take on only a small number of discrete values, we call it a 
+\series bold
+classification problem.
+ 
+\end_layout
+
+\begin_layout Subsection
+Linear Regression
+\end_layout
+
+\begin_layout Standard
+To perform supervised learning, we must decide how to represent our hypothesis
+ 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ As an inital choice, we're going to approximate 
+\begin_inset Formula $y$
+\end_inset
+
+ as a linear function of 
+\begin_inset Formula $x$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{\Theta}(x)=\sum_{i=0}^{n}\Theta_{i}x_{i}=\Theta^{T}x
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The 
+\begin_inset Formula $\Theta_{i}$
+\end_inset
+
+'s are the 
+\series bold
+parameters
+\series default
+ or the 
+\series bold
+weights
+\series default
+ which parameterize our functions mapping from the 
+\series bold
+feature space 
+\begin_inset Formula $X$
+\end_inset
+
+ 
+\series default
+to the 
+\series bold
+target space
+\series default
+ 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ Note, that 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+(also called the 
+\series bold
+intercept term
+\series default
+) is always equal to 1 to simplify our notation.
+ On the right-hand side of the equation above, we use both 
+\begin_inset Formula $\Theta$
+\end_inset
+
+and 
+\begin_inset Formula $x$
+\end_inset
+
+ as vectors to simplify the math.
+ 
+\end_layout
+
+\begin_layout Standard
+Now how are we going to learn our parameters 
+\begin_inset Formula $\Theta$
+\end_inset
+
+? We will try to make 
+\begin_inset Formula $h(x)$
+\end_inset
+
+ to be as close to 
+\begin_inset Formula $y$
+\end_inset
+
+ as possible for the training examples we have.
+ To do this, we define the 
+\series bold
+cost function
+\series default
+, which measures how close the 
+\begin_inset Formula $h(x^{(i)})$
+\end_inset
+
+'s are to the corresponding 
+\begin_inset Formula $y^{(i)}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J(\Theta)=\frac{1}{2}\sum_{i=1}^{m}(h_{\Theta}(x^{(i)})-y^{(i)})^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+LMS algorithm
+\end_layout
+
+\begin_layout Standard
+We want to choose 
+\begin_inset Formula $\Theta$
+\end_inset
+
+so as to make 
+\begin_inset Formula $J(\Theta)$
+\end_inset
+
+ as small as possible.
+ We start by choosing some initial guess for 
+\begin_inset Formula $\Theta$
+\end_inset
+
+and then we repeatedly change 
+\begin_inset Formula $\Theta$
+\end_inset
+
+to minimize 
+\begin_inset Formula $J(\Theta)$
+\end_inset
+
+ step by step.
+ We now look at the 
+\series bold
+gradient descent 
+\series default
+algorithm that does exactly that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta_{j}:=\Theta_{j}-\alpha\frac{\partial}{\partial}J(\Theta)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\alpha$
+\end_inset
+
+is the 
+\series bold
+learning rate
+\series default
+.
+ This way w're going stepwise in the direction of steepest descrease of
+ J.
+ For a single training example, we get the update rule:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta_{j}:=\Theta_{j}+\alpha(y^{(i)}-h_{\Theta}(x^{(i)}))x_{j}^{(i)}
+\]
+
+\end_inset
+
+This rule is called the 
+\series bold
+LMS (least mean square)
+\series default
+ update rule.
+ It is proportional to the error term 
+\begin_inset Formula $(y^{(i)}-h_{\Theta}(x^{(i)}))$
+\end_inset
+
+ so for small errors w're only going to make small adjustments whereas we're
+ going to make bigger adjustments for bigger errors.
+\end_layout
+
+\begin_layout Standard
+The adjustment to the whole training set is quite simple:
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+Loop {
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+for i=1 to m, {
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset Formula $\Theta_{j}:=\Theta_{j}+\alpha(y^{(i)}-h_{\Theta}(x^{(i)}))x_{j}^{(i)}$
+\end_inset
+
+ (for every j)
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+We repeatedly run through the training set and for each training example
+ we update all he parameters.
+ This algorithm is called 
+\series bold
+stochastic gradient descent 
+\series default
+or 
+\series bold
+incremental gradient descent
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Another option is the 
+\series bold
+batch gradient descent
+\series default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+Repeat until convergence{
+\begin_inset Formula 
+\[
+\Theta_{j}:=\Theta_{j}+\alpha\sum_{i=1}^{m}(y^{(i)}-h_{\Theta}(x^{(i)}))x_{j}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \qquad{}
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+Stochastic gradient is often preferred to batch gradient because whereas
+ batch gradient has to scan over the whole training set (which can get costly
+ for large m), stochastic gradient can start right away with the first training
+ example.
+ Note, that stochastic gradient doesn't reach a global minimum (as batch
+ gradient) but oscillates around an optimal solution.
+ 
+\end_layout
+
+\begin_layout Subsection
+The normal equations
+\end_layout
+
+\begin_layout Standard
+We will now see another way to minimize 
+\begin_inset Formula $J$
+\end_inset
+
+.
+ In this method we' re going to take the derivatives of 
+\begin_inset Formula $J$
+\end_inset
+
+ with respect to the 
+\begin_inset Formula $\Theta_{j}$
+\end_inset
+
+'s and set them to zero.
+ First we're repeating some rules to simplify our math.
+\end_layout
+
+\begin_layout Subsubsection
+Matrix derivatives
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{A}f(A)=\left[\begin{array}{ccc}
+\frac{\partial f}{\partial A_{11}} & \dots & \frac{\partial f}{\partial A_{1n}}\\
+\vdots & \ddots & \vdots\\
+\frac{\partial f}{\partial A_{m1}} & \dots & \frac{\partial f}{\partial A_{mn}}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr(A)=tr(A^{T})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr(ABCD)=tr(DABC)=tr(CDAB)=tr(BCDA)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Least squares revisited
+\end_layout
+
+\begin_layout Standard
+Given a training set, we define the 
+\series bold
+design matrix
+\series default
+ X to be the matrix containing all training examples, where the i-th training
+ example is the i-th row.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X=\left[\begin{array}{c}
+(x^{(1)})^{T}\\
+\vdots\\
+(x^{(m)})^{T}
+\end{array}\right]
+\]
+
+\end_inset
+
+Let 
+\begin_inset Formula $\overrightarrow{y}$
+\end_inset
+
+be the m-dimensional vector containing all target values from the training
+ set.
+ Using math rules and the formula we got in the last section we get
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\Theta}J(\Theta)=X^{T}X\Theta-X^{T}y
+\]
+
+\end_inset
+
+Therefore the value of 
+\begin_inset Formula $\Theta$
+\end_inset
+
+that minimizes 
+\begin_inset Formula $J(\Theta)$
+\end_inset
+
+ is given by the equation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta=(X^{T}X)^{-1}X^{T}y
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Probabilistic interpretation
+\end_layout
+
+\begin_layout Standard
+We will now look at linear regression under terms of probabilistic assumptions.
+ To start, we assume that the target variable and the inputs are related
+ via
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y^{(i)}=\Theta^{T}x^{(i)}+\epsilon^{(i)}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\epsilon^{(i)}$
+\end_inset
+
+ is an error term that is distributed IID (independently and identically
+ distributed) according to a Gaussian distribution with mean 0 and variance
+ 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+ We write this as 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\epsilon^{(i)}\sim N(0,\sigma^{2})."$
+\end_inset
+
+ This implies that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y^{(i)}|\,x^{(i)};\Theta)=\frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{(y^{(i)}-\Theta^{T}x^{(i)})^{2}}{2\sigma^{2}}\right)
+\]
+
+\end_inset
+
+This follows from the densitiy of 
+\begin_inset Formula $\epsilon^{(i)}$
+\end_inset
+
+.
+ The notation 
+\begin_inset Formula $p(y^{(i)}|\:x^{(i)};\Theta)$
+\end_inset
+
+ indicates the distribution of 
+\begin_inset Formula $y^{(i)}$
+\end_inset
+
+given 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+, parameterized by 
+\begin_inset Formula $\Theta$
+\end_inset
+
+.
+ Getting back to our whole training set we can also write the probability
+ of the whole data as 
+\begin_inset Formula $p(y|\:X;\Theta)$
+\end_inset
+
+.
+ When we wish to see this as a function of 
+\begin_inset Formula $\Theta$
+\end_inset
+
+, we will call it the 
+\series bold
+likelihood
+\series default
+ function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(\Theta)=L(\Theta;X,y)=p(y|\,X;\Theta)
+\]
+
+\end_inset
+
+Because of our assumption of independence for the 
+\begin_inset Formula $\epsilon^{(i)}$
+\end_inset
+
+, this can also be written as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(\Theta)=\prod_{i=1}^{m}p(y^{(i)}|\:x^{(i)};\Theta)=\prod_{i=1}^{m}\frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{(y^{(i)}-\Theta^{T}x^{(i)})^{2}}{2\sigma^{2}}\right)
+\]
+
+\end_inset
+
+The principal of 
+\series bold
+maximum likelihood
+\series default
+ says that we should choose 
+\begin_inset Formula $\Theta$
+\end_inset
+
+so as to make the data as high probability as possible.
+ Therefore we should choose 
+\begin_inset Formula $\Theta$
+\end_inset
+
+to maximize 
+\begin_inset Formula $L(\Theta)$
+\end_inset
+
+.
+ To make our calculations simpler we will instead of maximizing 
+\begin_inset Formula $L(\Theta)$
+\end_inset
+
+maximize a strictly increasing function of 
+\begin_inset Formula $L(\Theta)$
+\end_inset
+
+, in our case the 
+\series bold
+log likelihood
+\series default
+ 
+\begin_inset Formula $l(\Theta)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\Theta)=log\,L(\Theta)=m\,log\frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{\sigma^{2}}\cdot\frac{1}{2}\sum_{i=1}^{m}(y^{(i)}-\Theta^{T}x^{(i)})^{2}
+\]
+
+\end_inset
+
+Hence, maximizing 
+\begin_inset Formula $l(\Theta)$
+\end_inset
+
+gives the same answer as maximizing 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{2}\sum_{i=1}^{m}(y^{(i)}-\Theta^{T}x^{(i)})^{2},
+\]
+
+\end_inset
+
+which is our original 
+\begin_inset Formula $J(\Theta)$
+\end_inset
+
+, the cost function from least-square.
+ 
+\end_layout
+
+\begin_layout Section
+Classification and logistic regression
+\end_layout
+
+\begin_layout Standard
+Classification is quite similar to the regression problem, but now our values
+ 
+\begin_inset Formula $y$
+\end_inset
+
+ take on only a small number of discrete values.
+ To start, we will focus on the 
+\series bold
+inary classification
+\series default
+ problem, where 
+\begin_inset Formula $y$
+\end_inset
+
+ can only take on 1 and 0.
+ Given 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+, the corresponding 
+\begin_inset Formula $y^{(i)}$
+\end_inset
+
+is also called the 
+\series bold
+label
+\series default
+ for the training example.
+ 
+\end_layout
+
+\begin_layout Subsection
+Logistic regression
+\end_layout
+
+\begin_layout Standard
+If we would use our already known linear regression algorithm to predict
+ 
+\begin_inset Formula $y$
+\end_inset
+
+ given 
+\begin_inset Formula $x$
+\end_inset
+
+, we would see that this method performs rather poorly.
+ It also makes no sense that 
+\begin_inset Formula $h_{\Theta}(x)$
+\end_inset
+
+ can take on values outside of 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+.
+ To fix this we will change our hypothesis:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{\Theta}(x)=g(\Theta^{T}x)=\frac{1}{1+e^{-\Theta^{T}x}}
+\]
+
+\end_inset
+
+where
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+g(z)=\frac{1}{1+e^{-z}}
+\]
+
+\end_inset
+
+is called the 
+\series bold
+logistic function
+\series default
+ or the 
+\series bold
+sigmoid function
+\series default
+.
+ As you can see, 
+\begin_inset Formula $g(z)$
+\end_inset
+
+ tends to 1 for large values of z and to 0 for small values of z.
+ The derivative of the sigmoid function is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+g'(z)=g(z)(1-g(z)).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similar as before we will now make a set of probabilistic assumptions and
+ then fit our parameters via maximum lieklihood.
+ Let us assume that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(y=1|\,x;\Theta)=h_{\Theta}(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(y=0|\,x;\Theta)=1-h_{\Theta}(x)
+\]
+
+\end_inset
+
+ Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y|x;\Theta)=(h_{\Theta}(x))^{y}(1-h_{\Theta}(x))^{1-y}
+\]
+
+\end_inset
+
+Again, assuming that our 
+\begin_inset Formula $m$
+\end_inset
+
+ training examples ar IID, the likelihood of the parameters is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(\Theta)=\prod_{i=1}^{m}(h_{\Theta}(x^{(i)}))^{y^{(i)}}(1-h_{\Theta}(x^{(i)}))^{1-y^{(i)}}
+\]
+
+\end_inset
+
+As before, we will again maximize the log likelihood
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\Theta)=log\,L(\Theta)=\sum_{i=1}^{m}y^{(i)}log\,h(x^{(i)})+(1-y^{(i)})log(1-h(x^{(i)}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+How do we maximize the likelihood? Similar as with linear regression we
+ can use gradient ascent.
+ In vectorial notation, our updates will be given by 
+\begin_inset Formula $\Theta:=\Theta+\alpha\nabla_{\Theta}l(\Theta)$
+\end_inset
+
+ where 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial\Theta_{j}}l(\Theta)=(y-h_{\Theta}(x))x_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

@@ -32,11 +32,12 @@ def em_mog(X, k, max_iter=20):
     # Initialize the means of the gaussians. You can use K-means!         #
     #######################################################################
 
-    kmeans  = KMeans(n_clusters=k).fit(X)
+    
+    kmeans = KMeans(n_clusters=k, max_iter=max_iter)
+
+    kmeans.fit(X)
 
     mu = kmeans.cluster_centers_
-
-
     #######################################################################
     #                         END OF YOUR CODE                            #
     #######################################################################
@@ -80,6 +81,9 @@ def log_likelihood(X, mu, sigma, phi):
     # This is used to check for convergnence of the algorithm.            #
     #######################################################################
 
+
+
+
     k = mu.shape[0]
     n = X.shape[0]
 
@@ -115,6 +119,8 @@ def e_step(X, mu, sigma, phi):
     # of a gaussian with the current parameters.                          #
     #######################################################################
 
+
+
     ind = np.arange(phi.shape[0])
     w = np.zeros((X.shape[0], phi.shape[0]))
     denumerator  = 0
@@ -125,6 +131,7 @@ def e_step(X, mu, sigma, phi):
     for i in range(mu.shape[0]):
             w[:, i] = multivariate_normal.pdf(X,mean=mu[i],cov=sigma[i])*phi[i] #claculate the columns of the matrix
     w /= np.sum(w,axis=1)[:,None] #division over the precalculated denums, elementwise per row
+
 
 
     #######################################################################

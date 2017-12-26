@@ -27,12 +27,15 @@ def kmeans_colors(img, k, max_iter=100):
     w,h,d = tuple(img.shape)
     image_array = np.reshape(img, (w * h, d))
 
-    print("Fitting model on a small sub-sample of the data")
+    # Fitting model on a small sub-sample of the data
     image_array_sample = sklearn.utils.shuffle(image_array, random_state=0)[:1000]
+
+    # In this case n_clusters is the amount of colors
     kmeans = KMeans(n_clusters=k, random_state=0, max_iter=max_iter).fit(image_array_sample)
 
     labels = kmeans.predict(image_array)
 
+    # Reproduce the picture
     img_cl = np.zeros((w, h, d))
     label_idx = 0
     for i in range(w):
