@@ -1939,5 +1939,460 @@ We can also apply Laplace smoothing (what is needed in practice for good
  performance):
 \end_layout
 
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=1}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=1\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=1\}n_{i}+|V|}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=0}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=0\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=0\}n_{i}+|V|}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Support Vector Machines
+\end_layout
+
+\begin_layout Subsection
+Margins: Intuition
+\end_layout
+
+\begin_layout Standard
+Consider logistic regression.
+ We would predict 
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ on an input 1 iff 
+\begin_inset Formula $h_{\Theta}(x)\ge0.5$
+\end_inset
+
+ or equivlently iff 
+\begin_inset Formula $\Theta^{T}x\ge0$
+\end_inset
+
+.
+ The larger 
+\begin_inset Formula $\Theta^{T}x$
+\end_inset
+
+ is, the higher our degree of 
+\begin_inset Quotes eld
+\end_inset
+
+confidence
+\begin_inset Quotes erd
+\end_inset
+
+ that the label is +1+.
+ Informally we could also say, that 
+\begin_inset Formula $y=1$
+\end_inset
+
+ if 
+\begin_inset Formula $\Theta^{T}x\gg0$
+\end_inset
+
+.
+ Similarly we could say that 
+\begin_inset Formula $y=0$
+\end_inset
+
+ if 
+\begin_inset Formula $\Theta^{T}x\ll0$
+\end_inset
+
+.
+ Therefore we could say informally that we found a good fit if we can find
+ 
+\begin_inset Formula $\Theta$
+\end_inset
+
+so that 
+\begin_inset Formula $\Theta^{T}x\gg0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $y^{(i)}=1$
+\end_inset
+
+, and 
+\begin_inset Formula $\Theta^{T}x\ll0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $y^{(i)}=0.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For another type of intuition, consider the following figure where x's represent
+ positive training examples and y's negative training examples.
+ The line is also called 
+\series bold
+separating hyperplane
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename margins_intuition.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Making a prediction for A should be much easier and more confident than
+ one for C.
+ It would be nice to have a classifier that allows us to make correct and
+ confident predictions on the training examples.
+ 
+\end_layout
+
+\begin_layout Subsection
+Notation
+\end_layout
+
+\begin_layout Standard
+To make things easier we'll consider a linear classifier for a binary classifica
+tion problem with labels 
+\begin_inset Formula $y\in\{-1,1\}$
+\end_inset
+
+.
+ We will also use parameters 
+\begin_inset Formula $w,b$
+\end_inset
+
+ and write our classifier as 
+\begin_inset Formula $h_{w,b}(x)=g(w^{T}x+b)$
+\end_inset
+
+ where 
+\begin_inset Formula $g(z)=1$
+\end_inset
+
+if 
+\begin_inset Formula $z\ge0$
+\end_inset
+
+and 0 otherwise.
+ So, 
+\begin_inset Formula $b$
+\end_inset
+
+ take the role of 
+\begin_inset Formula $\Theta_{0}$
+\end_inset
+
+and 
+\series bold
+
+\begin_inset Formula $w$
+\end_inset
+
+ 
+\series default
+the role of 
+\begin_inset Formula $[\Theta_{1},\dots,\Theta_{n}]^{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Functional and geometric margins
+\end_layout
+
+\begin_layout Standard
+We define the 
+\series bold
+functional margin
+\series default
+ of 
+\begin_inset Formula $(w,b)$
+\end_inset
+
+ with respect to a training example 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\gamma}^{(i)}=y^{(i)}(w^{T}x+b)
+\]
+
+\end_inset
+
+Note, that when 
+\begin_inset Formula $y^{(i)}$
+\end_inset
+
+is 1, then for the functional margin to be large, 
+\begin_inset Formula $(w^{T}x+b)$
+\end_inset
+
+ needs to be a large positive number.
+ Similar for 
+\begin_inset Formula $y^{(i)}=-1$
+\end_inset
+
+it needs to be a large negative number.
+ Moreover, if 
+\begin_inset Formula $y^{(i)}(w^{T}x+b)>0$
+\end_inset
+
+, then our prediction on this example is correct.
+ The problem here is that scaling our 
+\begin_inset Formula $w,b$
+\end_inset
+
+ does not change our hypothesis 
+\begin_inset Formula $h_{w,b}$
+\end_inset
+
+since it only depends on the sign.
+ But scaling affects our functional margin.
+ It might make sense to normalize this so we can't exploit this freedom.
+ We'll come back later to this.
+ For a whole training set 
+\begin_inset Formula $S$
+\end_inset
+
+ we set the overall function margin to be the smallest of the functional
+ margins:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\gamma}=min\hat{\gamma}^{^{(i)}}
+\]
+
+\end_inset
+
+Let's talk about 
+\series bold
+geometric margins
+\series default
+.
+ Consider the following figure: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename geometrix_margin.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We want to be able to find the value of 
+\begin_inset Formula $\gamma^{(i)}$
+\end_inset
+
+.
+ We know that B is given by 
+\begin_inset Formula $x^{(i)}-\gamma^{(i)}\cdot w/||w||$
+\end_inset
+
+.
+ It also has to satisfy the equation of the decision boundary 
+\begin_inset Formula $w^{T}x+b=0$
+\end_inset
+
+.
+ Hence,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+w^{T}\left(x^{(i)}-\gamma^{(i)}\frac{w}{||w||}\right)+b=0
+\]
+
+\end_inset
+
+Solving for 
+\begin_inset Formula $\gamma^{(i)}$
+\end_inset
+
+ yields
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y^{(i)}=\left(\frac{w}{||w||}\right)^{T}x^{(i)}+\frac{b}{||w||}
+\]
+
+\end_inset
+
+More generally, to consider negative 
+\begin_inset Formula $y$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y^{(i)}=y^{(i)}\left(\left(\frac{w}{||w||}\right)^{T}x^{(i)}+\frac{b}{||w||}\right)
+\]
+
+\end_inset
+
+Now scaling 
+\begin_inset Formula $w,b$
+\end_inset
+
+ does not change the margin.
+ Again we define the geometric margin as the smallest of the geometric margins
+ of the training set.
+ 
+\end_layout
+
+\begin_layout Subsection
+The optimal margin classifier
+\end_layout
+
+\begin_layout Standard
+It seems that a good way is to find a decision boundary that maximizes the
+ margin.
+ For this (and now), we'll assume that our data is linear separable.
+ This poses the following optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\gamma,w,b}\gamma
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ y^{(i)}(w^{T}x^{(i)}+b)\ge\gamma,\ i=1,\dots,m
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+||w||=1
+\]
+
+\end_inset
+
+We want to maximize 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ The last constraint ensures that the functional margin equals the geometric
+ margin.
+ Solving this problem will result with 
+\begin_inset Formula $(w,b)$
+\end_inset
+
+ with the largest possible geometric margin.
+ This problem is quite hard to solve, so we're going to transform it a bit:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\gamma,w,b}\frac{\hat{\gamma}}{||w||}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ y^{(i)}(w^{T}x^{(i)}+b)\ge\hat{\gamma},\ i=1,\dots,m
+\]
+
+\end_inset
+
+We can do this because of 
+\begin_inset Formula $\gamma=\frac{\hat{\gamma}}{||w||}$
+\end_inset
+
+.
+ This is still a bit nasty, so we keep going with a bit of scaling.
+ Since we are now allowed to scale we can set 
+\begin_inset Formula $\hat{\gamma}=1$
+\end_inset
+
+ and rescale 
+\begin_inset Formula $(w,b)$
+\end_inset
+
+what leads to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+min_{\gamma,w,b}\frac{1}{2}||w||^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ y^{(i)}(w^{T}x^{(i)}+b)\ge1,\ i=1,\dots,m
+\]
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document

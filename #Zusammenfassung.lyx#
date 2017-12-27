@@ -1750,5 +1750,321 @@ te normal distribution, discretizing the features and using Naive Bayes
 Laplace smoothing 
 \end_layout
 
+\begin_layout Standard
+Assume a word our algorithm has never seen shows up.
+ Because it has not seen it before it will decide the probability to be
+ zero for spam and non-spam mail what will will lead to 
+\begin_inset Formula $\frac{0}{0}$
+\end_inset
+
+ division: Our algorithm doesn't know how to predict this case.
+ To take account of such new words we can use 
+\series bold
+Laplace smoothing: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j}=\frac{(\sum_{i=1}^{m}1\{z^{(i)}=1\})+1}{m+k}
+\]
+
+\end_inset
+
+ where k is the maximum value z can take on.
+ Returning to our Naive Bayes classifier with Laplace smoothing we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j|y=1}=\frac{\sum_{i=1}^{m}1\{x_{j}^{(i)}=1\land y^{(i)}=1\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=1\}+2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j|y=0}=\frac{\sum_{i=1}^{m}1\{x_{j}^{(i)}=1\land y^{(i)}=0\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=0\}+2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Event models for text classification
+\end_layout
+
+\begin_layout Standard
+We'll look at one more model for text classification.
+ In the last chapter we assumed that first it is randomly determined whether
+ the next mail is from a spammer or a non-spammer.
+ Then the person sending the mail runs through the dictionary deciding whether
+ to use or not use the word 
+\begin_inset Formula $i$
+\end_inset
+
+ according to the probabilities 
+\begin_inset Formula $\phi_{i|y}$
+\end_inset
+
+.
+ Now we take a look at the 
+\series bold
+multinomial event model.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x_{i}$
+\end_inset
+
+will now denote the identitiy of the 
+\begin_inset Formula $i$
+\end_inset
+
+-th word in the email.
+ Thus, 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+can now take on values from 1 to 
+\begin_inset Formula $|V|$
+\end_inset
+
+ where 
+\begin_inset Formula $V$
+\end_inset
+
+ is the dictionary.
+ 
+\begin_inset Formula $(1,17,...)$
+\end_inset
+
+ means the first word in the mail is the first from the dictionary, the
+ second word is the 17-th from the dictionary, etc.
+ Now again, it is first decided whether it is a spam mail or not.
+ Then, the sender of the email writes the email by generating 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+from some multinomial distribution over words, then chooses 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+the same way but independently, etc.
+ The overall probability of a message is then given by 
+\begin_inset Formula $p(y)\prod_{i=1}^{n}p(x_{i}|y)$
+\end_inset
+
+.
+ This looks similar as before but the terms in the formula mean now different
+ things and in particular, 
+\begin_inset Formula $x_{i}|y$
+\end_inset
+
+ is now multinomial, rather than Bernoulli.
+ 
+\end_layout
+
+\begin_layout Standard
+The parameters are 
+\begin_inset Formula $\phi_{y}=p(y)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi_{i|y=1}=p(x_{j}=i|y=1)$
+\end_inset
+
+,
+\begin_inset Formula $\phi_{i|y=0}=p(x_{j}=i|y=0)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The likelihood is then given by 
+\end_layout
+
+\begin_layout Standard
+\SpecialChar ligaturebreak
+
+\begin_inset Formula 
+\[
+L(\phi,\phi_{i|y=1},\phi_{i|y=0})=\prod_{i=1}^{m}(\prod_{j=1}^{n_{i}}p(x_{j}^{(i)}|y;\phi_{i|y=1};\phi_{i|y=0}))p(y^{(i)}|\phi).
+\]
+
+\end_inset
+
+Maximizing this yield the maximum likelihhod estimates for the parameters:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=1}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=1\}}{\sum_{i=1}^{m}1\{y^{(i)}=1\}n_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=0}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=0\}}{\sum_{i=1}^{m}1\{y^{(i)}=0\}n_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{y}=\frac{\sum_{i=1}^{m}1\{y^{(i)}=1\}}{m}
+\]
+
+\end_inset
+
+We can also apply Laplace smoothing (what is needed in practice for good
+ performance):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=1}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=1\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=1\}n_{i}+|V|}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=0}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=0\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=0\}n_{i}+|V|}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Support Vector Machines
+\end_layout
+
+\begin_layout Subsection
+Margins: Intuition
+\end_layout
+
+\begin_layout Standard
+Consider logistic regression.
+ We would predict 
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ on an input 1 iff 
+\begin_inset Formula $h_{\Theta}(x)\ge0.5$
+\end_inset
+
+ or equivlently iff 
+\begin_inset Formula $\Theta^{T}x\ge0$
+\end_inset
+
+.
+ The larger 
+\begin_inset Formula $\Theta^{T}x$
+\end_inset
+
+ is, the higher our degree of 
+\begin_inset Quotes eld
+\end_inset
+
+confidence
+\begin_inset Quotes erd
+\end_inset
+
+ that the label is +1+.
+ Informally we could also say, that 
+\begin_inset Formula $y=1$
+\end_inset
+
+ if 
+\begin_inset Formula $\Theta^{T}x\gg0$
+\end_inset
+
+.
+ Similarly we could say that 
+\begin_inset Formula $y=0$
+\end_inset
+
+ if 
+\begin_inset Formula $\Theta^{T}x\ll0$
+\end_inset
+
+.
+ Therefore we could say informally that we found a good fit if we can find
+ 
+\begin_inset Formula $\Theta$
+\end_inset
+
+so that 
+\begin_inset Formula $\Theta^{T}x\gg0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $y^{(i)}=1$
+\end_inset
+
+, and 
+\begin_inset Formula $\Theta^{T}x\ll0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $y^{(i)}=0.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For another type of intuition, consider the following figure where x's represent
+ positive training examples and y's negative training examples.
+ The line is also called 
+\series bold
+separating hyperplane
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename margins_intuition.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \end_body
 \end_document
