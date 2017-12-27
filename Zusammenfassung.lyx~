@@ -1326,7 +1326,7 @@ Graphically spoken, the covariance matrix changes the shape of the ellipsoid
 
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 The Gaussian Discriminant Analysis model
 \end_layout
 
@@ -1470,7 +1470,7 @@ is different .
  
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Discussion: GDA and logistic regression
 \end_layout
 
@@ -1499,7 +1499,444 @@ is some appropriate function of the remainin parameters.
 \begin_inset Formula $p(y=1|x)$
 \end_inset
 
+.
+ When do we prefer one model over the other?
+\end_layout
 
+\begin_layout Standard
+GDA makes 
+\emph on
+stronger
+\emph default
+ modeling assumptions than logistic regression does.
+ It turns out that when these assumptions are correct, GDA will find better
+ fits to the data.
+ This is especially the case when 
+\begin_inset Formula $p(x|y)$
+\end_inset
+
+ is gaussian.
+ But by making weaker assumptions, logistic regression is more 
+\emph on
+robust
+\emph default
+ and less sensitive to wrong assumptions than GDA.
+ So if we assumed that 
+\begin_inset Formula $p(y|x)$
+\end_inset
+
+ is logistic and 
+\begin_inset Formula $x|y\sim Poisson$
+\end_inset
+
+ then GDA may not do well on such non-Gaussian data.
+ GDA makes more assumptions and is more data-efficient when the modeling
+ assumptions are (at least approximately) correct.
+ Logistic regression makes weaker assumptions and is more robust.
+ Especially in non-Gaussian data, logistic regression will do better than
+ GDA.
+\end_layout
+
+\begin_layout Subsection
+Naive Bayes
+\end_layout
+
+\begin_layout Standard
+GDA works with continuous, real-valued vectors.
+ This is a different learning algorithm where the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+'s are discrete-valued.
+ To demonstrate, assume we're gonna build an spam-filter.
+\end_layout
+
+\begin_layout Standard
+We will represent an email via a feature vector whose length is equal to
+ the length of the dictionary.
+ If an email contains word number 
+\begin_inset Formula $i$
+\end_inset
+
+ in the dictionary, then 
+\begin_inset Formula $x_{i}=1$
+\end_inset
+
+, otherwise 
+\begin_inset Formula $x_{i}=0$
+\end_inset
+
+.
+ The words in the feature vector are called 
+\series bold
+vocabulary
+\series default
+.
+ We want to model 
+\begin_inset Formula $p(x|y)$
+\end_inset
+
+.
+ This means that given spam or not spam, how possible is it that word 
+\begin_inset Formula $i$
+\end_inset
+
+ is going to show up.
+ To model 
+\begin_inset Formula $p(x|y)$
+\end_inset
+
+ we're going to make a very strong assumption.
+ We will assume that the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+'s are conditionally independent given 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ This assumption is called the 
+\series bold
+Naive Bayes (NB) assumption
+\series default
+ and the resulting algorithm is called the 
+\series bold
+Naive Bayes classifier.
+ 
+\series default
+This means that when we have 
+\begin_inset Formula $y=1$
+\end_inset
+
+, the knowledge of 
+\begin_inset Formula $x_{2987}$
+\end_inset
+
+makes no effect on the knowledge of 
+\begin_inset Formula $x_{19}$
+\end_inset
+
+.
+ This can also be written as 
+\begin_inset Formula $p(x_{2987}|y)=p(x_{2987}|y,x_{19})$
+\end_inset
+
+ (this is different from saying they are independet what would mean 
+\begin_inset Formula $p(x_{2987})=p(x_{2987}|x_{19})$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+We now have 
+\begin_inset Formula $p(x_{1},\dots,x_{n}|y)=\prod_{i=1}^{n}p(x_{i}|y)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that even though we made a strong assumptions, NB still works well
+ on many problems.
+ 
+\end_layout
+
+\begin_layout Standard
+Our model is parameterized by 
+\begin_inset Formula $\phi_{i|y=1}=p(x_{i}=1|y=1)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi_{i|y=0}=p(x_{i}=1|y=0)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi_{y}=p(y=1)$
+\end_inset
+
+.
+ When we write down the joint likelihood of the data we get
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(\phi_{y},\phi_{i|y=0},\phi_{i|y=1})=\prod_{i=1}^{m}p(x^{(i)},y^{(i)})
+\]
+
+\end_inset
+
+Maximizing this results in the maximum likelihood estimates:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j|y=1}=\frac{\sum_{i=1}^{m}1\{x_{j}^{(i)}=1\land y^{(i)}=1\}}{\sum_{i=1}^{m}1\{y^{(i)}=1\}}
+\]
+
+\end_inset
+
+(How many times does the word show up in spam email in contrast to all spam
+ email?)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j|y=0}=\frac{\sum_{i=1}^{m}1\{x_{j}^{(i)}=1\land y^{(i)}=0\}}{\sum_{i=1}^{m}1\{y^{(i)}=0\}}
+\]
+
+\end_inset
+
+(How many times does the word show up in non-spam email in contrast to all
+ non-spam email?)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{y}=\frac{\sum_{i=1}^{m}1\{y^{(i)}=1\}}{m}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now that we have fit all our data, to make a prediction we simply have to
+ calculate
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y=1|x)=\frac{p(x|y=1)p(y=1)}{p(x)}=\frac{(\prod_{i=1}^{n}p(x_{i}|y=1))p(y=1)}{(\prod_{i=1}^{n}p(x_{i}|y=1))p(y=1)+(\prod_{i=1}^{n}p(x_{i}|y=0))p(y=0)}=\frac{(\prod_{i=1}^{n}\phi_{i|y=1})\phi_{y}}{(\prod_{i=1}^{n}\phi_{i|y=1})\phi_{y}+(\prod_{i=1}^{n}\phi_{i|y=0})(1-\phi_{y})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that even though this example was with binary values, the generalization
+ to a case where 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+can take on values in {1,2,...,k} is straightforward.
+ We could just model 
+\begin_inset Formula $p(x_{i}|y)$
+\end_inset
+
+ as multinomial rather than as Bernoulli.
+ It is in practice quite common to 
+\series bold
+discretize
+\series default
+ and then use Naive Bayes.
+ When original, contiuous-valued attributes are not well-modeled by a multivaria
+te normal distribution, discretizing the features and using Naive Bayes
+ will often result in a better classifier.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Laplace smoothing 
+\end_layout
+
+\begin_layout Standard
+Assume a word our algorithm has never seen shows up.
+ Because it has not seen it before it will decide the probability to be
+ zero for spam and non-spam mail what will will lead to 
+\begin_inset Formula $\frac{0}{0}$
+\end_inset
+
+ division: Our algorithm doesn't know how to predict this case.
+ To take account of such new words we can use 
+\series bold
+Laplace smoothing: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j}=\frac{(\sum_{i=1}^{m}1\{z^{(i)}=1\})+1}{m+k}
+\]
+
+\end_inset
+
+ where k is the maximum value z can take on.
+ Returning to our Naive Bayes classifier with Laplace smoothing we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j|y=1}=\frac{\sum_{i=1}^{m}1\{x_{j}^{(i)}=1\land y^{(i)}=1\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=1\}+2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{j|y=0}=\frac{\sum_{i=1}^{m}1\{x_{j}^{(i)}=1\land y^{(i)}=0\}+1}{\sum_{i=1}^{m}1\{y^{(i)}=0\}+2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Event models for text classification
+\end_layout
+
+\begin_layout Standard
+We'll look at one more model for text classification.
+ In the last chapter we assumed that first it is randomly determined whether
+ the next mail is from a spammer or a non-spammer.
+ Then the person sending the mail runs through the dictionary deciding whether
+ to use or not use the word 
+\begin_inset Formula $i$
+\end_inset
+
+ according to the probabilities 
+\begin_inset Formula $\phi_{i|y}$
+\end_inset
+
+.
+ Now we take a look at the 
+\series bold
+multinomial event model.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x_{i}$
+\end_inset
+
+will now denote the identitiy of the 
+\begin_inset Formula $i$
+\end_inset
+
+-th word in the email.
+ Thus, 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+can now take on values from 1 to 
+\begin_inset Formula $|V|$
+\end_inset
+
+ where 
+\begin_inset Formula $V$
+\end_inset
+
+ is the dictionary.
+ 
+\begin_inset Formula $(1,17,...)$
+\end_inset
+
+ means the first word in the mail is the first from the dictionary, the
+ second word is the 17-th from the dictionary, etc.
+ Now again, it is first decided whether it is a spam mail or not.
+ Then, the sender of the email writes the email by generating 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+from some multinomial distribution over words, then chooses 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+the same way but independently, etc.
+ The overall probability of a message is then given by 
+\begin_inset Formula $p(y)\prod_{i=1}^{n}p(x_{i}|y)$
+\end_inset
+
+.
+ This looks similar as before but the terms in the formula mean now different
+ things and in particular, 
+\begin_inset Formula $x_{i}|y$
+\end_inset
+
+ is now multinomial, rather than Bernoulli.
+ 
+\end_layout
+
+\begin_layout Standard
+The parameters are 
+\begin_inset Formula $\phi_{y}=p(y)$
+\end_inset
+
+, 
+\begin_inset Formula $\phi_{i|y=1}=p(x_{j}=i|y=1)$
+\end_inset
+
+,
+\begin_inset Formula $\phi_{i|y=0}=p(x_{j}=i|y=0)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The likelihood is then given by 
+\end_layout
+
+\begin_layout Standard
+\SpecialChar ligaturebreak
+
+\begin_inset Formula 
+\[
+L(\phi,\phi_{i|y=1},\phi_{i|y=0})=\prod_{i=1}^{m}(\prod_{j=1}^{n_{i}}p(x_{j}^{(i)}|y;\phi_{i|y=1};\phi_{i|y=0}))p(y^{(i)}|\phi).
+\]
+
+\end_inset
+
+Maximizing this yield the maximum likelihhod estimates for the parameters:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=1}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=1\}}{\sum_{i=1}^{m}1\{y^{(i)}=1\}n_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{k|y=0}=\frac{\sum_{i=1}^{m}\sum_{j=1}^{n_{i}}1\{x_{j}^{(i)}=k\land y^{(i)}=0\}}{\sum_{i=1}^{m}1\{y^{(i)}=0\}n_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi_{y}=\frac{\sum_{i=1}^{m}1\{y^{(i)}=1\}}{m}
+\]
+
+\end_inset
+
+We can also apply Laplace smoothing (what is needed in practice for good
+ performance):
 \end_layout
 
 \end_body
