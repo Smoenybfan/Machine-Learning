@@ -1461,6 +1461,45 @@ The data has been fit to the two gaussians we see here.
 \end_inset
 
 .
+ The gaussians have the same shape because they have the same covariance
+ matrix but their mean 
+\begin_inset Formula $\mu_{0},\mu_{1}$
+\end_inset
+
+is different .
+ 
+\end_layout
+
+\begin_layout Subsection
+Discussion: GDA and logistic regression
+\end_layout
+
+\begin_layout Standard
+We can view 
+\begin_inset Formula $p(y=1|x;\phi,\mu_{0},\mu_{1},\Sigma)$
+\end_inset
+
+ as a function of x and will find that in can be expressed in the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y=1|x;\phi,\Sigma,\mu_{0},\mu_{1})=\frac{1}{1+exp(-\Theta^{T}x)}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\Theta$
+\end_inset
+
+is some appropriate function of the remainin parameters.
+ This is the form that logistic regression used to model 
+\begin_inset Formula $p(y=1|x)$
+\end_inset
+
+
 \end_layout
 
 \end_body
