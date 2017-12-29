@@ -3010,5 +3010,619 @@ where all but the suport vectors are zero.
  
 \end_layout
 
+\begin_layout Subsection
+Kernels
+\end_layout
+
+\begin_layout Standard
+In the beginning we had our example where we had the living area as input
+ 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ We then considered using the features 
+\begin_inset Formula $x,x^{2},x^{3}$
+\end_inset
+
+and some cubic form.
+ To be able to distinguish we will further call the original input value
+ the 
+\series bold
+input attributes
+\series default
+ of a problem.
+ When they get somewhat mapped (could also just be 1:1) and then used in
+ our learning algorithm we'll call those 
+\series bold
+input features
+\series default
+.
+ We also denote 
+\begin_inset Formula $\phi$
+\end_inset
+
+the 
+\series bold
+feature mapping
+\series default
+, which maps from the attributes to the features.
+ In the mentioned example we had:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi(x)=\left[\begin{array}{c}
+x\\
+x^{2}\\
+x^{3}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In our SVM, we may want to work with such mapped features.
+ To do so we can simply use 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ instead of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Since the algorithm has been written in terms of inner products 
+\begin_inset Formula $<x,z>$
+\end_inset
+
+ we would replace these with 
+\begin_inset Formula $<\phi(x),\phi(z)>$
+\end_inset
+
+.
+ Given a feature mapping 
+\begin_inset Formula $\phi$
+\end_inset
+
+, we fedine the corresponding 
+\series bold
+Kernel
+\series default
+ to be 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=\phi(x)^{T}\phi(z)
+\]
+
+\end_inset
+
+Then, everywhere we had 
+\begin_inset Formula $<x,z>$
+\end_inset
+
+in our algorithm we replace it with 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Now, given 
+\begin_inset Formula $\phi$
+\end_inset
+
+we could easily compute 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ by finding 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi(z)$
+\end_inset
+
+ and taking their inner product.
+ But more interesting is that often, 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ may be very inexpensive to calculate even though 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ may be very expensive (e.g.
+ because it's high-dimensional).
+ By using an efficient way to calculate 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ in our algorithm, we can get the SVMs to learn in high dimensional feature
+ space given by 
+\begin_inset Formula $\phi$
+\end_inset
+
+without ever having to explicitly use 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Let's see an example.
+ Suppose 
+\begin_inset Formula $x,z\in\mathbb{R}^{n}$
+\end_inset
+
+and consider 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=(x^{T}z)^{2}
+\]
+
+\end_inset
+
+We can also write this as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=\sum_{i,j=1}^{n}(x_{i}x_{j})(z_{i}z_{j})
+\]
+
+\end_inset
+
+Only calculating 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+, here in the case of 
+\begin_inset Formula $n=2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi(x)=\left[\begin{array}{c}
+x_{1}x_{1}\\
+x_{1}x_{2}\\
+x_{2}x_{1}\\
+x_{2}x_{2}
+\end{array}\right]
+\]
+
+\end_inset
+
+Whereas calculating 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ only required 
+\begin_inset Formula $O(n)$
+\end_inset
+
+ time, just calculating 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ took 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+ time.
+ Even though we mapped to a higher dimensional space, we can still work
+ in linear time.
+ 
+\end_layout
+
+\begin_layout Standard
+Now, let's talk about a different, intuitive view of kernels.
+ Intuitively we might expect 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ to be large when 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi(z)$
+\end_inset
+
+ are close together (because the angle in between is small) and small when
+ they are far apart.
+ So we can think of the kernel 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ as a measurment of how similar 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi(z)$
+\end_inset
+
+ are.
+ Given this intuition we might choose 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=exp\left(-\frac{||x-z||^{2}}{2\sigma^{2}}\right).
+\]
+
+\end_inset
+
+ This kernel is called the 
+\series bold
+Gaussian kernel
+\series default
+ and is a valid kernel.
+ But how can we generally decide if a kernel is valid?
+\end_layout
+
+\begin_layout Standard
+We denote the 
+\series bold
+Kernel matrix
+\series default
+ to be the matrix defined by 
+\begin_inset Formula $K_{ij}=K(x^{(i)},x^{(j)})$
+\end_inset
+
+ where the 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+come from a set of points.
+ Now, 
+\begin_inset Formula $K$
+\end_inset
+
+ is a valid kernel if and only if its matrix is 
+\emph on
+positive semi-definite
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Shortly: Kernels let you work efficiently in high dimensional space.
+ 
+\end_layout
+
+\begin_layout Subsection
+Regularization and the non-seperable case
+\end_layout
+
+\begin_layout Standard
+So far, we've only worked in cases where the data was linearly seperable.
+ But this might not be the case or you could also just have small outliners
+ that change your hyperplane dramatically to the worse (see figure) 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename outliner_hyperplane.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To make the algorithm work for non-linearly seperable datasets as well as
+ be less sensitive to such outliners, we reformulate our optimization using
+ 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+
+\series bold
+-regularization
+\series default
+:
+\begin_inset Formula 
+\[
+min_{\gamma,w,b}\frac{1}{2}||w||^{2}+C\sum_{i=1}^{m}\xi_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ y^{(i)}(w^{T}x^{(i)}+b)\ge1-\xi_{i},\ i=1,\dots,m
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\xi_{i}\ge0\ i=1,\dots,m
+\]
+
+\end_inset
+
+Examples are now allowed to have a functional margin less than 1, and if
+ an example has such a functional margin 
+\begin_inset Formula $1-\xi_{i}$
+\end_inset
+
+, we would pay a cost to our objective function being increased with 
+\begin_inset Formula $C\xi_{i}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $C$
+\end_inset
+
+ controls the relative weighting between the two goals of keeping the objective
+ function small and ensuring most examples have a functional margin of at
+ least 1.
+ 
+\end_layout
+
+\begin_layout Standard
+We can again form the Lagrangian:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(w,b,\alpha)=\frac{1}{2}||w||^{2}+C\sum_{i=1}^{m}\xi_{i}-\sum_{i=1}^{m}\alpha_{i}[y^{(i)}(w^{T}x^{(i)}+b)-1+\xi_{i}]-\sum_{i=1}^{m}r_{i}\xi_{i}
+\]
+
+\end_inset
+
+The 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+'s and 
+\begin_inset Formula $r_{i}$
+\end_inset
+
+'s are our Lagrange multipliers (
+\begin_inset Formula $\ge0$
+\end_inset
+
+).
+ We then obtain the dual form of the problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\alpha}W(\alpha)=\sum_{i=1}^{m}\alpha_{i}-\frac{1}{2}\sum_{i,j=1}^{m}y^{(i)}y^{(j)}\alpha_{i}\alpha_{j}(x^{(i)})^{T}x^{(j)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ 0\le\alpha_{i}\le C
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=0}^{m}\alpha_{i}y^{(i)}=0
+\]
+
+\end_inset
+
+Applying the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-regulariztation, the only change here is that the 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+also have to be less or equal to 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ Also, the KKT dual-complementarity conditions are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{i}=0\Rightarrow y^{(i)}(w^{T}x^{(i)}+b)\ge1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{i}=C\Rightarrow y^{(i)}(w^{T}x^{(i)}+b)\le1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+0<\alpha_{i}<C\Rightarrow y^{(i)}(w^{T}x^{(i)}+b)=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The SMO algorithm
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+sequential minimal algorithm SMO
+\series default
+ gives an efficient way of solvinf the dual problem in SVMs.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Coordinate ascent
+\end_layout
+
+\begin_layout Standard
+Consider trying to solve the unconstrained optimization problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\underset{\alpha}{max}W(\alpha_{1},\dots,\alpha_{m})
+\]
+
+\end_inset
+
+Here we think of 
+\begin_inset Formula $W$
+\end_inset
+
+ as some funciton of the parameters 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+and ignore every ressemblance or similarity.
+ We're going to consider a new algorithm called 
+\series bold
+coordinate ascent
+\series default
+: 
+\end_layout
+
+\begin_layout Standard
+Loop until convergence: {
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad$
+\end_inset
+
+For 
+\begin_inset Formula $i=1,\dots,m$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad\qquad\alpha_{i}:=arg\,max_{\hat{\alpha_{i}}}W(\alpha_{1},\dots,\alpha_{i-1},\hat{\alpha}_{i},\alpha_{i+1},\dots,\alpha_{m})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad$
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Standard
+Thus, for each loop we hold all except 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ fixed and reoptimize 
+\begin_inset Formula $W$
+\end_inset
+
+ with respect to just the parameter 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+.
+ The order in which we choose the 
+\begin_inset Formula $\alpha$
+\end_inset
+
+to be optimized can be to our likings (e.g.
+ the one we expect the largest increase for 
+\begin_inset Formula $W(\alpha)$
+\end_inset
+
+).
+ When the innermost 
+\begin_inset Formula $arg\,max$
+\end_inset
+
+ can be calculated efficiently, coordinate ascent can be fairly efficient.
+ Following is a figure of some coordinate ascent example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename coordinate_ascent.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \end_body
 \end_document

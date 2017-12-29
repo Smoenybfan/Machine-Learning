@@ -2538,7 +2538,779 @@ L(w,\alpha,\beta)=f(w)+\sum_{i=1}^{k}\alpha_{i}g_{i}(w)+\sum_{i=1}^{l}\beta_{i}h
 
 \end_inset
 
-If
+If, for a given 
+\begin_inset Formula $w$
+\end_inset
+
+ any of our constraints is hurt, this quanitity will be 
+\begin_inset Formula $\infty$
+\end_inset
+
+.
+ If the constraints are satisfied, then 
+\begin_inset Formula $\Theta_{P}(w)=f(w)$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $\Theta_{P}$
+\end_inset
+
+takes on the value of our objective if the constraints are satisfied and
+ 
+\begin_inset Formula $\infty$
+\end_inset
+
+if they are not satisfied.
+ Therefore we can consider the following optimization problem 
+\begin_inset Formula 
+\[
+\underset{w}{min}\Theta_{p}(w)=\underset{w}{min}\underset{\alpha,\beta:\alpha_{i}\ge0}{max}L(w,\alpha,\beta)
+\]
+
+\end_inset
+
+and see that it's our original optimization problem.
+ We define the optimal value of the objective to be 
+\begin_inset Formula $p^{*}=\underset{w}{min}\Theta_{p}(w)$
+\end_inset
+
+ and vall this the 
+\series bold
+value
+\series default
+ of the primal problem.
+ 
+\end_layout
+
+\begin_layout Standard
+Now we look at a different problem.
+ We define:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta_{D}(\alpha,\beta)=\underset{w}{min}L(w,\alpha,\beta)
+\]
+
+\end_inset
+
+Here, the 
+\begin_inset Formula $D$
+\end_inset
+
+ subscript stands for 
+\series bold
+dual
+\series default
+.
+ We are now optimizing with respect to 
+\begin_inset Formula $w$
+\end_inset
+
+, whereas we were optimizing with respect to 
+\begin_inset Formula $\alpha,\beta$
+\end_inset
+
+ in the primal problem.
+ We can now pose the dual optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\underset{\alpha,\beta:\alpha_{i}\ge0}{max}\Theta_{D}(w)=\underset{\alpha,\beta:\alpha_{i}\ge0}{max}\underset{w}{min}L(w,\alpha,\beta)
+\]
+
+\end_inset
+
+We also define the optimal value of the dual problem's objective to be 
+\begin_inset Formula $d^{*}=max_{\alpha,\beta:\alpha_{i}\ge0}\Theta_{D}(w)$
+\end_inset
+
+.
+ It can easily be show that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+d^{*}=max_{\alpha,\beta:\alpha_{i}\ge0}\Theta_{D}(w)\le min\Theta_{p}(w)=p^{*}
+\]
+
+\end_inset
+
+However, under certain conditions we will have 
+\begin_inset Formula $d^{*}=p^{*}$
+\end_inset
+
+.
+ We suppose now that 
+\begin_inset Formula $f$
+\end_inset
+
+ and the 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+'s are convex and the 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+'s affine (
+\begin_inset Formula $h_{i}(w)=a_{i}^{T}w+b)$
+\end_inset
+
+, linear with intercept term) and we assume that the constraints on 
+\begin_inset Formula $g_{i}$
+\end_inset
+
+are feasible.
+ Under these assumptions, there must exist 
+\begin_inset Formula $w^{*},\alpha^{*},\beta^{*},$
+\end_inset
+
+ so that 
+\begin_inset Formula $w^{*}$
+\end_inset
+
+is the solution to the primal problem and 
+\begin_inset Formula $\alpha^{*},\beta^{*}$
+\end_inset
+
+are the solution to the dual problem and moreover 
+\begin_inset Formula $p^{*}=d^{*}=L(w^{*},\alpha^{*},\beta^{*})$
+\end_inset
+
+.
+ Also, 
+\begin_inset Formula $w^{*},\alpha^{*},\beta^{*}$
+\end_inset
+
+satisfy the 
+\series bold
+Karush-Kuhn-Tucker (KKT) conditions
+\series default
+, which follow and if they satisfy them, then they're a solution to the
+ primal and dual problems:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial w_{i}}L(w^{*},\alpha^{*},\beta^{*})=0,\ i=1,\dots,n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial\beta_{i}}L(w^{*},\alpha^{*},\beta^{*})=0,\ i=1,\dots,l
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{i}^{*}g_{i}(w^{*})=0,\ i=1,\dots,k
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+g(w^{*})\le0,\ i=1,\dots,k
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha^{*}\ge0,\ i=1,\dots,k
+\]
+
+\end_inset
+
+
+\begin_inset Formula $\alpha_{i}^{*}g(w^{*})=0$
+\end_inset
+
+ also means that if 
+\begin_inset Formula $\alpha_{i}^{*}>0$
+\end_inset
+
+, then 
+\begin_inset Formula $g_{i}(w^{*})=0$
+\end_inset
+
+.
+ We will use this later.
+ 
+\end_layout
+
+\begin_layout Subsection
+Optimal margin classifiers
+\end_layout
+
+\begin_layout Standard
+Remember the primal optimization problem we posed for finding the optimal
+ margin classifier:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+min_{\gamma,w,b}\frac{1}{2}||w||^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ y^{(i)}(w^{T}x^{(i)}+b)\ge1,\ i=1,\dots,m
+\]
+
+\end_inset
+
+We can write the constraints as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+g_{i}(w)=-y^{(i)}(w^{T}x^{(i)}+b)+1\le0
+\]
+
+\end_inset
+
+We have one such constraint per training example.
+ Note that from the KKT condition we mentioned, we will have 
+\begin_inset Formula $\alpha_{i}>0$
+\end_inset
+
+ for only the training examples where the functional margin is exactly 1,
+ because only there 
+\begin_inset Formula $g_{i}(w)=0$
+\end_inset
+
+.
+ Look at the figure below
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename svm_figure.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can see exactly three points on the dashed line which signals the points
+ where the functional margin is equal to 1.
+ The points on these lines (where the 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ are non-zero) are called 
+\series bold
+suport vectors
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+When we construct the Lagrangian for our optimization problem we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(w,b,\alpha)=\frac{1}{2}||w||^{2}-\sum_{i=1}^{m}\alpha_{i}[y^{(i)}(w^{T}x^{(i)}+b)-1]
+\]
+
+\end_inset
+
+We have only 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+, but no 
+\begin_inset Formula $\beta_{i}$
+\end_inset
+
+because we have only inequality constraints.
+ Let's find the dual form.
+ We start by setting the derivatives of 
+\begin_inset Formula $L$
+\end_inset
+
+ with respect to 
+\series bold
+
+\begin_inset Formula $w,b$
+\end_inset
+
+ 
+\series default
+to zero:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{w}L(w,b,\alpha)=w-\sum_{i=1}^{m}\alpha_{i}y^{(i)}x^{(i)}=0
+\]
+
+\end_inset
+
+This implies that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+w=\sum_{i=1}^{m}\alpha_{i}y^{(i)}x^{(i)}=0
+\]
+
+\end_inset
+
+For the deratives with respect to 
+\begin_inset Formula $b$
+\end_inset
+
+ we get
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial b}L(w,b,\alpha)=\sum_{i=1}^{m}\alpha_{i}y^{(i)}=0
+\]
+
+\end_inset
+
+If we put these back in the Lagrangian, simplify and remember the last result
+ we got we obtain
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(w,b,\alpha)=\sum_{i=1}^{m}\alpha_{i}-\frac{1}{2}\sum_{i,j=1}^{m}y^{(i)}y^{(j)}\alpha_{i}\alpha_{j}(x^{(i)})^{T}x^{(j)}
+\]
+
+\end_inset
+
+Putting tis together with the constraint that 
+\begin_inset Formula $\alpha_{i}\ge0$
+\end_inset
+
+, we get the following dual optimization problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\alpha}W(\alpha)=\sum_{i=1}^{m}\alpha_{i}-\frac{1}{2}\sum_{i,j=1}^{m}y^{(i)}y^{(j)}\alpha_{i}\alpha_{j}(x^{(i)})^{T}x^{(j)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ \alpha_{i}\ge0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=0}^{m}\alpha_{i}y^{(i)}=0
+\]
+
+\end_inset
+
+The KKT conditions are all satisfied.
+ We'll talk later about how to get the optimal values for the 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+.
+ But if we had them we could solve for the optimal 
+\begin_inset Formula $w$
+\end_inset
+
+ and then, having this solve for the optimal value of the intercept b, that
+ would be
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+b^{*}=-\frac{max_{i:y^{(i)}=-1}w^{*T}x^{(i)}+min_{i:y^{(i)}=1}w^{*T}x^{(i)}}{2}
+\]
+
+\end_inset
+
+Before we finish here we look at how we could make a prediction.
+ Having fit the parameters, we would calculate 
+\begin_inset Formula $w^{T}x+b$
+\end_inset
+
+ and predict 
+\begin_inset Formula $y=1$
+\end_inset
+
+iff it is bigger than 0.
+ This quantity can also be written as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+w^{T}x+b=\sum_{i=1}^{m}\alpha_{i}y^{(i)}<x^{(i)},x>+b
+\]
+
+\end_inset
+
+where all but the suport vectors are zero.
+ This will help making this algorithm fast and efficient.
+ 
+\end_layout
+
+\begin_layout Subsection
+Kernels
+\end_layout
+
+\begin_layout Standard
+In the beginning we had our example where we had the living area as input
+ 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ We then considered using the features 
+\begin_inset Formula $x,x^{2},x^{3}$
+\end_inset
+
+and some cubic form.
+ To be able to distinguish we will further call the original input value
+ the 
+\series bold
+input attributes
+\series default
+ of a problem.
+ When they get somewhat mapped (could also just be 1:1) and then used in
+ our learning algorithm we'll call those 
+\series bold
+input features
+\series default
+.
+ We also denote 
+\begin_inset Formula $\phi$
+\end_inset
+
+the 
+\series bold
+feature mapping
+\series default
+, which maps from the attributes to the features.
+ In the mentioned example we had:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi(x)=\left[\begin{array}{c}
+x\\
+x^{2}\\
+x^{3}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In our SVM, we may want to work with such mapped features.
+ To do so we can simply use 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ instead of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Since the algorithm has been written in terms of inner products 
+\begin_inset Formula $<x,z>$
+\end_inset
+
+ we would replace these with 
+\begin_inset Formula $<\phi(x),\phi(z)>$
+\end_inset
+
+.
+ Given a feature mapping 
+\begin_inset Formula $\phi$
+\end_inset
+
+, we fedine the corresponding 
+\series bold
+Kernel
+\series default
+ to be 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=\phi(x)^{T}\phi(z)
+\]
+
+\end_inset
+
+Then, everywhere we had 
+\begin_inset Formula $<x,z>$
+\end_inset
+
+in our algorithm we replace it with 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Now, given 
+\begin_inset Formula $\phi$
+\end_inset
+
+we could easily compute 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ by finding 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi(z)$
+\end_inset
+
+ and taking their inner product.
+ But more interesting is that often, 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ may be very inexpensive to calculate even though 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ may be very expensive (e.g.
+ because it's high-dimensional).
+ By using an efficient way to calculate 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ in our algorithm, we can get the SVMs to learn in high dimensional feature
+ space given by 
+\begin_inset Formula $\phi$
+\end_inset
+
+without ever having to explicitly use 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Let's see an example.
+ Suppose 
+\begin_inset Formula $x,z\in\mathbb{R}^{n}$
+\end_inset
+
+and consider 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=(x^{T}z)^{2}
+\]
+
+\end_inset
+
+We can also write this as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=\sum_{i,j=1}^{n}(x_{i}x_{j})(z_{i}z_{j})
+\]
+
+\end_inset
+
+Only calculating 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+, here in the case of 
+\begin_inset Formula $n=2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi(x)=\left[\begin{array}{c}
+x_{1}x_{1}\\
+x_{1}x_{2}\\
+x_{2}x_{1}\\
+x_{2}x_{2}
+\end{array}\right]
+\]
+
+\end_inset
+
+Whereas calculating 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ only required 
+\begin_inset Formula $O(n)$
+\end_inset
+
+ time, just calculating 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ took 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+ time.
+ Even though we mapped to a higher dimensional space, we can still work
+ in linear time.
+ 
+\end_layout
+
+\begin_layout Standard
+Now, let's talk about a different, intuitive view of kernels.
+ Intuitively we might expect 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ to be large when 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi(z)$
+\end_inset
+
+ are close together (because the angle in between is small) and small when
+ they are far apart.
+ So we can think of the kernel 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ as a measurment of how similar 
+\begin_inset Formula $\phi(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi(z)$
+\end_inset
+
+ are.
+ Given this intuition we might choose 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+K(x,z)=exp\left(-\frac{||x-z||^{2}}{2\sigma^{2}}\right).
+\]
+
+\end_inset
+
+ This kernel is called the 
+\series bold
+Gaussian kernel
+\series default
+ and is a valid kernel.
+ But how can we generally decide if a kernel is valid?
+\end_layout
+
+\begin_layout Standard
+We denote the 
+\series bold
+Kernel matrix
+\series default
+ to be the matrix defined by 
+\begin_inset Formula $K_{ij}=K(x^{(i)},x^{(j)})$
+\end_inset
+
+ where the 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+come from a set of points.
+ Now, 
+\begin_inset Formula $K$
+\end_inset
+
+ is a valid kernel if and only if its matrix is 
+\emph on
+positive semi-definite
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Shortly: Kernels let you w
 \end_layout
 
 \end_body
