@@ -3620,8 +3620,255 @@ to be optimized can be to our likings (e.g.
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection
+SMO
+\end_layout
 
+\begin_layout Standard
+Again, this is the dual optimization problem we want to solve:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\alpha}W(\alpha)=\sum_{i=1}^{m}\alpha_{i}-\frac{1}{2}\sum_{i,j=1}^{m}y^{(i)}y^{(j)}\alpha_{i}\alpha_{j}(x^{(i)})^{T}x^{(j)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ 0\le\alpha_{i}\le C
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=0}^{m}\alpha_{i}y^{(i)}=0
+\]
+
+\end_inset
+
+Assume we have a set of 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ that satisfy this constraint.
+ When we want to update some objects of the 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+, we have to update at least two of them simultaneously to keep satisfying
+ the constraint.
+ We will do the following in the SMO:
+\end_layout
+
+\begin_layout Standard
+Repeat till convergence {
+\end_layout
+
+\begin_layout Enumerate
+Select some pair 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+and 
+\begin_inset Formula $\alpha_{j}$
+\end_inset
+
+ to update next (using a heuristic that picks the two that will allow us
+ to make the biggest progress)
+\end_layout
+
+\begin_layout Enumerate
+Reoptimize 
+\begin_inset Formula $W(\alpha)$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+and 
+\begin_inset Formula $\alpha_{j}$
+\end_inset
+
+ while holding all other 
+\begin_inset Formula $\alpha_{k}$
+\end_inset
+
+ fixed.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+To check for convergence we can check whether the KKT conditions are satisfied
+ within some tolerance convergence parameter 
+\begin_inset Formula $tol$
+\end_inset
+
+ which is typically set around 0.001 to 0.01.
+\end_layout
+
+\begin_layout Standard
+The key to efficency is to be able to compute the update efficiently.
+ Let's shortly sketch this update: 
+\end_layout
+
+\begin_layout Standard
+Let's say in our current step we want to optimize 
+\begin_inset Formula $\alpha_{1},\alpha_{2}$
+\end_inset
+
+.
+ We hold all other fixed and we know that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{1}y^{(1)}+\alpha_{2}y^{(2)}=-\sum_{i=3}^{m}\alpha_{i}y^{(i)}
+\]
+
+\end_inset
+
+The right side is fixed so we can denote it by some constant 
+\begin_inset Formula $\zeta$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{1}y^{(1)}+\alpha_{2}y^{(2)}=\zeta
+\]
+
+\end_inset
+
+We can picture the constraints as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename smo.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the constraints, we know that 
+\begin_inset Formula $\alpha_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $\alpha_{2}$
+\end_inset
+
+must lie within the box [0,
+\begin_inset Formula $C$
+\end_inset
+
+] x [0,
+\begin_inset Formula $C$
+\end_inset
+
+].
+ Also we know that they both must lie on the line plotted.
+ We rewrite our equation a bit:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{1}=(\zeta-\alpha_{2}y^{(2)})y^{(1)}
+\]
+
+\end_inset
+
+Hence, the objective function can be written as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+W(\alpha_{1},\dots,\alpha_{m})=W((\zeta-\alpha_{2}y^{(2)})y^{(1)},\alpha_{2},\dots,\alpha_{m})
+\]
+
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+This is just some quadratic function in 
+\begin_inset Formula $\alpha_{2}$
+\end_inset
+
+, so we can express it as 
+\begin_inset Formula $a\alpha_{2}^{2}+b\alpha_{2}+c$
+\end_inset
+
+ for some appropriate a,b and c.
+ We can easily calculate the maximum value for this and denote it as 
+\begin_inset Formula $\alpha_{2}^{new,unclipped}$
+\end_inset
+
+uf we ignore the box constraint.
+ Now we just have to make sure it lies within the minimum and maximum it
+ may take (clip inside the [L,H] interval):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{2}^{new}=\begin{cases}
+\begin{array}{c}
+H\\
+\alpha_{2}^{new,unclipped}\\
+L
+\end{array} & \begin{array}{c}
+if\ \alpha_{2}^{new,unclipped}>H\\
+if\ L\le\alpha_{2}^{new,unclipped}\le H\\
+if\ \alpha_{2}^{new,unclipped}<L
+\end{array}\end{cases}
+\]
+
+\end_inset
+
+Having this we can just plug it back into our equation and solve for 
+\begin_inset Formula $\alpha_{1}^{new}$
+\end_inset
+
+.
+ 
 \end_layout
 
 \end_body
