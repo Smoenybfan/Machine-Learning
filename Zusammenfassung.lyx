@@ -3868,7 +3868,1105 @@ Having this we can just plug it back into our equation and solve for
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Section
+Learning Theory
+\end_layout
+
+\begin_layout Subsection
+Bias/variance tradeoff
+\end_layout
+
+\begin_layout Standard
+Using linear regression, we might think about whether to use 
+\begin_inset Quotes eld
+\end_inset
+
+simple
+\begin_inset Quotes erd
+\end_inset
+
+ model like a linear one or more complex like the polynomial one.
+ Consider the following example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename bias_variance.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Fitting a 5th order polynomial does not result in a good model.
+ Even though it would do very well on predicting training example it would
+ do a bad job on new examples.
+ It 
+\series bold
+generalizes
+\series default
+ badly.
+ The 
+\series bold
+generalization error
+\series default
+ of a hypothesis is its expected error on examples not necessarily in the
+ training set.
+ Informally, we define the 
+\series bold
+bias
+\series default
+ of a model to be the expected generalization error, even if we fit it to
+ a huge training set.
+ Thus, in the problem above, the linear model suffers from large bias and
+ may underfit the data.
  
+\end_layout
+
+\begin_layout Standard
+The second component to the generalization error, consisting of the 
+\series bold
+variance 
+\series default
+of a model fitting procedure.
+ Especially, when fitting high-order polynomial like the right-most figure,
+ there is a large risk that we're fitting patterns in the data that happen
+ to be only present in our training examples but do not reflect the relationship
+ between 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ By fitting these patterns we might again obtain a model with large generalizati
+on error.
+ In this case, we would say the model has large variance.
+ 
+\end_layout
+
+\begin_layout Standard
+Often, there is a tradeoff between bias and variance.
+ If our model has too few parameters, it may have large bias and small variance,
+ but if it has too many parameters, it may have small bias and large variance.
+ In the figures above, the quadratic function does best in predicting new
+ examples.
+ 
+\end_layout
+
+\begin_layout Subsection
+Preliminaries
+\end_layout
+
+\begin_layout Standard
+This chapter will help us hone our intuition and derive rules of thumb about
+ how to best apply learning algorithms in different settings.
+ We will also try to formalize the bias/variance tradeoff and answer other
+ questions.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Lemma.
+
+\series default
+ Let 
+\begin_inset Formula $A_{1},\dots,A_{k}$
+\end_inset
+
+ be 
+\begin_inset Formula $k$
+\end_inset
+
+ different events (that may not be independent).
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(A_{1}\cup\dots\cup A_{k})\le P(A_{1})+\dots+P(A_{k}).
+\]
+
+\end_inset
+
+
+\series bold
+Lemma.
+
+\series default
+ Let 
+\begin_inset Formula $Z_{1},\dots,Z_{m}$
+\end_inset
+
+ be 
+\begin_inset Formula $m$
+\end_inset
+
+ independent and iid random variables drawn from a Bernoulli(
+\begin_inset Formula $\phi$
+\end_inset
+
+) distribution.
+ I.e.
+ 
+\begin_inset Formula $P(Z_{i}=1)=\phi$
+\end_inset
+
+ and 
+\begin_inset Formula $P(Z_{i}=1-\phi)$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\hat{\phi}=(1/m)\sum_{i=1}^{m}Z_{i}$
+\end_inset
+
+ be the mean of these random variables and let any 
+\begin_inset Formula $\gamma>0$
+\end_inset
+
+ be fixed.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(|\phi-\hat{\phi}|>\gamma)\le2exp(-2\gamma^{2}m)
+\]
+
+\end_inset
+
+ This lemma (which is also called the 
+\series bold
+Chernoff bound
+\series default
+) says that if we take 
+\begin_inset Formula $\hat{\phi}$
+\end_inset
+
+-the average of 
+\begin_inset Formula $m$
+\end_inset
+
+ Bernoulli(
+\begin_inset Formula $\phi)$
+\end_inset
+
+ random variables- to be our estimate of 
+\begin_inset Formula $\phi$
+\end_inset
+
+, then the probability of being far from the true value is small, so long
+ as 
+\begin_inset Formula $m$
+\end_inset
+
+ is large.
+ You can also say that if you have a biased coin which has a chance of 
+\begin_inset Formula $\phi$
+\end_inset
+
+for heads and you toss it 
+\begin_inset Formula $m$
+\end_inset
+
+ times and calculate the fraction of times it came up heads, tat will be
+ a good estimate of 
+\begin_inset Formula $\phi$
+\end_inset
+
+(as long as 
+\begin_inset Formula $m$
+\end_inset
+
+ is large).
+ 
+\end_layout
+
+\begin_layout Standard
+We will stick to binary classification in which the labels are 
+\begin_inset Formula $y\in\{0,1\}$
+\end_inset
+
+.
+ All our conclusions can be generalized.
+ 
+\end_layout
+
+\begin_layout Standard
+We assume that we are given a training set 
+\begin_inset Formula $S$
+\end_inset
+
+ of size 
+\begin_inset Formula $m$
+\end_inset
+
+, where the training examples 
+\begin_inset Formula $(x^{(i)},y^{(i)})$
+\end_inset
+
+ are drawn iid from some probability distribution 
+\begin_inset Formula $D.$
+\end_inset
+
+ For a hypothesis 
+\begin_inset Formula $h$
+\end_inset
+
+ we define the 
+\series bold
+training error 
+\series default
+(also called 
+\series bold
+emiprical risk 
+\series default
+or 
+\series bold
+empirical error
+\series default
+) to be
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\hat{\epsilon}(h)=\frac{1}{m}\sum_{i=1}^{m}1\{h(x^{(i)}\ne y^{(i)}\}}
+\]
+
+\end_inset
+
+If we want to make the dependence of the training set clear we can also
+ write 
+\begin_inset Formula $\hat{\epsilon}_{S}(h)$
+\end_inset
+
+.
+ We also define the generalization error to be
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon(h)=P_{(x,y)\sim D}(h(x)\ne y).
+\]
+
+\end_inset
+
+This is the probability that, if we now draw a new example from a distribution
+ 
+\begin_inset Formula $D$
+\end_inset
+
+, we will misclassify it.
+ Note that we assume that all our training data is drawn from the same distribut
+ion 
+\begin_inset Formula $D$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Consider the setting of linear classification and let 
+\begin_inset Formula $h_{\Theta}(x)=\text{1\{\Theta}^{T}x\}$
+\end_inset
+
+.
+ A way to fit the parameters 
+\begin_inset Formula $\Theta$
+\end_inset
+
+is to mimimize the training error and pick
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\Theta}=arg\ min_{\Theta}\hat{\epsilon}(h_{\Theta})
+\]
+
+\end_inset
+
+We call this the 
+\series bold
+empirical risk minimization ERM
+\series default
+ and the resulting hypothesis output by the learning algorithm is 
+\begin_inset Formula $\hat{h}=h_{\hat{\Theta}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We will further abstract away from specific parameterization of hypotheses
+ and from wether we're using a linear classifier.
+ We define the 
+\series bold
+hypothesis class
+\series default
+ 
+\begin_inset Formula $H$
+\end_inset
+
+ used by a learning algorithm to be the set of all classifiers considered
+ by it.
+ For linear classification 
+\begin_inset Formula $H=\{h_{\Theta}:h_{\Theta}(x)=1\{\Theta^{T}x\},\Theta\in\mathbb{R}^{n+1}\}$
+\end_inset
+
+is the set of all classifiers over the domain of inputs 
+\begin_inset Formula $X$
+\end_inset
+
+ where the decision boundary is linear.
+ If we were looking at, say, neural networks then we could let 
+\begin_inset Formula $H$
+\end_inset
+
+ be the set of all classifiers representable by some neural network architecture.
+ 
+\end_layout
+
+\begin_layout Standard
+Empirical risk minimization can now be thought as the minimization over
+ the class of functions 
+\begin_inset Formula $H$
+\end_inset
+
+, in which the learning algorithm picks the hypothesis
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{h}=arg\ \underset{h\in H}{min}\hat{\epsilon}(h)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The case of finite 
+\begin_inset Formula $H$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We consider now a learning problem in which we have a finite hypothesis
+ class 
+\begin_inset Formula $H=\{h_{1},\dots h_{k}\}$
+\end_inset
+
+ consisting of 
+\begin_inset Formula $k$
+\end_inset
+
+ hypotheses.
+ Thus, 
+\begin_inset Formula $H$
+\end_inset
+
+ is a set of functions mapping from 
+\begin_inset Formula $X$
+\end_inset
+
+ to 
+\begin_inset Formula $\{0,1\}$
+\end_inset
+
+ and empirical risk minimization picks the one with the smallest error.
+ To be able to give a guarrantee on the generalization error by first showing
+ that 
+\begin_inset Formula $\hat{\epsilon}(h)$
+\end_inset
+
+ is a reliable estate of 
+\begin_inset Formula $\epsilon(h)$
+\end_inset
+
+ for all hypotheses 
+\begin_inset Formula $h$
+\end_inset
+
+ and second showing that this implies an upper bound on the generalization
+ error on 
+\begin_inset Formula $\hat{h}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Take any fixed 
+\begin_inset Formula $h_{i}\in H$
+\end_inset
+
+.
+ Consider a random variable 
+\begin_inset Formula $Z$
+\end_inset
+
+: We're going to sample 
+\begin_inset Formula $(x,y)\sim D.$
+\end_inset
+
+ Then we set 
+\begin_inset Formula $Z=1\{h_{i}(x)\ne y\}$
+\end_inset
+
+.
+ In other words, Z indicates whether 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ misclassifies it.
+ We also define 
+\begin_inset Formula $Z_{j}=1\{h_{i}(x^{(j)}\ne y^{(j)}\}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The misclassification probability on a randomy drawn example (
+\begin_inset Formula $\epsilon(h)$
+\end_inset
+
+) is exactly the expected value of 
+\begin_inset Formula $Z$
+\end_inset
+
+ .
+ Moreover, the training error can be written as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\epsilon}(h_{i})=\frac{1}{m}\sum_{j=1}^{m}Z_{j}
+\]
+
+\end_inset
+
+Thus, 
+\begin_inset Formula $\hat{\epsilon}$
+\end_inset
+
+ is exactly the mean of the 
+\begin_inset Formula $m$
+\end_inset
+
+ random variables 
+\begin_inset Formula $Z_{j}$
+\end_inset
+
+ that are drawn iid from a Bernoulli distribution with mean 
+\begin_inset Formula $\epsilon(h_{i})$
+\end_inset
+
+.
+ Applying the heffding inequality, we obtain
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(|\epsilon(h_{i})-\hat{\epsilon}(h_{i})|>\gamma)\le2exp(-2\gamma^{2}m)
+\]
+
+\end_inset
+
+This shows that 
+\begin_inset Formula $\epsilon(h_{i})$
+\end_inset
+
+ will be close to 
+\begin_inset Formula $\hat{\epsilon}(h_{i})$
+\end_inset
+
+.
+ We want to show that this is true for all hypotheses.
+ Let 
+\begin_inset Formula $A_{i}$
+\end_inset
+
+denote the event that 
+\begin_inset Formula $|\epsilon(h_{i})-\hat{\epsilon}(h_{i})|>\gamma$
+\end_inset
+
+.
+ Through the union bond lemma and the equation above, we get that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(\lnot\exists h\in H:\,|\,\epsilon(h_{i})-\hat{\epsilon}(h_{i})|>\gamma)=1-2k\,exp(-2\gamma^{2}m)
+\]
+
+\end_inset
+
+What we did was, for particular values of 
+\begin_inset Formula $m$
+\end_inset
+
+ and 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ , given a bound on probability that 
+\begin_inset Formula $|\epsilon(h)-\hat{\epsilon}(h)|>\gamma$
+\end_inset
+
+.
+ Now, given 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ and some 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+, how large must 
+\begin_inset Formula $m$
+\end_inset
+
+ be before we can guarantee that with probability of at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, training error will be within 
+\begin_inset Formula $\gamma$
+\end_inset
+
+of generalization error? By setting 
+\begin_inset Formula $\delta=2k\,exp(-2\gamma^{2}m)$
+\end_inset
+
+ and solving for 
+\begin_inset Formula $m$
+\end_inset
+
+ we get that if
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+m\ge\frac{1}{2\gamma^{2}}log\frac{2k}{\delta},
+\]
+
+\end_inset
+
+ then with probabilty of at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that 
+\begin_inset Formula $|\epsilon(h)-\hat{\epsilon}(h)|\le\gamma$
+\end_inset
+
+ for all hypotheses (or that the probability of the difference of the errors
+ being greater than 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is at most 
+\begin_inset Formula $\delta$
+\end_inset
+
+).
+ The training set size 
+\begin_inset Formula $m$
+\end_inset
+
+ that a certain method or algorithm requires to achieve a certain level
+ of performance is also called the algorithm's 
+\series bold
+sample complexity
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Similarly, we can also hold 
+\begin_inset Formula $m$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta$
+\end_inset
+
+ fixed and show that with probability 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that for all hypotheses
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+|\epsilon(h)-\hat{\epsilon}(h)|\le\sqrt{\frac{1}{2m}log\frac{2k}{\delta}}.
+\]
+
+\end_inset
+
+ We assume now that uniform convergence holds and define 
+\begin_inset Formula $h^{*}=arg\,min_{h\in H}\hat{\epsilon}(h)$
+\end_inset
+
+ to be the best possible hypothesis in 
+\begin_inset Formula $H$
+\end_inset
+
+.
+ It makes sense to compare with 
+\begin_inset Formula $h^{*}$
+\end_inset
+
+since this is the best possible hypothesis.
+ Pick 
+\begin_inset Formula $\hat{h}=arg\,min_{h\in H}\hat{\epsilon}(h)$
+\end_inset
+
+.
+ We have now:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon(\hat{h})\le\epsilon(h^{*})+2\gamma
+\]
+
+\end_inset
+
+
+\series bold
+Theorem.
+
+\series default
+ Let 
+\begin_inset Formula $|H|=k$
+\end_inset
+
+ and any 
+\begin_inset Formula $m,\delta$
+\end_inset
+
+ be fixed.
+ Then with probability of at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon(\hat{h})\le\left(\underset{h\in H}{min}\epsilon(h)\right)+2\sqrt{\frac{1}{2m}log\frac{2k}{\delta}}
+\]
+
+\end_inset
+
+Note, that this also quantifies our statement about bias/variance.
+ If we switch from our hypothesis class 
+\begin_inset Formula $H$
+\end_inset
+
+ to a bigger class 
+\begin_inset Formula $H'$
+\end_inset
+
+with 
+\begin_inset Formula $H'\supseteq H$
+\end_inset
+
+, then our first term (the bias) decreases (because we're taking the min
+ from more hypotheses), but the second term (the variance) increases (because
+ 
+\begin_inset Formula $k$
+\end_inset
+
+ gets bigger).
+ 
+\end_layout
+
+\begin_layout Standard
+By holding 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta$
+\end_inset
+
+fixed and solving for m, we can also obtain the complexity bound: 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Corollary.
+
+\series default
+ Let 
+\begin_inset Formula $|H|=k$
+\end_inset
+
+ and let any 
+\begin_inset Formula $\delta,\gamma$
+\end_inset
+
+ be fiexed.
+ Then for 
+\begin_inset Formula $\epsilon(\hat{h})\le min_{h\in H}\epsilon(h)+2\gamma$
+\end_inset
+
+ to hold with probability at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, it suffices that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+m\ge O\left(\frac{1}{\gamma^{2}}log\frac{k}{\delta}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The case of inifinite 
+\begin_inset Formula $H$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Many hypothesis classes actually contain an infinite number of functions.
+ Suppose now, that we have an 
+\begin_inset Formula $H$
+\end_inset
+
+, that is parameterized by 
+\begin_inset Formula $d$
+\end_inset
+
+ real numbers.
+ We'd be using 64 bit to represent a float and this means our learning algorithm
+ is parameterized by 
+\begin_inset Formula $64d$
+\end_inset
+
+ bits.
+ Thus our hypothesis class consists at most 
+\begin_inset Formula $k=2^{64d}$
+\end_inset
+
+different hypotheses.
+ To guarantee that 
+\begin_inset Formula $\epsilon(\hat{h})\le\epsilon(h^{*})+2\gamma$
+\end_inset
+
+ to hold with probability at least 
+\begin_inset Formula $1-\delta,$
+\end_inset
+
+ it suffices that 
+\begin_inset Formula $m=O_{\gamma,\delta}(d)$
+\end_inset
+
+ (linear, parameterized by 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta$
+\end_inset
+
+).
+ This means to do well we're going to need on the order of a linear number
+ of training examples in
+\begin_inset Formula $d$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+To derive a more satisfying argument, we need more definitions.
+ 
+\end_layout
+
+\begin_layout Standard
+Given a set 
+\begin_inset Formula $S=\{x^{(i)},\dots,x^{(d)}\}$
+\end_inset
+
+ (no relation to the training set) of points 
+\begin_inset Formula $x^{(i)}\in X$
+\end_inset
+
+, we say that 
+\begin_inset Formula $H$
+\end_inset
+
+ 
+\series bold
+shatters
+\series default
+ S, if 
+\begin_inset Formula $H$
+\end_inset
+
+ can realize any labeling on S.
+ I.e.
+ if for any set of labels 
+\begin_inset Formula $\{y^{(1)},\dots,y^{(d)}\}$
+\end_inset
+
+, there exists some 
+\begin_inset Formula $h\in H$
+\end_inset
+
+ so that 
+\begin_inset Formula $h(x^{(i)})=y^{(i)}$
+\end_inset
+
+for all 
+\begin_inset Formula $i=1,\dots,d$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Given a hypothesis class 
+\begin_inset Formula $H$
+\end_inset
+
+, we then define its 
+\series bold
+Vapnik-Chervonenkis dimension VC(
+\begin_inset Formula $H$
+\end_inset
+
+)
+\series default
+, to be the size of the largest set that is shattered by H.
+ 
+\end_layout
+
+\begin_layout Standard
+For instance, consider the following figure:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename VC.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Can the set 
+\begin_inset Formula $H$
+\end_inset
+
+ of linear classifiers in two dimensions (
+\begin_inset Formula $h(x)=1\{\Theta_{0}+\Theta_{1}x_{1}+\Theta_{2}x_{2}\ge0\}$
+\end_inset
+
+) shatter the set above? Yes, it can:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename VC_linear.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But it is possible to show that there is no set of 4 points that this hypothesis
+ class can shatter.
+ Thus, VC(
+\begin_inset Formula $H$
+\end_inset
+
+)=3.
+ 
+\end_layout
+
+\begin_layout Standard
+To prove that VC(
+\begin_inset Formula $H$
+\end_inset
+
+) is at least 
+\begin_inset Formula $d$
+\end_inset
+
+, we need to show that there's at least 
+\emph on
+one
+\emph default
+ set of size 
+\begin_inset Formula $d$
+\end_inset
+
+ that 
+\begin_inset Formula $H$
+\end_inset
+
+ can shatter.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Theorem.
+ 
+\series default
+Let 
+\begin_inset Formula $H$
+\end_inset
+
+ be given, and let 
+\begin_inset Formula $d=VC(H)$
+\end_inset
+
+, Then with probability at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that for all 
+\begin_inset Formula $h\in H$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+|\epsilon(h)-\hat{\epsilon}(h)|\le O\left(\sqrt{\frac{d}{m}log\frac{m}{d}+\frac{1}{m}log\frac{1}{\delta}}\right)
+\]
+
+\end_inset
+
+And
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+|\epsilon(\hat{h})\le\epsilon(h^{*})+O\left(\sqrt{\frac{d}{m}log\frac{m}{d}+\frac{1}{m}log\frac{1}{\delta}}\right).
+\]
+
+\end_inset
+
+In other words, if a hypothesis class has finite VC dimension, then the
+ uniform convergence occurs as 
+\begin_inset Formula $m$
+\end_inset
+
+ becomes large.
+\begin_inset Newline linebreak
+\end_inset
+
+
+\series bold
+Corollary.
+ 
+\series default
+For 
+\begin_inset Formula $|\epsilon(h)-\hat{\epsilon}(h)|\le\gamma$
+\end_inset
+
+ to hold for all hypotheses with probability at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, it suffices that 
+\begin_inset Formula $m=O_{\gamma,\delta}(d)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In other words, the number of training examples to learn 
+\begin_inset Quotes eld
+\end_inset
+
+well
+\begin_inset Quotes erd
+\end_inset
+
+ using 
+\begin_inset Formula $H$
+\end_inset
+
+ ist linear in the VC dimension of 
+\begin_inset Formula $H$
+\end_inset
+
+.
+ It also turns out, that for 
+\begin_inset Quotes eld
+\end_inset
+
+most
+\begin_inset Quotes erd
+\end_inset
+
+ hypothesis classes, the VC dimension is also roughly linear in the number
+ of parameters.
+ So, the number of training examples needed is usually roughly linear in
+ the number of parameters of 
+\begin_inset Formula $H.$
+\end_inset
+
+
 \end_layout
 
 \end_body

@@ -3310,7 +3310,1321 @@ positive semi-definite
 \end_layout
 
 \begin_layout Standard
-Shortly: Kernels let you w
+Shortly: Kernels let you work efficiently in high dimensional space.
+ 
+\end_layout
+
+\begin_layout Subsection
+Regularization and the non-seperable case
+\end_layout
+
+\begin_layout Standard
+So far, we've only worked in cases where the data was linearly seperable.
+ But this might not be the case or you could also just have small outliners
+ that change your hyperplane dramatically to the worse (see figure) 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename outliner_hyperplane.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To make the algorithm work for non-linearly seperable datasets as well as
+ be less sensitive to such outliners, we reformulate our optimization using
+ 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+
+\series bold
+-regularization
+\series default
+:
+\begin_inset Formula 
+\[
+min_{\gamma,w,b}\frac{1}{2}||w||^{2}+C\sum_{i=1}^{m}\xi_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ y^{(i)}(w^{T}x^{(i)}+b)\ge1-\xi_{i},\ i=1,\dots,m
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\xi_{i}\ge0\ i=1,\dots,m
+\]
+
+\end_inset
+
+Examples are now allowed to have a functional margin less than 1, and if
+ an example has such a functional margin 
+\begin_inset Formula $1-\xi_{i}$
+\end_inset
+
+, we would pay a cost to our objective function being increased with 
+\begin_inset Formula $C\xi_{i}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $C$
+\end_inset
+
+ controls the relative weighting between the two goals of keeping the objective
+ function small and ensuring most examples have a functional margin of at
+ least 1.
+ 
+\end_layout
+
+\begin_layout Standard
+We can again form the Lagrangian:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(w,b,\alpha)=\frac{1}{2}||w||^{2}+C\sum_{i=1}^{m}\xi_{i}-\sum_{i=1}^{m}\alpha_{i}[y^{(i)}(w^{T}x^{(i)}+b)-1+\xi_{i}]-\sum_{i=1}^{m}r_{i}\xi_{i}
+\]
+
+\end_inset
+
+The 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+'s and 
+\begin_inset Formula $r_{i}$
+\end_inset
+
+'s are our Lagrange multipliers (
+\begin_inset Formula $\ge0$
+\end_inset
+
+).
+ We then obtain the dual form of the problem:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\alpha}W(\alpha)=\sum_{i=1}^{m}\alpha_{i}-\frac{1}{2}\sum_{i,j=1}^{m}y^{(i)}y^{(j)}\alpha_{i}\alpha_{j}(x^{(i)})^{T}x^{(j)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ 0\le\alpha_{i}\le C
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=0}^{m}\alpha_{i}y^{(i)}=0
+\]
+
+\end_inset
+
+Applying the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-regulariztation, the only change here is that the 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+also have to be less or equal to 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ Also, the KKT dual-complementarity conditions are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{i}=0\Rightarrow y^{(i)}(w^{T}x^{(i)}+b)\ge1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{i}=C\Rightarrow y^{(i)}(w^{T}x^{(i)}+b)\le1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+0<\alpha_{i}<C\Rightarrow y^{(i)}(w^{T}x^{(i)}+b)=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The SMO algorithm
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+sequential minimal algorithm SMO
+\series default
+ gives an efficient way of solvinf the dual problem in SVMs.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Coordinate ascent
+\end_layout
+
+\begin_layout Standard
+Consider trying to solve the unconstrained optimization problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\underset{\alpha}{max}W(\alpha_{1},\dots,\alpha_{m})
+\]
+
+\end_inset
+
+Here we think of 
+\begin_inset Formula $W$
+\end_inset
+
+ as some funciton of the parameters 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+and ignore every ressemblance or similarity.
+ We're going to consider a new algorithm called 
+\series bold
+coordinate ascent
+\series default
+: 
+\end_layout
+
+\begin_layout Standard
+Loop until convergence: {
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad$
+\end_inset
+
+For 
+\begin_inset Formula $i=1,\dots,m$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad\qquad\alpha_{i}:=arg\,max_{\hat{\alpha_{i}}}W(\alpha_{1},\dots,\alpha_{i-1},\hat{\alpha}_{i},\alpha_{i+1},\dots,\alpha_{m})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad$
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Standard
+Thus, for each loop we hold all except 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ fixed and reoptimize 
+\begin_inset Formula $W$
+\end_inset
+
+ with respect to just the parameter 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+.
+ The order in which we choose the 
+\begin_inset Formula $\alpha$
+\end_inset
+
+to be optimized can be to our likings (e.g.
+ the one we expect the largest increase for 
+\begin_inset Formula $W(\alpha)$
+\end_inset
+
+).
+ When the innermost 
+\begin_inset Formula $arg\,max$
+\end_inset
+
+ can be calculated efficiently, coordinate ascent can be fairly efficient.
+ Following is a figure of some coordinate ascent example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename coordinate_ascent.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+SMO
+\end_layout
+
+\begin_layout Standard
+Again, this is the dual optimization problem we want to solve:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+max_{\alpha}W(\alpha)=\sum_{i=1}^{m}\alpha_{i}-\frac{1}{2}\sum_{i,j=1}^{m}y^{(i)}y^{(j)}\alpha_{i}\alpha_{j}(x^{(i)})^{T}x^{(j)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s.t.\ 0\le\alpha_{i}\le C
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=0}^{m}\alpha_{i}y^{(i)}=0
+\]
+
+\end_inset
+
+Assume we have a set of 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ that satisfy this constraint.
+ When we want to update some objects of the 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+, we have to update at least two of them simultaneously to keep satisfying
+ the constraint.
+ We will do the following in the SMO:
+\end_layout
+
+\begin_layout Standard
+Repeat till convergence {
+\end_layout
+
+\begin_layout Enumerate
+Select some pair 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+and 
+\begin_inset Formula $\alpha_{j}$
+\end_inset
+
+ to update next (using a heuristic that picks the two that will allow us
+ to make the biggest progress)
+\end_layout
+
+\begin_layout Enumerate
+Reoptimize 
+\begin_inset Formula $W(\alpha)$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+and 
+\begin_inset Formula $\alpha_{j}$
+\end_inset
+
+ while holding all other 
+\begin_inset Formula $\alpha_{k}$
+\end_inset
+
+ fixed.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+To check for convergence we can check whether the KKT conditions are satisfied
+ within some tolerance convergence parameter 
+\begin_inset Formula $tol$
+\end_inset
+
+ which is typically set around 0.001 to 0.01.
+\end_layout
+
+\begin_layout Standard
+The key to efficency is to be able to compute the update efficiently.
+ Let's shortly sketch this update: 
+\end_layout
+
+\begin_layout Standard
+Let's say in our current step we want to optimize 
+\begin_inset Formula $\alpha_{1},\alpha_{2}$
+\end_inset
+
+.
+ We hold all other fixed and we know that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{1}y^{(1)}+\alpha_{2}y^{(2)}=-\sum_{i=3}^{m}\alpha_{i}y^{(i)}
+\]
+
+\end_inset
+
+The right side is fixed so we can denote it by some constant 
+\begin_inset Formula $\zeta$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{1}y^{(1)}+\alpha_{2}y^{(2)}=\zeta
+\]
+
+\end_inset
+
+We can picture the constraints as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename smo.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the constraints, we know that 
+\begin_inset Formula $\alpha_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $\alpha_{2}$
+\end_inset
+
+must lie within the box [0,
+\begin_inset Formula $C$
+\end_inset
+
+] x [0,
+\begin_inset Formula $C$
+\end_inset
+
+].
+ Also we know that they both must lie on the line plotted.
+ We rewrite our equation a bit:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{1}=(\zeta-\alpha_{2}y^{(2)})y^{(1)}
+\]
+
+\end_inset
+
+Hence, the objective function can be written as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+W(\alpha_{1},\dots,\alpha_{m})=W((\zeta-\alpha_{2}y^{(2)})y^{(1)},\alpha_{2},\dots,\alpha_{m})
+\]
+
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+This is just some quadratic function in 
+\begin_inset Formula $\alpha_{2}$
+\end_inset
+
+, so we can express it as 
+\begin_inset Formula $a\alpha_{2}^{2}+b\alpha_{2}+c$
+\end_inset
+
+ for some appropriate a,b and c.
+ We can easily calculate the maximum value for this and denote it as 
+\begin_inset Formula $\alpha_{2}^{new,unclipped}$
+\end_inset
+
+uf we ignore the box constraint.
+ Now we just have to make sure it lies within the minimum and maximum it
+ may take (clip inside the [L,H] interval):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha_{2}^{new}=\begin{cases}
+\begin{array}{c}
+H\\
+\alpha_{2}^{new,unclipped}\\
+L
+\end{array} & \begin{array}{c}
+if\ \alpha_{2}^{new,unclipped}>H\\
+if\ L\le\alpha_{2}^{new,unclipped}\le H\\
+if\ \alpha_{2}^{new,unclipped}<L
+\end{array}\end{cases}
+\]
+
+\end_inset
+
+Having this we can just plug it back into our equation and solve for 
+\begin_inset Formula $\alpha_{1}^{new}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Learning Theory
+\end_layout
+
+\begin_layout Subsection
+Bias/variance tradeoff
+\end_layout
+
+\begin_layout Standard
+Using linear regression, we might think about whether to use 
+\begin_inset Quotes eld
+\end_inset
+
+simple
+\begin_inset Quotes erd
+\end_inset
+
+ model like a linear one or more complex like the polynomial one.
+ Consider the following example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename bias_variance.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Fitting a 5th order polynomial does not result in a good model.
+ Even though it would do very well on predicting training example it would
+ do a bad job on new examples.
+ It 
+\series bold
+generalizes
+\series default
+ badly.
+ The 
+\series bold
+generalization error
+\series default
+ of a hypothesis is its expected error on examples not necessarily in the
+ training set.
+ Informally, we define the 
+\series bold
+bias
+\series default
+ of a model to be the expected generalization error, even if we fit it to
+ a huge training set.
+ Thus, in the problem above, the linear model suffers from large bias and
+ may underfit the data.
+ 
+\end_layout
+
+\begin_layout Standard
+The second component to the generalization error, consisting of the 
+\series bold
+variance 
+\series default
+of a model fitting procedure.
+ Especially, when fitting high-order polynomial like the right-most figure,
+ there is a large risk that we're fitting patterns in the data that happen
+ to be only present in our training examples but do not reflect the relationship
+ between 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ By fitting these patterns we might again obtain a model with large generalizati
+on error.
+ In this case, we would say the model has large variance.
+ 
+\end_layout
+
+\begin_layout Standard
+Often, there is a tradeoff between bias and variance.
+ If our model has too few parameters, it may have large bias and small variance,
+ but if it has too many parameters, it may have small bias and large variance.
+ In the figures above, the quadratic function does best in predicting new
+ examples.
+ 
+\end_layout
+
+\begin_layout Subsection
+Preliminaries
+\end_layout
+
+\begin_layout Standard
+This chapter will help us hone our intuition and derive rules of thumb about
+ how to best apply learning algorithms in different settings.
+ We will also try to formalize the bias/variance tradeoff and answer other
+ questions.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Lemma.
+
+\series default
+ Let 
+\begin_inset Formula $A_{1},\dots,A_{k}$
+\end_inset
+
+ be 
+\begin_inset Formula $k$
+\end_inset
+
+ different events (that may not be independent).
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(A_{1}\cup\dots\cup A_{k})\le P(A_{1})+\dots+P(A_{k}).
+\]
+
+\end_inset
+
+
+\series bold
+Lemma.
+
+\series default
+ Let 
+\begin_inset Formula $Z_{1},\dots,Z_{m}$
+\end_inset
+
+ be 
+\begin_inset Formula $m$
+\end_inset
+
+ independent and iid random variables drawn from a Bernoulli(
+\begin_inset Formula $\phi$
+\end_inset
+
+) distribution.
+ I.e.
+ 
+\begin_inset Formula $P(Z_{i}=1)=\phi$
+\end_inset
+
+ and 
+\begin_inset Formula $P(Z_{i}=1-\phi)$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\hat{\phi}=(1/m)\sum_{i=1}^{m}Z_{i}$
+\end_inset
+
+ be the mean of these random variables and let any 
+\begin_inset Formula $\gamma>0$
+\end_inset
+
+ be fixed.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(|\phi-\hat{\phi}|>\gamma)\le2exp(-2\gamma^{2}m)
+\]
+
+\end_inset
+
+ This lemma (which is also called the 
+\series bold
+Chernoff bound
+\series default
+) says that if we take 
+\begin_inset Formula $\hat{\phi}$
+\end_inset
+
+-the average of 
+\begin_inset Formula $m$
+\end_inset
+
+ Bernoulli(
+\begin_inset Formula $\phi)$
+\end_inset
+
+ random variables- to be our estimate of 
+\begin_inset Formula $\phi$
+\end_inset
+
+, then the probability of being far from the true value is small, so long
+ as 
+\begin_inset Formula $m$
+\end_inset
+
+ is large.
+ You can also say that if you have a biased coin which has a chance of 
+\begin_inset Formula $\phi$
+\end_inset
+
+for heads and you toss it 
+\begin_inset Formula $m$
+\end_inset
+
+ times and calculate the fraction of times it came up heads, tat will be
+ a good estimate of 
+\begin_inset Formula $\phi$
+\end_inset
+
+(as long as 
+\begin_inset Formula $m$
+\end_inset
+
+ is large).
+ 
+\end_layout
+
+\begin_layout Standard
+We will stick to binary classification in which the labels are 
+\begin_inset Formula $y\in\{0,1\}$
+\end_inset
+
+.
+ All our conclusions can be generalized.
+ 
+\end_layout
+
+\begin_layout Standard
+We assume that we are given a training set 
+\begin_inset Formula $S$
+\end_inset
+
+ of size 
+\begin_inset Formula $m$
+\end_inset
+
+, where the training examples 
+\begin_inset Formula $(x^{(i)},y^{(i)})$
+\end_inset
+
+ are drawn iid from some probability distribution 
+\begin_inset Formula $D.$
+\end_inset
+
+ For a hypothesis 
+\begin_inset Formula $h$
+\end_inset
+
+ we define the 
+\series bold
+training error 
+\series default
+(also called 
+\series bold
+emiprical risk 
+\series default
+or 
+\series bold
+empirical error
+\series default
+) to be
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\hat{\epsilon}(h)=\frac{1}{m}\sum_{i=1}^{m}1\{h(x^{(i)}\ne y^{(i)}\}}
+\]
+
+\end_inset
+
+If we want to make the dependence of the training set clear we can also
+ write 
+\begin_inset Formula $\hat{\epsilon}_{S}(h)$
+\end_inset
+
+.
+ We also define the generalization error to be
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon(h)=P_{(x,y)\sim D}(h(x)\ne y).
+\]
+
+\end_inset
+
+This is the probability that, if we now draw a new example from a distribution
+ 
+\begin_inset Formula $D$
+\end_inset
+
+, we will misclassify it.
+ Note that we assume that all our training data is drawn from the same distribut
+ion 
+\begin_inset Formula $D$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Consider the setting of linear classification and let 
+\begin_inset Formula $h_{\Theta}(x)=\text{1\{\Theta}^{T}x\}$
+\end_inset
+
+.
+ A way to fit the parameters 
+\begin_inset Formula $\Theta$
+\end_inset
+
+is to mimimize the training error and pick
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\Theta}=arg\ min_{\Theta}\hat{\epsilon}(h_{\Theta})
+\]
+
+\end_inset
+
+We call this the 
+\series bold
+empirical risk minimization ERM
+\series default
+ and the resulting hypothesis output by the learning algorithm is 
+\begin_inset Formula $\hat{h}=h_{\hat{\Theta}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We will further abstract away from specific parameterization of hypotheses
+ and from wether we're using a linear classifier.
+ We define the 
+\series bold
+hypothesis class
+\series default
+ 
+\begin_inset Formula $H$
+\end_inset
+
+ used by a learning algorithm to be the set of all classifiers considered
+ by it.
+ For linear classification 
+\begin_inset Formula $H=\{h_{\Theta}:h_{\Theta}(x)=1\{\Theta^{T}x\},\Theta\in\mathbb{R}^{n+1}\}$
+\end_inset
+
+is the set of all classifiers over the domain of inputs 
+\begin_inset Formula $X$
+\end_inset
+
+ where the decision boundary is linear.
+ If we were looking at, say, neural networks then we could let 
+\begin_inset Formula $H$
+\end_inset
+
+ be the set of all classifiers representable by some neural network architecture.
+ 
+\end_layout
+
+\begin_layout Standard
+Empirical risk minimization can now be thought as the minimization over
+ the class of functions 
+\begin_inset Formula $H$
+\end_inset
+
+, in which the learning algorithm picks the hypothesis
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{h}=arg\ \underset{h\in H}{min}\hat{\epsilon}(h)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The case of finite 
+\begin_inset Formula $H$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We consider now a learning problem in which we have a finite hypothesis
+ class 
+\begin_inset Formula $H=\{h_{1},\dots h_{k}\}$
+\end_inset
+
+ consisting of 
+\begin_inset Formula $k$
+\end_inset
+
+ hypotheses.
+ Thus, 
+\begin_inset Formula $H$
+\end_inset
+
+ is a set of functions mapping from 
+\begin_inset Formula $X$
+\end_inset
+
+ to 
+\begin_inset Formula $\{0,1\}$
+\end_inset
+
+ and empirical risk minimization picks the one with the smallest error.
+ To be able to give a guarrantee on the generalization error by first showing
+ that 
+\begin_inset Formula $\hat{\epsilon}(h)$
+\end_inset
+
+ is a reliable estate of 
+\begin_inset Formula $\epsilon(h)$
+\end_inset
+
+ for all hypotheses 
+\begin_inset Formula $h$
+\end_inset
+
+ and second showing that this implies an upper bound on the generalization
+ error on 
+\begin_inset Formula $\hat{h}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Take any fixed 
+\begin_inset Formula $h_{i}\in H$
+\end_inset
+
+.
+ Consider a random variable 
+\begin_inset Formula $Z$
+\end_inset
+
+: We're going to sample 
+\begin_inset Formula $(x,y)\sim D.$
+\end_inset
+
+ Then we set 
+\begin_inset Formula $Z=1\{h_{i}(x)\ne y\}$
+\end_inset
+
+.
+ In other words, Z indicates whether 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ misclassifies it.
+ We also define 
+\begin_inset Formula $Z_{j}=1\{h_{i}(x^{(j)}\ne y^{(j)}\}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The misclassification probability on a randomy drawn example (
+\begin_inset Formula $\epsilon(h)$
+\end_inset
+
+) is exactly the expected value of 
+\begin_inset Formula $Z$
+\end_inset
+
+ .
+ Moreover, the training error can be written as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\epsilon}(h_{i})=\frac{1}{m}\sum_{j=1}^{m}Z_{j}
+\]
+
+\end_inset
+
+Thus, 
+\begin_inset Formula $\hat{\epsilon}$
+\end_inset
+
+ is exactly the mean of the 
+\begin_inset Formula $m$
+\end_inset
+
+ random variables 
+\begin_inset Formula $Z_{j}$
+\end_inset
+
+ that are drawn iid from a Bernoulli distribution with mean 
+\begin_inset Formula $\epsilon(h_{i})$
+\end_inset
+
+.
+ Applying the heffding inequality, we obtain
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(|\epsilon(h_{i})-\hat{\epsilon}(h_{i})|>\gamma)\le2exp(-2\gamma^{2}m)
+\]
+
+\end_inset
+
+This shows that 
+\begin_inset Formula $\epsilon(h_{i})$
+\end_inset
+
+ will be close to 
+\begin_inset Formula $\hat{\epsilon}(h_{i})$
+\end_inset
+
+.
+ We want to show that this is true for all hypotheses.
+ Let 
+\begin_inset Formula $A_{i}$
+\end_inset
+
+denote the event that 
+\begin_inset Formula $|\epsilon(h_{i})-\hat{\epsilon}(h_{i})|>\gamma$
+\end_inset
+
+.
+ Through the union bond lemma and the equation above, we get that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(\lnot\exists h\in H:\,|\,\epsilon(h_{i})-\hat{\epsilon}(h_{i})|>\gamma)=1-2k\,exp(-2\gamma^{2}m)
+\]
+
+\end_inset
+
+What we did was, for particular values of 
+\begin_inset Formula $m$
+\end_inset
+
+ and 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ , given a bound on probability that 
+\begin_inset Formula $|\epsilon(h)-\hat{\epsilon}(h)|>\gamma$
+\end_inset
+
+.
+ Now, given 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ and some 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+, how large must 
+\begin_inset Formula $m$
+\end_inset
+
+ be before we can guarantee that with probability of at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, training error will be within 
+\begin_inset Formula $\gamma$
+\end_inset
+
+of generalization error? By setting 
+\begin_inset Formula $\delta=2k\,exp(-2\gamma^{2}m)$
+\end_inset
+
+ and solving for 
+\begin_inset Formula $m$
+\end_inset
+
+ we get that if
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+m\ge\frac{1}{2\gamma^{2}}log\frac{2k}{\delta},
+\]
+
+\end_inset
+
+ then with probabilty of at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that 
+\begin_inset Formula $|\epsilon(h)-\hat{\epsilon}(h)|\le\gamma$
+\end_inset
+
+ for all hypotheses (or that the probability of the difference of the errors
+ being greater than 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is at most 
+\begin_inset Formula $\delta$
+\end_inset
+
+).
+ The training set size 
+\begin_inset Formula $m$
+\end_inset
+
+ that a certain method or algorithm requires to achieve a certain level
+ of performance is also called the algorithm's 
+\series bold
+sample complexity
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Similarly, we can also hold 
+\begin_inset Formula $m$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta$
+\end_inset
+
+ fixed and show that with probability 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that for all hypotheses
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+|\epsilon(h)-\hat{\epsilon}(h)|\le\sqrt{\frac{1}{2m}log\frac{2k}{\delta}}.
+\]
+
+\end_inset
+
+ We assume now that uniform convergence holds and define 
+\begin_inset Formula $h^{*}=arg\,min_{h\in H}\hat{\epsilon}(h)$
+\end_inset
+
+ to be the best possible hypothesis in 
+\begin_inset Formula $H$
+\end_inset
+
+.
+ It makes sense to compare with 
+\begin_inset Formula $h^{*}$
+\end_inset
+
+since this is the best possible hypothesis.
+ Pick 
+\begin_inset Formula $\hat{h}=arg\,min_{h\in H}\hat{\epsilon}(h)$
+\end_inset
+
+.
+ We have now:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon(\hat{h})\le\epsilon(h^{*})+2\gamma
+\]
+
+\end_inset
+
+
+\series bold
+Theorem.
+
+\series default
+ Let 
+\begin_inset Formula $|H|=k$
+\end_inset
+
+ and any 
+\begin_inset Formula $m,\delta$
+\end_inset
+
+ be fixed.
+ Then with probability of at least 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon(\hat{h})\le\left(\underset{h\in H}{min}\epsilon(h)\right)+2\sqrt{\frac{1}{2m}log\frac{2k}{\delta}}
+\]
+
+\end_inset
+
+Note, that this also quantifies our statement about bias/variance.
+ If we switch from our hypothesis class 
+\begin_inset Formula $H$
+\end_inset
+
+ to a bigger class 
+\begin_inset Formula $H'$
+\end_inset
+
+with 
+\begin_inset Formula $H'\supseteq H$
+\end_inset
+
+, then our first term (the bias) decreases (because we're taking the min
+ from more hypotheses), but the second term (the variance) increases (because
+ 
+\begin_inset Formula $k$
+\end_inset
+
+ gets bigger).
+ 
+\end_layout
+
+\begin_layout Standard
+By holding 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta$
+\end_inset
+
+fixed and solving for m, we can also obtain the complexit
 \end_layout
 
 \end_body
