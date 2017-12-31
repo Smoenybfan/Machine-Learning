@@ -4969,5 +4969,605 @@ most
 
 \end_layout
 
+\begin_layout Section
+Regularization and model selection 
+\end_layout
+
+\begin_layout Standard
+How do we select among different models for a learning problem? How can
+ we automatically select a model that represents a good tradeoff between
+ bias and variance?
+\end_layout
+
+\begin_layout Standard
+For the sake of concrectness, we assume we have some finite set of models
+ 
+\begin_inset Formula $M=\{M_{1},\dots,M_{d}\}$
+\end_inset
+
+that we're trying to select among.
+ 
+\end_layout
+
+\begin_layout Subsection
+Cross validation
+\end_layout
+
+\begin_layout Standard
+Given a training set 
+\begin_inset Formula $S$
+\end_inset
+
+, our intuition might be to train each model on 
+\begin_inset Formula $S$
+\end_inset
+
+ and then choose the hypothesis with the smallest training error.
+ This does not work.
+ Consider choosing the order of a polynomial.
+ This algorithm would always choose the highest order possible, leading
+ to high variance.
+ 
+\end_layout
+
+\begin_layout Standard
+A better algorithm is 
+\series bold
+hold-out cross validation
+\series default
+ (also called 
+\series bold
+simple cross validation
+\series default
+):
+\end_layout
+
+\begin_layout Enumerate
+Randomly split 
+\begin_inset Formula $S$
+\end_inset
+
+ into 
+\begin_inset Formula $S_{train}$
+\end_inset
+
+(maybe 70% of the data) and 
+\begin_inset Formula $S_{CV}$
+\end_inset
+
+(the remaining data).
+ 
+\begin_inset Formula $S_{VC}$
+\end_inset
+
+ is called the hold-out cross validation set.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Train each model 
+\begin_inset Formula $M_{i}$
+\end_inset
+
+ on 
+\begin_inset Formula $S_{train}$
+\end_inset
+
+to get some hypothesis 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Select the hypothesis 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ that has the smallest error 
+\begin_inset Formula $\hat{\epsilon}_{S_{CV}}(h_{i})$
+\end_inset
+
+ on the hold-out corss validation set.
+ 
+\end_layout
+
+\begin_layout Standard
+By testing on a set that the models were not trained on, we obtain a better
+ estimate of our hypotheses' true generalization error.
+ Usually somewhere between 25% and 33% of the data is used in the hold-out
+ cross validation set.
+ Optionally we can also make a fourth step where after we choose our model
+ we retrain it on the entire training set 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The disadvantage here is that we're 
+\begin_inset Quotes eld
+\end_inset
+
+wasting
+\begin_inset Quotes erd
+\end_inset
+
+ about 30% of our data.
+ There will definitely be a point where we can only train of 0.7
+\begin_inset Formula $m$
+\end_inset
+
+, instead of 
+\begin_inset Formula $m$
+\end_inset
+
+ training examples.
+ So, in learning problems where we have few data (say, 
+\begin_inset Formula $m=20$
+\end_inset
+
+) we would rather use another method, called 
+\series bold
+k-fold cross validation
+\series default
+:
+\end_layout
+
+\begin_layout Enumerate
+Randomly split 
+\begin_inset Formula $S$
+\end_inset
+
+ into 
+\begin_inset Formula $k$
+\end_inset
+
+ disjoint subsets of 
+\begin_inset Formula $m/k$
+\end_inset
+
+ training examples each.
+ We'll call these subsets 
+\begin_inset Formula $S_{1},\dots,S_{k}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+For each model 
+\begin_inset Formula $M_{i}$
+\end_inset
+
+, we evaluate it as follows:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\qquad$
+\end_inset
+
+ For 
+\begin_inset Formula $j=1,\dots,k$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\qquad\qquad$
+\end_inset
+
+ Train the model 
+\begin_inset Formula $M_{i}$
+\end_inset
+
+on all data except 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ to get some hypothesis 
+\begin_inset Formula $h_{ij}$
+\end_inset
+
+.
+ Test this hypothesis 
+\begin_inset Formula $h_{ij}$
+\end_inset
+
+ on 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ to get 
+\begin_inset Formula $\hat{\epsilon}_{s_{j}}(h_{ij})$
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\qquad$
+\end_inset
+
+The estimated generalization error of the model 
+\begin_inset Formula $M_{j}$
+\end_inset
+
+ is then calculated as the average of the 
+\begin_inset Formula $\hat{\epsilon}_{S_{j}}(h_{ij})$
+\end_inset
+
+ (averaged over 
+\begin_inset Formula $j$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Enumerate
+Pick the model 
+\begin_inset Formula $M_{i}$
+\end_inset
+
+ with the lowest estimated generalization error and retrain it on the whole
+ training set.
+ The resulting hypothesis is then output as our final answer.
+ 
+\end_layout
+
+\begin_layout Standard
+A ususal choice for 
+\begin_inset Formula $k$
+\end_inset
+
+ as a number of folds would be around 
+\begin_inset Formula $k=10$
+\end_inset
+
+.
+ While the fraction of data held out is now only 
+\begin_inset Formula $1/k$
+\end_inset
+
+ -and therefore much smaller-, this method may also be more computionally
+ expensive.
+ 
+\end_layout
+
+\begin_layout Standard
+When we're using the extreme choice of 
+\begin_inset Formula $k=m$
+\end_inset
+
+ to leave out as little data as possible, we call this method the 
+\series bold
+leave-one-out cross validation .
+ 
+\end_layout
+
+\begin_layout Standard
+These methods can also be used to evaluate a single model or algorithm.
+ If we want to estimate our future performance, cross validation can give
+ a reasonable way of doing so.
+ 
+\end_layout
+
+\begin_layout Subsection
+Feature selection
+\end_layout
+
+\begin_layout Standard
+Imagine you have a supervised learning problem where the number of features
+ 
+\begin_inset Formula $n$
+\end_inset
+
+ is very large but you suspect that only a small number of features is actually
+ relevant.
+ Even with a linear algorithm, overfitting would still be a potential problem
+ unless the training set is fairly large.
+ We want to choose only the features that are relevant to us.
+ A possible way of doing so is called 
+\series bold
+forward search
+\series default
+:
+\end_layout
+
+\begin_layout Enumerate
+Initialize 
+\begin_inset Formula $F=\emptyset$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Repeat {
+\begin_inset Newline newline
+\end_inset
+
+(a) For 
+\begin_inset Formula $i=1,\dots,n$
+\end_inset
+
+ if 
+\begin_inset Formula $i\notin F$
+\end_inset
+
+, let 
+\begin_inset Formula $F_{i}=F\cup\{i\}$
+\end_inset
+
+and use some version of cross validation to evaluate features 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+(I.e.
+ train you algorithm only on the features in 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+and estimate its generalization error.)
+\begin_inset Newline newline
+\end_inset
+
+(b) Set 
+\begin_inset Formula $F$
+\end_inset
+
+ to be the best feature subset found on step (a).
+ 
+\begin_inset Newline newline
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Enumerate
+Select and output the best feature subset that was evaluated during the
+ entire search procedure.
+ 
+\end_layout
+
+\begin_layout Standard
+The outher loop can be done as many times as the number of features wanted
+ or till all features are chosen.
+ This algorithm is an instantiation of 
+\series bold
+wrapper model feature selection
+\series default
+, since it 
+\begin_inset Quotes eld
+\end_inset
+
+wraps
+\begin_inset Quotes erd
+\end_inset
+
+ around the algorithm and repeatedly calls the algorithm to evaluate how
+ well it does with different subsets.
+ Similarly we can also do 
+\series bold
+backward search
+\series default
+ where we start with the entire set and delete one by one, till we are satisfied.
+ These algorithms work usually quite well but can be computationally expensive.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Filter feature selection
+\series default
+ methods give heurisitc, but cheaper ways of chhosing feature subsets.
+ The idea is to calculate a simple score that tells us how informative each
+ fature is about the labels.
+ Then we just choose the 
+\begin_inset Formula $k$
+\end_inset
+
+ features with the best scores.
+ 
+\end_layout
+
+\begin_layout Standard
+In practice, a common way of doing so is to choose 
+\begin_inset Formula $S(i)$
+\end_inset
+
+ to be the 
+\series bold
+mutual information 
+\begin_inset Formula $MI(x_{i},y)$
+\end_inset
+
+ 
+\series default
+between 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+and 
+\begin_inset Formula $y$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+MI(x_{i},y)=\sum_{x_{i}\in\{0,1\}}\sum_{y\in\{0,1\}}p(x_{i},y)log\frac{p(x_{i},y)}{p(x_{i})p(y)}
+\]
+
+\end_inset
+
+Note, that this equation assumes that the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+and 
+\begin_inset Formula $y$
+\end_inset
+
+ are binary-valued.
+ The probabilities can be estimated according to their empirical distributions
+ on the training set.
+ Intuitively, this gives a measure of how different the probability distribution
+s 
+\begin_inset Formula $p(x_{i},y)$
+\end_inset
+
+ and 
+\begin_inset Formula $p(x_{i})p(y)$
+\end_inset
+
+ are.
+ If they are independent, then 
+\begin_inset Formula $p(x_{i},y)=p(x_{i})p(y)$
+\end_inset
+
+ and the score would be small.
+ 
+\end_layout
+
+\begin_layout Standard
+A way to choose how many features you want to use is again cross validation.
+\end_layout
+
+\begin_layout Subsection
+Bayesian statistics and regularization
+\end_layout
+
+\begin_layout Standard
+This will be another tool against overfitting.
+ For maximum likelihood, we chose our parameters according to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta_{ML}=arg\underset{\Theta}{max}\prod_{i=1}^{m}p(y^{(i)}|x^{(i)};\Theta).
+\]
+
+\end_inset
+
+In our previous discussions, 
+\begin_inset Formula $\Theta$
+\end_inset
+
+is not random, just unknown and it's our just to come up with procedures
+ to estimate it.
+ An alterative approach is the 
+\series bold
+Bayesian
+\series default
+ view, where we think of 
+\begin_inset Formula $\Theta$
+\end_inset
+
+as a random variable with unkown value.
+ We would specify a 
+\series bold
+prior distribution
+\series default
+ 
+\begin_inset Formula $p(\Theta)$
+\end_inset
+
+ on 
+\begin_inset Formula $\Theta$
+\end_inset
+
+that expresses our prior beliefs.
+ Given a training set, we can then calculate the posterior beliefs on the
+ parameters
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(\Theta|S)=\frac{p(S|\Theta)p(\Theta)}{p(S)}=\frac{(\prod_{i=1}^{m}p(y^{(i)}|x^{(i)},\Theta))p(\Theta)}{\int_{\Theta}(\prod_{i=1}^{m}p(y^{(i)}|x^{(i)},\Theta)p(\Theta))d\Theta}
+\]
+
+\end_inset
+
+Here, 
+\begin_inset Formula $p(y^{(i)}|x^{(i)},\Theta)$
+\end_inset
+
+ comes from our model.
+ For example, using Bayesian logistic regression: 
+\begin_inset Formula $p(y^{(i)}|x^{(i)},\Theta)=h_{\Theta}(x^{(i)})^{y^{(i)}}(1-h_{\Theta}(x^{(i)}))^{(1-y^{(i)}}$
+\end_inset
+
+.
+ To make a prediction we can compute the posterioir distribution on the
+ class label:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y|x,S)=\int_{\Theta}p(y|x,\Theta)p(\Theta|S)d\Theta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This procedure is thought of as 
+\begin_inset Quotes eld
+\end_inset
+
+fully Bayesian
+\begin_inset Quotes erd
+\end_inset
+
+ prediction.
+ Unfortunatelly, it is usually very computationally expensive.
+ Thus, in praxis we will usually approximate the posterior distribution
+ for 
+\begin_inset Formula $\Theta$
+\end_inset
+
+.
+ The 
+\series bold
+MAP (maximum a posteriori)
+\series default
+ estimate for 
+\begin_inset Formula $\Theta$
+\end_inset
+
+ is given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta_{MAP}=arg\underset{\Theta}{max}\prod_{i=1}^{m}p(y^{(i)}|x^{(i)},\Theta)p(\Theta).
+\]
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document
