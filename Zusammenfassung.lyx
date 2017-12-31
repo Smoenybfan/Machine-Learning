@@ -5569,5 +5569,185 @@ MAP (maximum a posteriori)
 
 \end_layout
 
+\begin_layout Section
+k-means
+\end_layout
+
+\begin_layout Standard
+In a clustering problem we are given a training set and want to group the
+ data into cohesive clusters.
+ 
+\begin_inset Formula $x^{(i)}\in\mathbb{R}^{n}$
+\end_inset
+
+as usual but no labels 
+\begin_inset Formula $y^{(i)}$
+\end_inset
+
+ are given.
+ This means it's an unsupervised learning probelm.
+ The k-means clustering algorithm is as follows:
+\end_layout
+
+\begin_layout Enumerate
+Initialize 
+\series bold
+cluster centroids
+\series default
+ 
+\begin_inset Formula $\mu_{1},\dots,\mu_{k}$
+\end_inset
+
+randomly.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Repeat until convergence: {
+\begin_inset Newline newline
+\end_inset
+
+For every 
+\begin_inset Formula $i$
+\end_inset
+
+, set
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+c^{(i)}=arg\underset{j}{min}||x^{(i)}-\mu_{j}||^{2}
+\]
+
+\end_inset
+
+Assign the training example to the closest cluster centroid.
+\begin_inset Newline newline
+\end_inset
+
+For each 
+\begin_inset Formula $j$
+\end_inset
+
+, set
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mu_{j}=\frac{\sum_{i=1}^{m}1\{c^{(i)}=j\}x^{(i)}}{\sum_{i=1}^{m}1\{c^{(i)}=j\}}
+\]
+
+\end_inset
+
+Move the cluster centroids to the mean of their assigned training examples.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename k-means.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us define the 
+\series bold
+distortion function
+\series default
+ to be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J(c,\mu)=\sum_{i=1}^{m}||x^{(i)}-\mu_{c^{(i)}}||^{2}
+\]
+
+\end_inset
+
+Thus, 
+\begin_inset Formula $J$
+\end_inset
+
+ measures the sum of euclidean distances between each training examples
+ and its assigned cluster centroid.
+ It can be shown that 
+\begin_inset Formula $k$
+\end_inset
+
+-means is coordinate descent on 
+\begin_inset Formula $J$
+\end_inset
+
+.
+ The inner loop of the 
+\begin_inset Formula $k$
+\end_inset
+
+-means algorithm minimizes 
+\begin_inset Formula $J$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $c$
+\end_inset
+
+ while holding 
+\begin_inset Formula $\mu$
+\end_inset
+
+fixed and the then minimizes 
+\begin_inset Formula $J$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $\mu$
+\end_inset
+
+while holding 
+\begin_inset Formula $c$
+\end_inset
+
+ fixed.
+ Thus, 
+\begin_inset Formula $J$
+\end_inset
+
+ must monotonically decrease and the value of 
+\begin_inset Formula $J$
+\end_inset
+
+ must converge.
+ 
+\end_layout
+
+\begin_layout Standard
+The distortion function 
+\begin_inset Formula $J$
+\end_inset
+
+ is a non-convex function, what means that it's not guaranteed to converge
+ in a global minimum but can also converge in a local minimum.
+ Therefore if you're worried about getting stuck in a bad local minimum,
+ a common thing is to run 
+\begin_inset Formula $k$
+\end_inset
+
+-means many times and then pick the one that gives the lowest distortion
+ 
+\begin_inset Formula $J(c,\mu)$
+\end_inset
+
+.
+ 
+\end_layout
+
 \end_body
 \end_document
