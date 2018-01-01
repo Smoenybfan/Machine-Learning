@@ -6000,7 +6000,448 @@ calculated in the E-step represent the soft guesses for the values of
 \begin_layout Standard
 The difference to the k-means algorithm is where we had hard assignments
  for the cluster centroids, we now have soft assignements.
+ It is also susceptible to local minima.
  
+\end_layout
+
+\begin_layout Section
+The EM algorithm
+\end_layout
+
+\begin_layout Subsection
+Jensen's inequality
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $f$
+\end_inset
+
+ be a function whose domain is the set of the real numbers.
+ We say that 
+\begin_inset Formula $f$
+\end_inset
+
+ is convex if 
+\begin_inset Formula $f'''(x)\ge0$
+\end_inset
+
+ for all values of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ For vector-valued 
+\begin_inset Formula $x$
+\end_inset
+
+, this can be generalized to its hessian 
+\begin_inset Formula $H$
+\end_inset
+
+ being positive semi-definite.
+ 
+\begin_inset Formula $f$
+\end_inset
+
+ is 
+\series bold
+strictly convex
+\series default
+ if 
+\begin_inset Formula $f'''(x)>0$
+\end_inset
+
+ for all 
+\begin_inset Formula $x$
+\end_inset
+
+ or if 
+\begin_inset Formula $H$
+\end_inset
+
+ is strictly positive semi-definite.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Theorem.
+
+\series default
+ Let 
+\begin_inset Formula $f$
+\end_inset
+
+ be a convex function and let 
+\begin_inset Formula $X$
+\end_inset
+
+ be a random variable.
+ Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E[f(X)]\ge f(E[X])
+\]
+
+\end_inset
+
+Moreover, if 
+\begin_inset Formula $f$
+\end_inset
+
+ is strictly convex, then 
+\begin_inset Formula $E[f(X)]=f(E[X])$
+\end_inset
+
+ only if 
+\begin_inset Formula $X=E[X]$
+\end_inset
+
+ with probability 1.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename jensen.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Remark: This works the same way with concave function but the 
+\begin_inset Formula $\ge$
+\end_inset
+
+is exchanged with 
+\begin_inset Formula $\le$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+The EM algorithm
+\end_layout
+
+\begin_layout Standard
+Suppose we have an estimation problem with a training set consisting of
+ 
+\begin_inset Formula $m$
+\end_inset
+
+ independent examples.
+ We wish to fit the parameters of a model 
+\begin_inset Formula $p(x,z)$
+\end_inset
+
+ to the data, where the likelihood is given by 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\Theta)=\sum_{i=1}^{m}log\sum_{z}p(x,z;\Theta)
+\]
+
+\end_inset
+
+ If the 
+\begin_inset Formula $z^{(i)}$
+\end_inset
+
+were observed, this wouldn't be much of a problem.
+ Now, EM algorithm gives an efficient method for maximum likelihood estimation.
+ Our strategy will be to repeatedly construct a lower-bound on 
+\begin_inset Formula $l$
+\end_inset
+
+ (E-step) and then optimize that lower-bound (M-step).
+ 
+\end_layout
+
+\begin_layout Standard
+For each 
+\begin_inset Formula $i$
+\end_inset
+
+, let 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+be some distribution over the 
+\begin_inset Formula $z$
+\end_inset
+
+'s (
+\begin_inset Formula $\sum_{z}Q_{i}(z)=1;Q_{i}\ge0$
+\end_inset
+
+).
+ Consider:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}log\,p(x^{(i)};\Theta)\ge\sum_{i}\sum_{z^{(i)}}Q_{i}(z^{(i)})log\frac{p(x^{(i)},z^{(i)};\Theta)}{Q_{i}(z^{(i)})}
+\]
+
+\end_inset
+
+Now, for any set of distributions 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+, this formula gives a lower bound on 
+\begin_inset Formula $l(\Theta)$
+\end_inset
+
+.
+ It seems natural to make the lower-bound tight at the value of 
+\begin_inset Formula $\Theta$
+\end_inset
+
+.
+ To make the bound tight, we need for the step involving Jensens ineuqality
+ to hold with equality at our value of 
+\begin_inset Formula $\Theta$
+\end_inset
+
+.
+ We require that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{p(x^{(i)},z^{(i)};\Theta)}{Q_{i}(z^{(i)})}=c
+\]
+
+\end_inset
+
+for some constant 
+\begin_inset Formula $c$
+\end_inset
+
+ that does not depend on 
+\begin_inset Formula $z^{(i)}$
+\end_inset
+
+.
+ This is easily accomplished by choosing
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q_{i}(z^{(i)})\varpropto p(x^{(i},z^{(i)},\Theta)
+\]
+
+\end_inset
+
+Because 
+\begin_inset Formula $\sum_{z}Q_{i}(z^{(i)})=1$
+\end_inset
+
+, we know that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q_{i}(z^{(i)})=p(z^{(i)}|x^{(i)};\Theta)
+\]
+
+\end_inset
+
+Thus, we can simply set the 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+'s to be the posterior distribution of the 
+\begin_inset Formula $z^{(i)}'s$
+\end_inset
+
+ given 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+and the setting of the parameter 
+\begin_inset Formula $\Theta$
+\end_inset
+
+.
+ Now, for the choice of the 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+, we got an equation before that gives a lower-bound on the loglikelihood
+ we're trying to maximize.
+ This is the E-setp.
+ In the M-step, we then maximize our formula with repsect to obtain a new
+ setting of the 
+\begin_inset Formula $\Theta$
+\end_inset
+
+'s.
+ Repeatedly carrying these two steps out gives us the EM-algorithm:
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Formula $\qquad$
+\end_inset
+
+Repeat until convergence {
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad$
+\end_inset
+
+(E-step) For each 
+\begin_inset Formula $i$
+\end_inset
+
+, set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q_{i}(z^{(i)}):=p(z^{(i)}|x^{(i)};\Theta)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\qquad$
+\end_inset
+
+(M-step) Set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Theta:=arg\underset{\Theta}{max}\sum_{i}\sum_{z^{(i)}}Q_{i}(z^{(i)})log\frac{p(x^{(i)},z^{(i)};\Theta)}{Q_{i}(z^{(i)})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+}
+\begin_inset Newline newline
+\end_inset
+
+Through Jensen's inequaliy we know that 
+\begin_inset Formula $l(\Theta^{(t)})\le l(\Theta^{(t+1)})$
+\end_inset
+
+ and therefore that the EM monotonically improves the log-likelihood.
+ EM also causes the likelihhod to converge monotonically.
+ A good moment to stop repeating the steps could be when we don't improve
+ more than some tolarance parameter.
+ 
+\end_layout
+
+\begin_layout Subsection
+Mixture of Gaussians revisited
+\end_layout
+
+\begin_layout Standard
+Let's go briefly back to the MoG.
+ Following our algorithm derivation above, for the E-step we simply calculate
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+w_{j}^{(i)}=Q_{i}(z^{(i)}=j)=P(z^{(i)}=j|x^{(i)};\phi,\mu,\Sigma)
+\]
+
+\end_inset
+
+Here, the middle part of the equation denotes the probability of 
+\begin_inset Formula $z^{(i)}$
+\end_inset
+
+taking the value 
+\begin_inset Formula $j$
+\end_inset
+
+ under the distribution 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+.
+ Next, in the M-step, we need to maximize with respect to our parameters
+ 
+\begin_inset Formula $\phi,\mu,\Sigma$
+\end_inset
+
+, the quantity 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}\sum_{z^{(i)}}Q_{i}(z^{(i)})log\frac{p(x^{(i)},z^{(i)};\phi,\mu,\Sigma)}{Q_{i}(z^{(i)})}=\sum_{i=1}^{m}\sum_{j=1}^{k}w_{j}^{(i)}log\frac{\frac{1}{(2\pi)^{n/2}|\Sigma_{j}|^{1/2}}exp(-\frac{1}{2}(x^{(i)}-\mu_{j})^{T}\Sigma_{j}^{-1}(x^{(i)}-\mu_{j}))\cdot\phi_{j}}{w_{j}^{(i)}}
+\]
+
+\end_inset
+
+Let's maximize with respect to 
+\begin_inset Formula $\mu_{l}$
+\end_inset
+
+.
+ If we take the derivative with respect to 
+\begin_inset Formula $\mu_{l}$
+\end_inset
+
+we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\mu_{l}}\sum_{i=1}^{m}\sum_{j=1}^{k}w_{j}^{(i)}log\frac{\frac{1}{(2\pi)^{n/2}|\Sigma_{j}|^{1/2}}exp(-\frac{1}{2}(x^{(i)}-\mu_{j})^{T}\Sigma_{j}^{-1}(x^{(i)}-\mu_{j}))\cdot\phi_{j}}{w_{j}^{(i)}}=\sum_{i=1}^{m}w_{l}^{(i)}(\Sigma_{l}^{-1}x^{(i)}-\Sigma_{l}^{-1}\mu_{l})
+\]
+
+\end_inset
+
+Setting this to zero and solving for 
+\begin_inset Formula $\mu_{l}$
+\end_inset
+
+yields the update rule
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{l}=\frac{\Sigma_{i=1}^{m}w_{l}^{(i)}x^{(i)}}{\sum_{i=1}^{m}w_{l}^{(i)}}
+\]
+
+\end_inset
+
+
 \end_layout
 
 \end_body
