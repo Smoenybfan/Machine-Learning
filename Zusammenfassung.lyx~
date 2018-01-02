@@ -7077,6 +7077,304 @@ where
 
 \end_inset
 
+So, using these definitions, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q_{i}(z^{(i)})=\frac{1}{(2\pi)^{k/2}|\Sigma_{z^{(i)}|x^{(i)}}|^{1/2}}exp\left(-\frac{1}{2}(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})^{T}\Sigma_{z^{(i)}|x^{(i)}}^{-1}(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})\right)
+\]
+
+\end_inset
+
+Now to the M-step.
+ We need to maximize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}\int_{z^{(i)}}Q_{i}(z^{(i)})log\frac{p(x^{(i)},z^{(i)};\mu,\Lambda,\psi)}{Q_{i}(z^{(i)})}dz^{(i)}
+\]
+
+\end_inset
+
+with respect to the parameters 
+\begin_inset Formula $\mu,\Lambda,\psi$
+\end_inset
+
+.
+ We'll only do 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+for now.
+ 
+\end_layout
+
+\begin_layout Standard
+We can simplify the equation above to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}E_{z^{(i)}\sim Q_{i}}[log\,p(x^{(i)}|z^{(i)};\mu,\Lambda,\psi)+log\,p(z^{(i)})-log\,Q_{i}(z^{(i)})]
+\]
+
+\end_inset
+
+The 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $z^{(i)}\sim Q_{i}$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ subscript indicates that the expectation is with respect to 
+\begin_inset Formula $z^{(i)}$
+\end_inset
+
+drawn from 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+.
+ We will leave this out if not necessary.
+ Dropping terms that do not depend on our parameters, we find that we need
+ to maximize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}E[log\,p(x^{(i)}|z^{(i)};\mu,\Lambda,\psi)]=\sum_{i=1}^{m}E\left[-\frac{1}{2}log|\psi|-\frac{n}{2}log(2\pi)-\frac{1}{2}(x^{(i)}-\mu-\Lambda z^{(i)})^{T}\psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right]
+\]
+
+\end_inset
+
+We maximize this now with respect to 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+.
+ Taking the derivatives on the parts depending on 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+and using some trace rules, we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\Lambda}\sum_{i=1}^{m}-E\left[\frac{1}{2}(x^{(i)}-\mu-\Lambda z^{(i)})^{T}\psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right]=\sum_{i=1}^{m}E[-\psi^{-1}\Lambda z^{(i)}z^{(i)^{T}}+\psi^{-1}(x^{(i)}-\mu)z^{(i)^{T}}]
+\]
+
+\end_inset
+
+Setting this to zero and simplifying, we get:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}\Lambda E_{z^{(i)}\sim Q_{i}}\left[z^{(i)}z^{(i)^{T}}\right]=\sum_{i=1}^{m}(x^{(i)}-\mu)E_{z^{(i)}\sim Q_{i}}[z^{(i)^{t}}]
+\]
+
+\end_inset
+
+Solving for 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+, we obtain
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Lambda=\left(\sum_{i=1}^{m}(x^{(i)}-\mu)E_{z^{(i)}\sim Qi}\left[z^{(i)T}\right]\right)\left(E_{z^{(i)}\sim Qi}\left[z^{(i)}z^{(i)T}\right]\right)^{-1}
+\]
+
+\end_inset
+
+This is quite the close relationship to the normal equation we got for least
+ squares regression (
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\Theta^{T}=(y^{T}X)(X^{T}X)^{-1}$
+\end_inset
+
+.
+ The analogy here is, that the 
+\begin_inset Formula $x$
+\end_inset
+
+'s are a linear function of the 
+\begin_inset Formula $z$
+\end_inset
+
+'s.
+ Given the 
+\begin_inset Quotes eld
+\end_inset
+
+guesses
+\begin_inset Quotes erd
+\end_inset
+
+ for the 
+\begin_inset Formula $z$
+\end_inset
+
+ that the E-step has found, we will now try to estimate the unknown linearity
+ 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+relating the 
+\begin_inset Formula $x$
+\end_inset
+
+'s and 
+\begin_inset Formula $z$
+\end_inset
+
+'s.
+ To complete our M-step update, lets work out the values of the expectations
+ we got above.
+ From our definition of 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+ being Gaussian with mean 
+\begin_inset Formula $\mu_{z^{(i)}|x^{(i)}}$
+\end_inset
+
+, we easily find 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E_{z^{(i)}\sim Qi}\left[z^{(i)T}\right]=\mu_{z^{(i)}|x^{(i)}}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E_{z^{(i)}\sim Qi}\left[z^{(i)}z^{(i)T}\right]=\mu_{z^{(i)}|x^{(i)}}\mu_{z^{(i)}|x^{(i)}}^{T}+\Sigma_{z^{(i)}|x^{(i)}}
+\]
+
+\end_inset
+
+Substituting this back into our previous equation, we get the M-step update
+ for 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Lambda=\left(\sum_{i=1}^{m}(x^{(i)}-\mu)\mu_{z^{(i)}|x^{(i)}}^{T}\right)\left(\sum_{i=1}^{m}\mu_{z^{(i)}|x^{(i)}}\mu_{z^{(i)}|x^{(i)}}^{T}+\Sigma_{z^{(i)}|x^{(i)}}\right)^{-1}
+\]
+
+\end_inset
+
+It is important to note that there is the term 
+\begin_inset Formula $\Sigma_{z^{(i)}|x^{(i)}}.$
+\end_inset
+
+This is the covariance in the posterior distribution 
+\begin_inset Formula $p(z^{(i)}|x^{(i)}).$
+\end_inset
+
+ The M-step must take this uncertainity about 
+\begin_inset Formula $z^{(i)}$
+\end_inset
+
+into account.
+ A common mistake in deriving EM is to assume that in the E-step we only
+ need to calculate the expectation 
+\begin_inset Formula $E[z]$
+\end_inset
+
+ of the latent random variable 
+\begin_inset Formula $z$
+\end_inset
+
+ and then plug it into the optimization in the M-step everywhere 
+\begin_inset Formula $z$
+\end_inset
+
+ occurs.
+ While this works in simple problems such as the mixture of gaussians, we
+ saw here that 
+\begin_inset Formula $E[zz^{T}]$
+\end_inset
+
+ and 
+\begin_inset Formula $E[z]E[z]^{T}$
+\end_inset
+
+ differ by 
+\begin_inset Formula $\Sigma_{z|x}$
+\end_inset
+
+.
+ Thus, the M-step update must take the covariance of 
+\begin_inset Formula $z$
+\end_inset
+
+ in the posterior distribution 
+\begin_inset Formula $p(z^{(i)}|x^{(i)})$
+\end_inset
+
+into account.Without making the entire derivation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu=\frac{1}{m}\sum_{i=1}^{m}x^{(i)}
+\]
+
+\end_inset
+
+Since this doesn't change as the parameters are varied (only dependent on
+ the 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+), we can compute this only once.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Phi=\frac{1}{m}\sum_{i=1}^{m}x^{(i)}x^{(i)^{T}}-x^{(i)}\mu_{z^{(i)}|x^{(i)}}^{T}\Lambda^{T}-\Lambda\mu_{z^{(i)}|x^{(i)}}x^{(i)^{T}}+\Lambda(\mu_{z^{(i)}|x^{(i)}}\mu_{z^{(i)}|x^{(i)}}^{T}+\Sigma_{z^{(i)}|x^{(i)}}\Lambda^{T}
+\]
+
+\end_inset
+
 
 \end_layout
 
