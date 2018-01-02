@@ -6445,5 +6445,651 @@ We'll leave out the rest, letting this part serve as an example.
  
 \end_layout
 
+\begin_layout Section
+Factor analysis
+\end_layout
+
+\begin_layout Standard
+When we have data that comes from a mixture of Gaussians, the EM algorithm
+ can be applied to fit a mixture model.
+ In this setting we usually have problems wth sufficient data to discern
+ the multiple-Gaussians structure (
+\begin_inset Formula $m\gg n$
+\end_inset
+
+, much more data than features).
+ Imagine a setting where you have much more features than data (
+\begin_inset Formula $n\gg m$
+\end_inset
+
+).
+ It might be difficult to model the data even with a single gaussian, much
+ more with a mixture of gaussians.
+ Using the same maximum likelihood estimators as in EM-MoG, we would get
+ a singular covariance matrix.
+ Therefore its inverse does not exist and the density of a multivariate
+ Gaussian distribution can not be calculated.
+ 
+\end_layout
+
+\begin_layout Standard
+Generally spoken, unless 
+\begin_inset Formula $m$
+\end_inset
+
+ exceeds 
+\begin_inset Formula $n$
+\end_inset
+
+ by some reasonable amount, the maximum likelihood estimators of the mean
+ and covariance may be poor.
+ In this chapter we will show a way to fit a reasonable Gaussian model to
+ such data.
+ 
+\end_layout
+
+\begin_layout Subsection
+Restrictions of 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we do not have sufficient data we may place some restrictions on the
+ space of matrices 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+we will consider.
+ For instance, we might consider to fit a covariance matrix 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ that is diagonal.
+ The maximum likelihood estimate of the covariance matrix is given by the
+ diagonal matrix 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ satisfying
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Sigma_{ij}=\frac{1}{m}\sum_{i=1}^{m}(x_{j}^{(i)}-\mu_{j})^{2}
+\]
+
+\end_inset
+
+Thus, 
+\begin_inset Formula $\Sigma_{ij}$
+\end_inset
+
+is just the empirical estimate of the variance of the 
+\begin_inset Formula $j$
+\end_inset
+
+-th coordinate of the data.
+ Recall that the contours of a Gaussian data are ellipses.
+ A diagonal 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ corresponds to a Gaussian where the major axes of these ellipses are axis-algin
+ed.
+ 
+\end_layout
+
+\begin_layout Standard
+Smoetimes, we may place a further restriction on the covariance matrix that
+ not only must it be diagonal but its diagonal entries must all be equal.
+ In this setting, we have 
+\begin_inset Formula $\Sigma=\sigma^{2}I$
+\end_inset
+
+ where 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+is the parameter under our control.
+ The maximum likelihood estimate of 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+can be found to be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sigma^{2}=\frac{1}{mn}\sum_{j=1}^{n}\sum_{i=1}^{m}(x_{j}^{(i)}-\mu_{j})^{2}
+\]
+
+\end_inset
+
+This corresponds to Gaussians whose densities have contours that are circles
+ (or spheres/hyperplanes in higher dimensions as 2).
+ 
+\end_layout
+
+\begin_layout Standard
+Without the constraints we needed 
+\begin_inset Formula $m\geq n+1$
+\end_inset
+
+ to be sure that 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+is not singular.
+ Under both of our two constraints we may obtain non-singular 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ when 
+\begin_inset Formula $m\ge2$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+However, with these restrictions we also model the coordinates 
+\begin_inset Formula $x_{i},x_{j}\,i\ne j$
+\end_inset
+
+ to be uncorrelated and independent.
+ Often, there are some interesting correlations that we want to capture.
+ Using these restrictions would leave us unable to do so.
+ 
+\end_layout
+
+\begin_layout Subsection
+Marginals and conditionals of Gaussians
+\end_layout
+
+\begin_layout Standard
+Suppose we have a vector-valued random variable
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x=\left[\begin{array}{c}
+x_{1}\\
+x_{2}
+\end{array}\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $x_{1}\in\mathbb{R}^{r},x_{2}\in\mathbb{R}^{s},x\in\mathbb{R}^{r+s}$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $x\sim N(\mu,\Sigma)$
+\end_inset
+
+, where
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu=\left[\begin{array}{c}
+\mu_{1}\\
+\mu_{2}
+\end{array}\right],\ \Sigma=\left[\begin{array}{cc}
+\Sigma_{11} & \Sigma_{12}\\
+\Sigma_{21} & \Sigma_{22}
+\end{array}\right]
+\]
+
+\end_inset
+
+Here, 
+\begin_inset Formula $\mu_{1}\in\mathbb{R}^{r},\mu_{2}\in\mathbb{R}^{s},\Sigma_{11}\in\mathbb{R}^{rxr},\Sigma_{12}\in\mathbb{R}^{rxs}$
+\end_inset
+
+and so on.
+ Note that since covariance matrices are symmetric, 
+\begin_inset Formula $\Sigma_{12}=\Sigma_{21}^{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Under our assumptions, 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ are jointyl multivariate Gaussians.
+ It is not hard to see that 
+\begin_inset Formula $E[x_{1}]=\mu_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $Cov(x)=E[(x_{1}-\mu_{1})(x_{1}-\mu_{1})]=\Sigma_{11}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since marginal distributions of Gaussians are themselves Gaussian, we therefore
+ have that the marginal distribution of 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+is given by 
+\begin_inset Formula $x_{1}\sim N(\mu_{1},\Sigma_{11})$
+\end_inset
+
+.
+ It can also be shown that 
+\begin_inset Formula $x_{1}|x_{2}\sim N(\mu_{1|2},\Sigma_{1|2})$
+\end_inset
+
+, where
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{1\text{|2 }}=\mu_{1}+\Sigma_{12}\Sigma_{22}^{-1}(x_{2}-\mu_{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Sigma_{1|2}=\Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The Factor analysis model
+\end_layout
+
+\begin_layout Standard
+We posit a joint distribution on 
+\begin_inset Formula $(x,z)$
+\end_inset
+
+ as follows, where 
+\begin_inset Formula $z\in\mathbb{R}^{k}$
+\end_inset
+
+ is a latent random variable:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z\sim N(0,I)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x|z\sim N(\mu+\Lambda z,\psi)
+\]
+
+\end_inset
+
+Here, the parameters of our model are the vector 
+\begin_inset Formula $\mu\in\mathbb{R}^{n}$
+\end_inset
+
+, the matrix 
+\begin_inset Formula $\Lambda\in\mathbb{R}^{nxk}$
+\end_inset
+
+, and the diagonal matrix 
+\begin_inset Formula $\psi\in\mathbb{R}^{nxn}$
+\end_inset
+
+.
+ The value of 
+\begin_inset Formula $k$
+\end_inset
+
+ is usually chosen to be smaller than 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Thus, we imagine that each datapoint 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+is generated by sampling a 
+\begin_inset Formula $k$
+\end_inset
+
+ dimension multivariate Gaussian 
+\begin_inset Formula $z^{(i)}$
+\end_inset
+
+.
+ Then, it is mapped to a 
+\begin_inset Formula $k$
+\end_inset
+
+-dimensional affine space by computing 
+\begin_inset Formula $\mu+\Lambda z^{(i)}$
+\end_inset
+
+.
+ Lastly 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+is generated by adding covariance noise 
+\begin_inset Formula $\psi$
+\end_inset
+
+ to this computation.
+ 
+\end_layout
+
+\begin_layout Standard
+Equivalently, we can therefore also define the factor analysis model according
+ to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z\sim N(0,I)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\epsilon\sim N(0,\psi)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x=\mu+\Lambda z+\epsilon
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ and 
+\begin_inset Formula $z$
+\end_inset
+
+ are independent.
+ 
+\end_layout
+
+\begin_layout Standard
+What distribution does our model exactly define? Our random variables 
+\begin_inset Formula $z$
+\end_inset
+
+ and 
+\begin_inset Formula $x$
+\end_inset
+
+ have a joint Gaussian distribution
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+z\\
+x
+\end{array}\right]\sim N(\mu_{zx},\Sigma)
+\]
+
+\end_inset
+
+We will now find 
+\begin_inset Formula $\mu_{zx}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We know that 
+\begin_inset Formula $E[z]=0$
+\end_inset
+
+ from the fact that 
+\begin_inset Formula $z\sim N(0,I).$
+\end_inset
+
+ Also, we have that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E[x]=E[\mu+\Lambda z+\epsilon]=\mu+\Lambda E[z]+E[\epsilon]=\mu
+\]
+
+\end_inset
+
+Putting these together, we otain
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{zx}=\left[\begin{array}{c}
+\overrightarrow{0}\\
+\mu
+\end{array}\right]
+\]
+
+\end_inset
+
+Next, to find 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ we need to calculate 
+\begin_inset Formula $\Sigma_{zz}=E[(z-E[z])(z-E[z])^{T}]$
+\end_inset
+
+, 
+\begin_inset Formula $\Sigma_{zx}=E[(z-E[z])(x-E[x])^{T}]$
+\end_inset
+
+, 
+\begin_inset Formula $\Sigma_{xx}=E[(x-E[x])(x-E[x])^{T}]$
+\end_inset
+
+ (the upper-left, upper-right and lower-right block).
+ Now, since 
+\begin_inset Formula $z\sim N(0,I)$
+\end_inset
+
+, we find that 
+\begin_inset Formula $\Sigma_{zz}=Cov(z)=I$
+\end_inset
+
+.
+ Also,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Sigma_{zz}=E[(z-E[z])(x-E[x])^{T}]=E[z(\mu+\Lambda z+\epsilon-\mu)^{T}]=E[zz^{T}]\Lambda^{T}+E[z\epsilon^{T}]=\Lambda^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly, we can find
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Sigma_{xx}=E[(x-E[x])(x-E[x])^{T}]=E[(\mu+\Lambda z+\epsilon-\mu)(\mu+\Lambda z+\epsilon-\mu)^{T}]=E[\Lambda zz^{T}\Lambda^{T}+\Lambda z\epsilon^{T}+\Lambda^{T}z^{T}\epsilon+\epsilon\epsilon^{T}]=\Lambda E[zz^{T}]\Lambda^{T}+E[\epsilon\epsilon^{T}]=\Lambda\Lambda^{T}+\psi
+\]
+
+\end_inset
+
+Putting everything together, we therefore have that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+z\\
+x
+\end{array}\right]\sim N\left(\left[\begin{array}{c}
+\overrightarrow{0}\\
+\mu
+\end{array}\right],\left[\begin{array}{cc}
+I & \Lambda^{T}\\
+\Lambda & \Lambda\Lambda^{T}+\psi
+\end{array}\right]\right)
+\]
+
+\end_inset
+
+We also get that the marginal distribution of 
+\begin_inset Formula $x$
+\end_inset
+
+ is given by 
+\begin_inset Formula $x\sim N(\mu,\Lambda\Lambda^{T}+\psi)$
+\end_inset
+
+.
+ Thus, given a training set, we can write down the log likelihood of the
+ parameters:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l(\mu,\Lambda,\psi)=log\prod_{i=1}^{m}\frac{1}{(2\pi)^{n/2}|\Lambda\Lambda^{T}+\psi|}exp\left(-\frac{1}{2}(x^{(i)}-\mu)^{T}(\Lambda\Lambda^{T}+\psi)^{-1}(x^{(i)}-\mu)\right).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+EM for factor analysis
+\end_layout
+
+\begin_layout Standard
+Maximizing the formula above is quite hard.
+ Therefore we will instead use the EM algorithm, which we're gonna derive
+ in this section.
+ 
+\end_layout
+
+\begin_layout Standard
+The derivation for the E-step is easy.
+ We need to compute 
+\begin_inset Formula $Q_{i}(z^{(i)})=p(z^{(i)}|x^{(i)};\mu,\Lambda,\psi).$
+\end_inset
+
+ By inserting our previous results into the formulas for finding the conditional
+ distribution of a Gaussian, we find that 
+\begin_inset Formula $z^{(i)}|x^{(i)};\mu,\Lambda,\psi\sim N(\mu_{z^{(i)}|x^{(i)}},\Sigma_{z^{(i)}|x^{(i)}}),$
+\end_inset
+
+where
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{z^{(i)}|x^{(i)}}=\Lambda^{T}(\Lambda\Lambda^{T}+\psi)^{-1}(x^{(i)}-\mu)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Sigma_{z^{(i)}|x^{(i)}}=I-\Lambda(\Lambda\Lambda^{T}+\psi)^{-1}\Lambda
+\]
+
+\end_inset
+
+So, using these definitions, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q_{i}(z^{(i)})=\frac{1}{(2\pi)^{k/2}|\Sigma_{z^{(i)}|x^{(i)}}|^{1/2}}exp\left(-\frac{1}{2}(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})^{T}\Sigma_{z^{(i)}|x^{(i)}}^{-1}(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document
