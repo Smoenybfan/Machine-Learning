@@ -7824,6 +7824,698 @@ Thus, whereas
 
 .
  PCA is therefore also referred to as dimensionality reduction algorithm.
+ The vectors 
+\begin_inset Formula $u_{1},\dots,u_{k}$
+\end_inset
+
+ are called the first 
+\begin_inset Formula $k$
+\end_inset
+
+ principal components of the data.
+ 
+\end_layout
+
+\begin_layout Section
+Reinforcement Learning and Control
+\end_layout
+
+\begin_layout Standard
+In supervised learning, our algorithms had some labels 
+\begin_inset Formula $y$
+\end_inset
+
+ that indicated whether our algorithm was doing well.
+ In many sequential decision maxing and control problems, it is difficult
+ to provide this kind of information.
+ Imagine a four-legged robot trying to walk.
+ Inititally we have no idea what the 
+\begin_inset Quotes eld
+\end_inset
+
+correct
+\begin_inset Quotes erd
+\end_inset
+
+ actions to take are.
+ In the reinforcement learning framework, we will provide some reward function
+ that indicates to our learning agent when it is doing poorly and when it
+ is doing well.
+ In the example with the robot, the reward function might give positive
+ rewards for moving forwards and negative rewareds for moving backwards
+ or falling over.
+ 
+\end_layout
+
+\begin_layout Subsection
+Markov decision processes MDP
+\end_layout
+
+\begin_layout Standard
+A Markov decision process is a tuple 
+\begin_inset Formula $(S,A,\{P_{A}\},\gamma,R)$
+\end_inset
+
+, where:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $S$
+\end_inset
+
+ is a set of 
+\series bold
+states
+\series default
+ (For example in autonomous helicopter flight, 
+\begin_inset Formula $S$
+\end_inset
+
+ might be the set of all possible orientations and positions of the helicopter)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $A$
+\end_inset
+
+ is a set of 
+\series bold
+actions
+\series default
+ (For example the set of all possible directions in which you can push the
+ helicopter's control stick)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $P_{sa}$
+\end_inset
+
+ are the 
+\series bold
+state transition probabilities
+\series default
+.
+ For each state 
+\begin_inset Formula $s\in S$
+\end_inset
+
+ and action 
+\begin_inset Formula $a\in A$
+\end_inset
+
+, 
+\begin_inset Formula $P_{sa}$
+\end_inset
+
+ is a distribution over the state space.
+ Briefly, 
+\begin_inset Formula $P_{sa}$
+\end_inset
+
+ gives the distribution over what states we will transition to if we take
+ action 
+\begin_inset Formula $a$
+\end_inset
+
+ in state 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\gamma\in[0,1)$
+\end_inset
+
+ is called the 
+\series bold
+discount factor
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $R\,:\,S\,\times A\mapsto\mathbb{R}$
+\end_inset
+
+ is the 
+\series bold
+reward function
+\series default
+ (sometimes only written as 
+\begin_inset Formula $R\,:\,S\mapsto\mathbb{R}$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+We start in some state 
+\begin_inset Formula $s_{0}$
+\end_inset
+
+ and get to choose some action 
+\begin_inset Formula $a_{0}$
+\end_inset
+
+ to take in the MDP.
+ Based on this choice, the state of the MDP randomly transitions to some
+ successor state 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+, drawn according to 
+\begin_inset Formula $s_{1}\sim P_{s_{0}a_{0}}$
+\end_inset
+
+.
+ Then we get to pick another action 
+\begin_inset Formula $a_{0}$
+\end_inset
+
+, MDP randomly transitions to some successor state 
+\begin_inset Formula $s_{2}\sim P_{s_{0}a_{0}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename states.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our total payoff is then given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s_{0},a_{0})+\gamma R(s_{1},a_{1})+\gamma^{2}R(s_{2},a_{2})+\dots
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Or when we are writing the reward as a function of the states only
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s_{0})+\gamma R(s_{1})+\gamma^{2}R(s_{2})+\dots
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our goal in reinforcement learning is to choose actions over time as to
+ maximize the expected value of the total payoff:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E\left[R(s_{0})+\gamma R(s_{1})+\gamma^{2}R(s_{2})+\dots\right]
+\]
+
+\end_inset
+
+Note that the reward at timestep 
+\begin_inset Formula $t$
+\end_inset
+
+ is 
+\series bold
+discounted
+\series default
+ by a factor of 
+\begin_inset Formula $\gamma^{t}$
+\end_inset
+
+.
+ Thus, to make this expectation large, we would like to get positive feedback
+ as soon as possible (and postpone negative rewards as long as possible).
+ 
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+policy
+\series default
+ is any function 
+\begin_inset Formula $\pi:\,S\mapsto A$
+\end_inset
+
+ mapping from the states to the actions.
+ We say that we are 
+\series bold
+executing 
+\series default
+some policy 
+\begin_inset Formula $\pi$
+\end_inset
+
+ if, whenever we are in state 
+\begin_inset Formula $s$
+\end_inset
+
+, we take action 
+\begin_inset Formula $a=\pi(s)$
+\end_inset
+
+.
+ We also define the 
+\series bold
+value function
+\series default
+ for a policy 
+\begin_inset Formula $\pi$
+\end_inset
+
+ according to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V^{\pi}(s)=E\left[R(s_{0})+\gamma R(s_{1})+\gamma^{2}R(s_{2})+\dots|s_{0}=s,\pi\right]
+\]
+
+\end_inset
+
+
+\begin_inset Formula $V^{\pi}(s)$
+\end_inset
+
+ is simply the expected sum of discounted rewards upon starting in state
+ 
+\begin_inset Formula $s$
+\end_inset
+
+ and taking actions according to 
+\begin_inset Formula $\pi$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Given a fixed policy 
+\begin_inset Formula $\pi$
+\end_inset
+
+, it's value function 
+\begin_inset Formula $V^{\pi}$
+\end_inset
+
+ satisfies the 
+\series bold
+Bellman euqations:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V^{\pi}(s)=R(s)+\gamma\sum_{s'\in S}P_{s\pi(s)}(s')V^{\pi}(s')
+\]
+
+\end_inset
+
+ This says that the expected sum of discounted rewards 
+\begin_inset Formula $V^{\pi}(s)$
+\end_inset
+
+ for starting in 
+\begin_inset Formula $s$
+\end_inset
+
+ consists of two terms: First, the 
+\series bold
+immediate reward 
+\begin_inset Formula $R(s)$
+\end_inset
+
+ 
+\series default
+that we get rightaway for starting in state 
+\begin_inset Formula $s$
+\end_inset
+
+ and second, the expected sum of future rewards.
+ We see that we can rewrite this second term as 
+\begin_inset Formula $E_{s'\sim P_{s\pi(s)}}\left[V^{\pi}(s')\right]$
+\end_inset
+
+.
+ This is the expected sum of discounted rewards for starting in state 
+\begin_inset Formula $s'$
+\end_inset
+
+, where 
+\begin_inset Formula $s'$
+\end_inset
+
+ is distributed according to 
+\begin_inset Formula $P_{s\pi(s)}$
+\end_inset
+
+ which is the distribution over where we will end up taking the first action
+ 
+\begin_inset Formula $\pi(s)$
+\end_inset
+
+ in the MDP from state 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Bellman's equation can be used to efficiently solve for 
+\begin_inset Formula $V^{\pi}.$
+\end_inset
+
+In a finite-state MDP, we can write down one such equation for 
+\begin_inset Formula $V^{\pi}(s)$
+\end_inset
+
+ for every state 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ This gives us a set of 
+\begin_inset Formula $|S|$
+\end_inset
+
+ linear equations in 
+\begin_inset Formula $|S|$
+\end_inset
+
+ variables which can be efficiently solved for the 
+\begin_inset Formula $V^{\pi}(s)$
+\end_inset
+
+'s.
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We also define the 
+\series bold
+optimal value function
+\series default
+ according to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V^{*}(s)=max_{\pi}V^{\pi}(s)
+\]
+
+\end_inset
+
+This is the best possible expected sum of discounted rewards that can be
+ attained using any policy.
+ There is also a version of Bellman's euqation for the optimal value:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V^{*}(s)=R(s)+\underset{a\in A}{max}\gamma\sum_{s'\in S}P_{sa}(s')V^{*}(s')
+\]
+
+\end_inset
+
+The first part is the immediate reward as before.
+ The second term is the maximum over all actions 
+\begin_inset Formula $a$
+\end_inset
+
+ of the expected future sum of discounted rewards we'll get after action
+ 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ In other words, you choose the action that will lead to the most profit
+ from the second state on.
+ 
+\end_layout
+
+\begin_layout Standard
+We also define a policy 
+\begin_inset Formula $\pi^{*}:\,S\mapsto A$
+\end_inset
+
+ as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\pi^{*}(s)=arg\underset{a\in A}{max}\sum_{s'\in S}P_{sa}(s')V^{*}(s')
+\]
+
+\end_inset
+
+So the best policy is the one, that chooses the action leading to the biggest
+ profit.
+ 
+\end_layout
+
+\begin_layout Standard
+Further, we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V^{*}(s)=V^{\pi^{*}}(s)\ge V^{\pi}(s)
+\]
+
+\end_inset
+
+An interesting property of 
+\begin_inset Formula $\pi^{*}$
+\end_inset
+
+is, that it's the optimal policy for all states 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ This means that we can start in any initial state in our MDP and use the
+ same policy.
+ 
+\end_layout
+
+\begin_layout Subsection
+Value iterations and policy iteration
+\end_layout
+
+\begin_layout Standard
+This section is a description of two efficient algorithms for solving finite-sta
+te MDPs.
+ We will consider only MDPs with finite state and action spaces.
+ 
+\end_layout
+
+\begin_layout Standard
+The first algorithm, 
+\series bold
+value iteration:
+\end_layout
+
+\begin_layout Enumerate
+For each state 
+\begin_inset Formula $s$
+\end_inset
+
+, initialize 
+\begin_inset Formula $V(s):=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Repeat until convergence {
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\ $
+\end_inset
+
+For every state, update 
+\begin_inset Formula $V(s):=R(s)+\underset{a\in A}{max}\sum_{s'\in S}P_{sa}(s')V^{*}(s')$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+This algorithm can be thought of as repeatedly tryin to update the estimated
+ value function using Bellman Equations.
+\end_layout
+
+\begin_layout Standard
+There are two ways of performing the updates of the inner loop.
+ In the first, we first compute the new values of 
+\begin_inset Formula $V(s)$
+\end_inset
+
+ for every state 
+\begin_inset Formula $s$
+\end_inset
+
+ and then overwrite all the old values with the new values.
+ This is called a 
+\series bold
+synchronous
+\series default
+ update.
+ Alternatively, we can also perfprm 
+\series bold
+asychronous
+\series default
+ updates.
+ Here, we would loop over the states, updating the values one at a time.
+ 
+\end_layout
+
+\begin_layout Standard
+Under either synchronous or asynchronous updates, it can be shown that value
+ iteration will cause 
+\begin_inset Formula $V$
+\end_inset
+
+ to converge to 
+\begin_inset Formula $V^{*}$
+\end_inset
+
+.
+ Having found 
+\begin_inset Formula $V^{*}$
+\end_inset
+
+, we can then use the equation in the previous section to find the optimal
+ policy.
+ 
+\end_layout
+
+\begin_layout Standard
+The second way is the 
+\series bold
+policy iteration
+\series default
+ algorithm which proceeds as follows:
+\end_layout
+
+\begin_layout Enumerate
+Initialize 
+\begin_inset Formula $\pi$
+\end_inset
+
+ randomly.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Repeat until convergence {
+\begin_inset Newline newline
+\end_inset
+
+(a) Let 
+\begin_inset Formula $V:=V^{\pi}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+(b) For each state 
+\begin_inset Formula $s$
+\end_inset
+
+, let 
+\begin_inset Formula $\pi(s):=arg\,\underset{a\in A}{max}\sum_{s'}P_{sa}(s')V(s')$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The inner loop repeatedly computes the value function for the current policy
+ and then updates the policy using the current value function.
+ Step (a) can be done via solving Bellman's equations as described earlier.
+ 
+\end_layout
+
+\begin_layout Standard
+After at most a finite number of iterations of this algorithm, 
+\begin_inset Formula $V$
+\end_inset
+
+ will converge to 
+\begin_inset Formula $V^{*}$
+\end_inset
+
+and 
+\begin_inset Formula $\pi$
+\end_inset
+
+ will converge to 
+\begin_inset Formula $\pi^{*}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Both algorithms are standard for solving MDPs and there isn't universal
+ agreement over which is better.
+ For small MDPs, policy iteration is often very fast and converges with
+ very few iterations.
+ However, for MDPs with large state spaces, solving for 
+\begin_inset Formula $V^{\pi}$
+\end_inset
+
+explicitly would involve solving a large system of linear quations and could
+ be difficult.
+ In these problems, value iteration may be preffered.
  
 \end_layout
 
